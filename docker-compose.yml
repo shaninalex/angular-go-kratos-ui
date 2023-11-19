@@ -1,0 +1,74 @@
+version: '3.7'
+
+volumes:
+  postgres_data:
+  rabbitmq_data:
+
+services:
+
+  # accounts:
+  #   build: ./accounts
+  #   container_name: accounts
+  #   restart: on-failure
+  #   ports:
+  #     - 8001:8001
+  #   environment:
+  #     - APP_PORT=8001
+  #     - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672/
+  #   depends_on:
+  #     rabbitmq_post_initialize:
+  #       condition: service_completed_successfully
+  
+  postgres:
+    image: postgres:15
+    container_name: database
+    environment:
+      - POSTGRES_USER=user
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_MULTIPLE_DATABASES=application,kratos
+    ports:
+      - 5432:5432
+    volumes:
+      - ./config/database/:/docker-entrypoint-initdb.d/
+      - postgres_data:/var/lib/postgresql/data/
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  kratos-migrate:
+    image: oryd/kratos:v1.0.0
+    container_name: kratos_db_migrate
+    environment:
+      - DSN=postgres://user:password@postgres:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
+    volumes:
+      - ./config/kratos:/etc/config/kratos
+    command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
+
+  kratos:
+    image: oryd/kratos:v1.0.0
+    container_name: kratos
+    environment:
+      - DSN=postgres://user:password@postgres:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
+    ports:
+      - 4433:4433
+      - 4434:4434
+    volumes:
+      - ./config/kratos:/etc/config/kratos
+    command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
+
+  # oathkeeper:
+  #   image: oryd/oathkeeper:v0.40
+  #   container_name: api_gateway
+  #   depends_on:
+  #     - kratos
+  #   ports:
+  #     - 8080:4455
+  #     - 4456:4456
+  #   command: serve proxy -c "/etc/config/oathkeeper/oathkeeper.yml"
+  #   environment:
+  #     - LOG_LEVEL=debug
+  #   restart: on-failure
+  #   volumes:
+  #     - ./config/oathkeeper:/etc/config/oathkeeper
