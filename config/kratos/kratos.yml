@@ -33,10 +33,10 @@ selfservice:
     error:
       ui_url: http://127.0.0.1:4200/error
 
-    # settings:
-    #   ui_url: http://127.0.0.1:4200/settings
-    #   privileged_session_max_age: 15m
-    #   required_aal: highest_available
+    settings:
+      ui_url: http://127.0.0.1:4200/settings
+      privileged_session_max_age: 15m
+      required_aal: highest_available
 
     recovery:
       enabled: true

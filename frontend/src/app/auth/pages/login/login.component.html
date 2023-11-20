@@ -1,0 +1,33 @@
+<form [action]="form.ui.action" [method]="form.ui.method" *ngIf="(form$ | async) as form">
+
+    <div class="formgroup" *ngFor="let node of form.ui.nodes">
+
+        <input *ngIf="node.attributes.type === 'hidden'"
+            [disabled]="node.attributes.disabled"
+            [name]="node.attributes.name"
+            [required]="node.attributes.required"
+            [type]="node.attributes.type"
+            [value]="node.attributes.value"
+        >
+
+        <div *ngIf="node.attributes.type !== 'submit' && node.attributes.type !== 'hidden'">
+            <input pInputText
+                [disabled]="node.attributes.disabled"
+                [name]="node.attributes.name"
+                [required]="node.attributes.required"
+                [type]="node.attributes.type"
+                [value]="node.attributes.value? node.attributes.value: null"
+                [placeholder]="node.meta.label?.text"
+            >
+        </div>
+
+        <div *ngIf="node.attributes.type === 'submit'">
+            <button class="p-ripple p-element p-button p-component" 
+                [disabled]="node.attributes.disabled"
+                [name]="node.attributes.name" 
+                [value]="node.attributes.value"
+                [type]="node.attributes.type">{{ node.meta.label?.text }}</button>
+        </div>
+    </div>
+
+</form>

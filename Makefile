@@ -2,6 +2,9 @@ start:
 	docker compose up -d --build
 
 down:
-	docker compose down -v
+	docker compose down
 
-restart: start down
+rebuild_backend:
+	docker compose up -d --no-deps --build backend
+
+restart: down start
