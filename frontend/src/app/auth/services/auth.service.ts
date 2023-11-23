@@ -21,4 +21,10 @@ export class AuthService {
             shareReplay()
         )
     }
+
+    formGetVerification(flow: string): Observable<any> {
+        return this.http.get<any>(`http://127.0.0.1:8080/api/v2/auth/get-verification-form?flow=${flow}`, { withCredentials: true }).pipe(
+            shareReplay(),
+        );
+    }
 }

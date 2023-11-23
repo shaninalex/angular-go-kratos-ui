@@ -10,8 +10,8 @@
             [value]="node.attributes.value"
         >
 
-        <div *ngIf="node.attributes.type !== 'submit' && node.attributes.type !== 'hidden'">
-            <input pInputText
+        <div class="field" *ngIf="node.attributes.type !== 'submit' && node.attributes.type !== 'hidden'">
+            <input pInputText class="w-full"
                 [disabled]="node.attributes.disabled"
                 [name]="node.attributes.name"
                 [required]="node.attributes.required"
@@ -21,16 +21,15 @@
             >
         </div>
 
-        <div *ngIf="node.attributes.type === 'submit'">
-                
-            <!-- 
+        <div *ngIf="node.attributes.type === 'submit'" class="flex justify-content-between align-items-center">
+            <button class="p-button" 
+                [disabled]="node.attributes.disabled"
                 [name]="node.attributes.name" 
                 [value]="node.attributes.value"
-            -->
-            <p-button class="btn lg blue" 
-                [disabled]="node.attributes.disabled"
-                [type]="node.attributes.type">{{ node.meta.label?.text }}</p-button>
+                [type]="node.attributes.type">{{ node.meta.label?.text }}</button>
+            <a routerLink="/auth/login">Login</a>
         </div>
     </div>
 
 </form>
+

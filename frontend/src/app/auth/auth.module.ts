@@ -1,6 +1,5 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
 import { AuthComponent } from './auth.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
@@ -11,6 +10,10 @@ import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { CardModule } from 'primeng/card';
+import { MessagesModule } from 'primeng/messages';
+import { ReactiveFormsModule } from '@angular/forms';
+
 
 const routes: Routes = [
     { path: "", component: AuthComponent, children: [
@@ -35,6 +38,9 @@ const routes: Routes = [
         HttpClientModule,
         InputTextModule,
         ButtonModule,
+        CardModule,
+        MessagesModule,
+        ReactiveFormsModule,
         RouterModule.forChild(routes),
     ],
     providers: [

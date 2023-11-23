@@ -14,7 +14,9 @@ export class RegisterComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private auth: AuthService,
-    ) {}
+    ) {
+        document.title = "Register";
+    }
 
     ngOnInit(): void {
         this.form$ = this.auth.getRegistrationFlow()

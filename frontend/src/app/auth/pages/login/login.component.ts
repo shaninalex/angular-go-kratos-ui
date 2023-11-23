@@ -15,7 +15,9 @@ export class LoginComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private auth: AuthService,
-    ) {}
+    ) {
+        document.title = "Login";
+    }
 
     ngOnInit(): void {
         this.form$ = this.auth.getLoginFlow()
