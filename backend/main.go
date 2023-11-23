@@ -67,6 +67,16 @@ func main() {
 		ProxyResponse(c, resp)
 	})
 
+	router.GET("/api/v2/auth/check-session", func(c *gin.Context) {
+		_, resp, err := client.FrontendApi.ToSession(c).Cookie(c.Request.Header.Get("Cookie")).Execute()
+		if err != nil {
+			log.Println(err)
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		ProxyResponse(c, resp)
+	})
+
 	router.Run(fmt.Sprintf(":%d", port))
 }
 
