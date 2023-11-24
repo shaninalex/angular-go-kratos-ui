@@ -19,8 +19,7 @@ export function CanActiveteAccountPage(route: ActivatedRouteSnapshot, state: Rou
         boolean |
         UrlTree
     >currentUser.pipe(
-        map((data:any) => {
-            console.log(data);
+        map(() => {
             return of(true);
         }),
         catchError(() => {

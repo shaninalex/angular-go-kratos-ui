@@ -20,4 +20,11 @@ export class BackendService {
        );
     }
 
+    getSettingsForm(): Observable<Logout> {
+       return this.http.get<Logout>(`${this.api_url}/api/v2/auth/settings`, { withCredentials: true}).pipe(
+           shareReplay()
+       );
+    }
+
+
 }

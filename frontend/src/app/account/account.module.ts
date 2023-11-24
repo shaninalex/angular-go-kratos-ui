@@ -6,6 +6,9 @@ import { AccountComponent } from './account.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { LogoutComponent } from './ui/logout/logout.component';
 import { BackendService } from './services/backend.service';
+import { SettingsComponent } from './components/settings/settings.component';
+import { InputTextModule } from 'primeng/inputtext';
+import { ButtonModule } from 'primeng/button';
 
 
 const routes: Routes = [
@@ -19,11 +22,14 @@ const routes: Routes = [
     declarations: [
         AccountComponent,
         LogoutComponent,
+        SettingsComponent,
     ],
     imports: [
         CommonModule,
         ReactiveFormsModule,
         HttpClientModule,
+        InputTextModule,
+        ButtonModule,
         RouterModule.forChild(routes)
     ],
     providers: [
