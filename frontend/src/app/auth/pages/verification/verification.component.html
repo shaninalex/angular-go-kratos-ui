@@ -11,14 +11,14 @@
         >
 
         <div class="field" *ngIf="node.attributes.type !== 'submit' && node.attributes.type !== 'hidden'">
-            <a *ngIf="node.type == 'a'" 
+            <a *ngIf="node.type == 'a'"
                 class="p-button p-button-link"
                 [href]="node.attributes.href">
                 {{ node.meta.label?.text }}
             </a>
 
-            <input *ngIf="node.type == 'input'" 
-                pInputText 
+            <input *ngIf="node.type == 'input'"
+                pInputText
                 class="w-full"
                 [disabled]="node.attributes.disabled"
                 [name]="node.attributes.name"
@@ -30,14 +30,13 @@
         </div>
 
         <div *ngIf="node.attributes.type === 'submit'" class="flex justify-content-between align-items-center">
-            <button class="p-button" 
-                [name]="node.attributes.name" 
+            <button class="p-button"
+                [name]="node.attributes.name"
                 [value]="node.attributes.value"
                 [disabled]="node.attributes.disabled"
                 [type]="node.attributes.type">{{ node.meta.label?.text }}</button>
         </div>
     </div>
 
-    <p-messages [(value)]="messages" [enableService]="false" [closable]="false"></p-messages>
-
+    <p>TODO: add alerts</p>
 </form>

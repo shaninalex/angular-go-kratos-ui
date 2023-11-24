@@ -8,10 +8,6 @@ import { RecoveryComponent } from './pages/recovery/recovery.component';
 import { AuthService } from './services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { CardModule } from 'primeng/card';
-import { MessagesModule } from 'primeng/messages';
 import { ReactiveFormsModule } from '@angular/forms';
 
 
@@ -36,10 +32,6 @@ const routes: Routes = [
     imports: [
         CommonModule,
         HttpClientModule,
-        InputTextModule,
-        ButtonModule,
-        CardModule,
-        MessagesModule,
         ReactiveFormsModule,
         RouterModule.forChild(routes),
     ],
