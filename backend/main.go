@@ -55,9 +55,7 @@ func main() {
 		verification_flow_id := c.Query("flow")
 		_, resp, err := client.FrontendApi.GetVerificationFlow(c).Id(
 			verification_flow_id,
-		).Cookie(
-			c.Request.Header.Get("Cookie"),
-		).Execute()
+		).Cookie(c.Request.Header.Get("Cookie")).Execute()
 
 		if err != nil {
 			log.Println(err)
@@ -69,6 +67,16 @@ func main() {
 
 	router.GET("/api/v2/auth/check-session", func(c *gin.Context) {
 		_, resp, err := client.FrontendApi.ToSession(c).Cookie(c.Request.Header.Get("Cookie")).Execute()
+		if err != nil {
+			log.Println(err)
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		ProxyResponse(c, resp)
+	})
+
+	router.GET("/api/v2/auth/logout", func(c *gin.Context) {
+		_, resp, err := client.FrontendApi.CreateBrowserLogoutFlow(c).Cookie(c.Request.Header.Get("Cookie")).Execute()
 		if err != nil {
 			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

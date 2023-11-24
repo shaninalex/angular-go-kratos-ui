@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Observable } from 'rxjs';
 
@@ -12,10 +11,7 @@ import { Observable } from 'rxjs';
 export class LoginComponent implements OnInit {
     form$: Observable<any>; // TODO: Types for login form
 
-    constructor(
-        private route: ActivatedRoute,
-        private auth: AuthService,
-    ) {
+    constructor(private auth: AuthService) {
         document.title = "Login";
     }
 
