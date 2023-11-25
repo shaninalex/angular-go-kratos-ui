@@ -1,35 +1,36 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, catchError, of, shareReplay } from "rxjs";
+import { Observable, catchError, finalize, of, shareReplay } from "rxjs";
+import { AuthUIService } from "./authui.service";
 
 @Injectable()
 export class AuthService {
     constructor(
-        private http: HttpClient
-    ) {}
+        private http: HttpClient,
+        private uiService: AuthUIService
+    ) { }
+
+    private handleRequest<T>(observable: Observable<T>): Observable<T> {
+        return observable.pipe(
+            finalize(() => this.uiService.loading.next(false)),
+            shareReplay()
+        );
+    }
 
     getLoginFlow(flow: string | null = null): Observable<any> {
         let params = new HttpParams();
         if (flow) params = params.append("id", flow);
-        return this.http.get<any>(`http://127.0.0.1:8080/api/v2/auth/get-login-form`, { params: params, withCredentials: true }).pipe(
-            shareReplay(),
-            // catching error in login component instead of service
-            // catchError(error => {
-            //     return of(error);
-            // })
-        );
+        return this.handleRequest(this.http.get<any>(`http://127.0.0.1:8080/api/v2/auth/get-login-form`, { params: params, withCredentials: true }))
     }
 
-    getRegistrationFlow(): Observable<any> { // TODO: Interface for Login flow
-        // TODO: use HttpParam
-        return this.http.get<any>(`http://127.0.0.1:8080/api/v2/auth/get-registration-form`, { withCredentials: true }).pipe(
-            shareReplay()
-        )
+    getRegistrationFlow(flow: string | null = null): Observable<any> {
+        let params = new HttpParams();
+        if (flow) params = params.append("id", flow);
+        return this.handleRequest(this.http.get<any>(`http://127.0.0.1:8080/api/v2/auth/get-registration-form`, { params: params, withCredentials: true }))
     }
 
     formGetVerification(flow: string): Observable<any> {
-        return this.http.get<any>(`http://127.0.0.1:8080/api/v2/auth/get-verification-form?flow=${flow}`, { withCredentials: true }).pipe(
-            shareReplay(),
-        );
+        let params = new HttpParams().append("flow", flow);
+        return this.handleRequest(this.http.get<any>(`http://127.0.0.1:8080/api/v2/auth/get-verification-form`, { params: params, withCredentials: true }))
     }
 }

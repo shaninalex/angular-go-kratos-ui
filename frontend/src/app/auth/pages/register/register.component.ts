@@ -1,7 +1,7 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
-import { Observable } from 'rxjs';
+import { Observable, finalize } from 'rxjs';
 import { AuthUIService } from '../../services/authui.service';
 
 @Component({
@@ -21,6 +21,8 @@ export class RegisterComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.form$ = this.auth.getRegistrationFlow()
+        this.form$ = this.auth.getRegistrationFlow().pipe(
+            finalize(() => this.uiService.loading.next(false))
+        )
     }
 }

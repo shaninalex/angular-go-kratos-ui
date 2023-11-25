@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { Observable, catchError } from 'rxjs';
+import { Observable, catchError, finalize } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthUIService } from '../../services/authui.service';
 
@@ -24,16 +24,16 @@ export class LoginComponent implements OnInit {
 
     ngOnInit(): void {
         this.route.queryParams.subscribe({
-            next: params => {
-                this.form$ = this.auth.getLoginFlow(params["flow"]).pipe(
-                    catchError(error => {
-                        if (error.status == 410) {
-                            // From can be expired and server will return "410 Gone"
-                            console.log("Form is expired");
-                        }
-                        return this.router.navigate(["/auth/login"]);
-                    })
-                );
+                next: params => {
+                    this.form$ = this.auth.getLoginFlow(params["flow"]).pipe(
+                        catchError(error => {
+                            if (error.status == 410) {
+                                // From can be expired and server will return "410 Gone"
+                                console.log("Form is expired");
+                            }
+                            return this.router.navigate(["/auth/login"]);
+                        })
+                    );
             }
         })
     }

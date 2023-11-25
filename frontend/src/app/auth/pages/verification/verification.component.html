@@ -26,7 +26,13 @@
                 [value]="node.attributes.value? node.attributes.value: null"
                 [placeholder]="node.meta.label?.text"
             >
+            <div class="text-sm" *ngFor="let m of node.messages"
+                [ngClass]="{
+                    'text-danger': m.type === 'error'
+                }"
+                >{{m.text}}</div>
         </div>
+        
 
         <div *ngIf="node.attributes.type === 'submit'" class="flex justify-content-between align-items-center">
             <button class="btn btn-info"
