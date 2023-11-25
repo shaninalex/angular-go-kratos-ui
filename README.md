@@ -15,3 +15,6 @@ npm run start
 
 ### Architecture
 ![Alt text](./docs/images/app-architecture.png "App Architecture")
+
+## Important
+Current configuration has open `kratos:4433` public port. Later I'll hide it by `oathkeeper` and handle forms submittions by `beckend` service
