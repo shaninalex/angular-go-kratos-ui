@@ -1,21 +1,24 @@
-import { Component } from "@angular/core"
-import { BackendService, Logout } from "../../services/backend.service";
-import { Observable } from "rxjs";
+import { Component, ViewEncapsulation } from "@angular/core"
+import { BackendService } from "../../services/backend.service";
 
 
 @Component({
-    selector: "app-logout",
-    template: `
-        <div *ngIf="(logout$ | async) as logout">
-            <a href="{{ logout.logout_url }}">logout</a>
-        </div>
-    `
+    selector: "#logout",
+    template: `<button type="button" class="btn btn-link" (click)="performLogout()">logout</button>`,
+    encapsulation: ViewEncapsulation.None
 })
 export class LogoutComponent {
-    logout$: Observable<Logout>;
+    constructor(private backend: BackendService) {}
 
-    constructor(private backend: BackendService) {
-       this.logout$ = this.backend.getLogoutLink();
+    performLogout(): void {
+        this.backend.getLogoutLink().subscribe({
+            next: data => {
+                window.location.href = data.logout_url;
+            },
+            error: err => {
+                console.log("can't get logout link...")
+            }
+        })
     }
 
 }
