@@ -1,7 +1,13 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Observable } from 'rxjs';
+import { Observable, tap } from 'rxjs';
 import { BackendService } from '../../services/backend.service';
 import { UIService } from 'src/app/shared/ui.service';
+
+export interface FormSettings {
+    action: string
+    method: string
+    nodes: Array<any>
+}
 
 @Component({
     selector: '#page-settings',
@@ -10,6 +16,12 @@ import { UIService } from 'src/app/shared/ui.service';
 })
 export class SettingsComponent implements OnInit {
     form$: Observable<any>;
+    active_tab: string = "profile";
+    nodes_profile: Array<any>;
+    nodes_password: Array<any>;
+    nodes_lookup_secret: Array<any>;
+    nodes_totp: Array<any>;
+    form_settings: FormSettings = <FormSettings>{};
 
     constructor(
         private backend: BackendService,
@@ -19,6 +31,22 @@ export class SettingsComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.form$ = this.backend.getSettingsForm();
+        // this.form$ = 
+        this.backend.getSettingsForm().subscribe({
+            next: (data: any) => {
+                this.form_settings.action = data.ui.action;
+                this.form_settings.method = "POST";
+                this.form_settings.nodes = data.ui.nodes.filter((node:any) => node.group === "default");
+                this.nodes_profile = data.ui.nodes.filter((node:any) => node.group === "profile");
+                this.nodes_password = data.ui.nodes.filter((node:any) => node.group === "password");
+                this.nodes_lookup_secret = data.ui.nodes.filter((node:any) => node.group === "lookup_secret");
+                this.nodes_totp = data.ui.nodes.filter((node:any) => node.group === "totp");
+
+            }
+        });
+    }
+
+    changeTab(tab_name: string): void {
+        this.active_tab = tab_name
     }
 }

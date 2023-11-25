@@ -1,0 +1,26 @@
+<form [action]="form_settings.action" [method]="form_settings.method">
+    <ng-container *ngFor="let node of form_settings.nodes">
+        <input *ngIf="node.attributes.type === 'hidden'" [disabled]="node.attributes.disabled"
+            [name]="node.attributes.name" [required]="node.attributes.required" [type]="node.attributes.type"
+            [value]="node.attributes.value">
+    </ng-container>
+
+    <div class="mb-3" *ngFor="let node of form_nodes">
+        <input *ngIf="node.attributes.type !== 'submit' && node.attributes.type !== 'hidden'"
+            class="form-control"
+            [disabled]="node.attributes.disabled"
+            [name]="node.attributes.name"
+            [required]="node.attributes.required"
+            [type]="node.attributes.type"
+            [value]="node.attributes.value? node.attributes.value: null"
+            [placeholder]="node.meta.label?.text">
+
+        <button 
+            *ngIf="node.attributes.type === 'submit'"
+            class="btn btn-info"
+            [disabled]="node.attributes.disabled"
+            [name]="node.attributes.name"
+            [value]="node.attributes.value"
+            [type]="node.attributes.type">{{ node.meta.label?.text }}</button>
+    </div>
+</form>
