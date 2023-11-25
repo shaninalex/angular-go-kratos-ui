@@ -105,6 +105,17 @@ func main() {
 		ProxyResponse(c, resp)
 	})
 
+	router.GET("/api/v2/auth/error", func(c *gin.Context) {
+		error_id := c.Query("id")
+		_, resp, err := client.FrontendApi.GetFlowError(c).Id(error_id).Execute()
+		if err != nil {
+			log.Println(err)
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		ProxyResponse(c, resp)
+	})
+
 	router.Run(fmt.Sprintf(":%d", port))
 }
 
