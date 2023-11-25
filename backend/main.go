@@ -79,7 +79,7 @@ func main() {
 		_, resp, err := client.FrontendApi.ToSession(c).Cookie(c.Request.Header.Get("Cookie")).Execute()
 		if err != nil {
 			log.Println(err)
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			c.JSON(resp.StatusCode, gin.H{"error": err.Error()})
 			return
 		}
 		ProxyResponse(c, resp)
