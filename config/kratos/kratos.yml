@@ -31,7 +31,7 @@ selfservice:
 
   flows:
     error:
-      ui_url: http://127.0.0.1:4200/error
+      ui_url: http://127.0.0.1:4200/account/error
 
     settings:
       ui_url: http://127.0.0.1:4200/settings

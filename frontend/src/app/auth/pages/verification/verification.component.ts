@@ -2,7 +2,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, tap} from 'rxjs';
-import { AuthUIService } from '../../services/authui.service';
+import { UIService } from '../../../shared/ui.service';
 
 
 @Component({
@@ -17,9 +17,9 @@ export class VerificationComponent {
     constructor(
         private auth: AuthService, 
         private route: ActivatedRoute,
-        private uiService: AuthUIService,
+        private uiService: UIService,
     ) {
-        this.uiService.formTitle.next("Verification");
+        this.uiService.title.next("Verification");
     }
 
     ngOnInit(): void {

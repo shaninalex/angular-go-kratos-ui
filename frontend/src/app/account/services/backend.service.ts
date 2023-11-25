@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Observable, shareReplay } from "rxjs";
-import { HttpClient } from "@angular/common/http"
+import { HttpClient, HttpParams } from "@angular/common/http"
+import { GeneralError } from "../typedefs";
 
 export interface Logout {
     logout_url: string
@@ -26,5 +27,11 @@ export class BackendService {
        );
     }
 
-
+    getError(error_id: string | null = null): Observable<GeneralError> {
+        let params = new HttpParams();
+        if (error_id) params = params.append("id", error_id);
+        return this.http.get<GeneralError>(`${this.api_url}/api/v2/auth/error`, { params: params, withCredentials: true}).pipe(
+            shareReplay()
+        );
+    }
 }

@@ -1,6 +1,6 @@
 import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Observable, map, tap } from 'rxjs';
-import { AuthUIService } from './services/authui.service';
+import { UIService } from '../shared/ui.service';
 
 @Component({
     selector: '#auth',
@@ -12,9 +12,9 @@ export class AuthComponent implements OnDestroy {
     loading: boolean;
 
     constructor(
-        private uiService: AuthUIService
+        private uiService: UIService
     ) {
-        this.formTitle$ = this.uiService.formTitle;
+        this.formTitle$ = this.uiService.title;
         this.uiService.loading.subscribe({
             next: data => this.loading = data
         });

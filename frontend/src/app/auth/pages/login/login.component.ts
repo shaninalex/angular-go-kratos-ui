@@ -2,7 +2,7 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Observable, catchError, finalize } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
-import { AuthUIService } from '../../services/authui.service';
+import { UIService } from '../../../shared/ui.service';
 
 
 @Component({
@@ -17,9 +17,9 @@ export class LoginComponent implements OnInit {
         private auth: AuthService,
         private router: Router,
         private route: ActivatedRoute,
-        private uiService: AuthUIService
+        private uiService: UIService
     ) {
-        this.uiService.formTitle.next("Login");
+        this.uiService.title.next("Login");
     }
 
     ngOnInit(): void {

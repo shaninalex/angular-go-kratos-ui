@@ -1,13 +1,13 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, catchError, finalize, of, shareReplay } from "rxjs";
-import { AuthUIService } from "./authui.service";
+import { Observable, finalize, shareReplay } from "rxjs";
+import { UIService } from "../../shared/ui.service";
 
 @Injectable()
 export class AuthService {
     constructor(
         private http: HttpClient,
-        private uiService: AuthUIService
+        private uiService: UIService
     ) { }
 
     private handleRequest<T>(observable: Observable<T>): Observable<T> {

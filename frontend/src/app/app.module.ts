@@ -6,6 +6,7 @@ import { HttpClientModule } from '@angular/common/http';
 import { AccountService } from './shared/account.service';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { UIService } from './shared/ui.service';
 
 @NgModule({
     declarations: [
@@ -21,6 +22,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     ],
     providers: [
         AccountService,
+        UIService
     ],
     bootstrap: [AppComponent]
 })
