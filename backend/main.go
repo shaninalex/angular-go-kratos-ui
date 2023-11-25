@@ -30,8 +30,7 @@ func main() {
 	router := gin.Default()
 
 	router.GET("/api/v2/auth/get-registration-form", func(c *gin.Context) {
-		req := client.FrontendApi.CreateBrowserRegistrationFlow(c)
-		_, resp, err := client.FrontendApi.CreateBrowserRegistrationFlowExecute(req)
+		_, resp, err := client.FrontendApi.CreateBrowserRegistrationFlow(c).Execute()
 		if err != nil {
 			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Unable to get registration flow"})

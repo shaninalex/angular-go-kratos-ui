@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { Observable, catchError } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -6,9 +6,9 @@ import { AuthUIService } from '../../services/authui.service';
 
 
 @Component({
-    selector: 'app-login',
+    selector: '#form-login',
     templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css']
+    encapsulation: ViewEncapsulation.None,
 })
 export class LoginComponent implements OnInit {
     form$: Observable<any>;

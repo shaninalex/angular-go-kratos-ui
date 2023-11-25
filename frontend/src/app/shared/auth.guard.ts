@@ -22,9 +22,10 @@ export function CanActiveteAccountPage(route: ActivatedRouteSnapshot, state: Rou
         map(() => {
             return of(true);
         }),
-        catchError(() => {
-            // console.log(err.error.error);
-            return router.navigate(["/auth/login"]);
+        catchError((err) => {
+            console.log(err.error.error);
+            return of(err)
+            // return router.navigate(["/auth/login"]);
         }),
     );
 }

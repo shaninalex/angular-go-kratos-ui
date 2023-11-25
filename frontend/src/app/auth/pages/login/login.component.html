@@ -27,13 +27,13 @@
             [value]="node.attributes.value"
             [type]="node.attributes.type">{{ node.meta.label?.text }}</button>
             
-            <a routerLink="/auth/register" class="btn btn-outline-info">Register</a>
+            <a routerLink="/auth/register" class="btn btn-link">Register</a>
         </div>
     </div>
 
     <div *ngFor="let message of form.ui.messages"
         class="alert mt-4" 
-        [ngClass]="{'alert-danger': message.type === 'error'}" role="alert">
+        [ngClass]="{'alert-warning': message.type === 'error'}" role="alert">
         {{message.text}}
     </div>
 

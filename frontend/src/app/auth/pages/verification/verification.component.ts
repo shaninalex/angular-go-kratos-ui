@@ -1,21 +1,25 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, tap} from 'rxjs';
+import { AuthUIService } from '../../services/authui.service';
 
 
 @Component({
   selector: 'app-verification',
   templateUrl: './verification.component.html',
-  styleUrls: ['./verification.component.css']
+  encapsulation: ViewEncapsulation.None
 })
 export class VerificationComponent {
     form$: Observable<any>;
     flow: string;
 
-
-    constructor(private auth: AuthService, private route: ActivatedRoute) {
-        document.title = "Verification";
+    constructor(
+        private auth: AuthService, 
+        private route: ActivatedRoute,
+        private uiService: AuthUIService,
+    ) {
+        this.uiService.formTitle.next("Verification");
     }
 
     ngOnInit(): void {

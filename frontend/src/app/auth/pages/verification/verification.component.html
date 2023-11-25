@@ -10,7 +10,7 @@
             [value]="node.attributes.value"
         >
 
-        <div class="field" *ngIf="node.attributes.type !== 'submit' && node.attributes.type !== 'hidden'">
+        <div class="mb-3" *ngIf="node.attributes.type !== 'submit' && node.attributes.type !== 'hidden'">
             <a *ngIf="node.type == 'a'"
                 class="btn btn-info"
                 [href]="node.attributes.href">
@@ -18,7 +18,7 @@
             </a>
 
             <input *ngIf="node.type == 'input'"
-                class="form-controle"
+                class="form-control"
                 [disabled]="node.attributes.disabled"
                 [name]="node.attributes.name"
                 [required]="node.attributes.required"
@@ -37,5 +37,16 @@
         </div>
     </div>
 
-    <p>TODO: add alerts</p>
+
+    <div *ngFor="let message of form.ui.messages"
+        class="alert mt-4" 
+        [ngClass]="{
+            'alert-warning': message.type === 'error',
+            'alert-success': message.type === 'success',
+            'alert-info': message.type === 'info'
+        }" 
+        role="alert">
+        {{message.text}}
+    </div>
+
 </form>

@@ -1,13 +1,13 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Observable } from 'rxjs';
 import { AuthUIService } from '../../services/authui.service';
 
 @Component({
-  selector: 'app-register',
+  selector: '#register',
   templateUrl: './register.component.html',
-  styleUrls: ['./register.component.css']
+  encapsulation: ViewEncapsulation.None
 })
 export class RegisterComponent implements OnInit {
     form$: Observable<any>; // TODO: Types for registration form

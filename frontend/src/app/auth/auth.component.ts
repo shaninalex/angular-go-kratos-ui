@@ -1,11 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
 import { AuthUIService } from './services/authui.service';
 
 @Component({
-    selector: 'app-auth',
+    selector: '#auth',
     templateUrl: './auth.component.html',
-    styleUrls: ['./auth.component.css']
+    encapsulation: ViewEncapsulation.None
 })
 export class AuthComponent {
     formTitle$: Observable<string>;
