@@ -41,6 +41,7 @@ func main() {
 	})
 
 	router.GET("/api/v2/auth/get-login-form", func(c *gin.Context) {
+		// check if id exists - if exists - get existed login flow to show errors
 		req := client.FrontendApi.CreateBrowserLoginFlow(c)
 		_, resp, err := client.FrontendApi.CreateBrowserLoginFlowExecute(req)
 		if err != nil {

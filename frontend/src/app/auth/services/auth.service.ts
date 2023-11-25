@@ -1,4 +1,4 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, shareReplay } from "rxjs";
 
@@ -8,11 +8,12 @@ export class AuthService {
         private http: HttpClient
     ) {}
 
-    getLoginFlow(): Observable<any> { // TODO: Interface for Login flow
-        // TODO: use HttpParam
-        return this.http.get<any>(`http://127.0.0.1:8080/api/v2/auth/get-login-form`, { withCredentials: true }).pipe(
+    getLoginFlow(flow: string | null = null): Observable<any> {
+        let params = new HttpParams();
+        if (flow) params = params.append("id", flow);
+        return this.http.get<any>(`http://127.0.0.1:8080/api/v2/auth/get-login-form`, { params: params, withCredentials: true }).pipe(
             shareReplay()
-        )
+        );
     }
 
     getRegistrationFlow(): Observable<any> { // TODO: Interface for Login flow
