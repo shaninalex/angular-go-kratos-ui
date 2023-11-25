@@ -1,4 +1,3 @@
-
 <form [action]="form.ui.action" [method]="form.ui.method" *ngIf="(form$ | async) as form">
     <div class="formgroup" *ngFor="let node of form.ui.nodes">
         <input *ngIf="node.attributes.type === 'hidden'"
@@ -33,7 +32,11 @@
 
     <div *ngFor="let message of form.ui.messages"
         class="alert mt-4" 
-        [ngClass]="{'alert-warning': message.type === 'error'}" role="alert">
+        [ngClass]="{
+            'alert-warning': message.type === 'error',
+            'alert-info': message.type === 'info'
+        }" 
+        role="alert">
         {{message.text}}
     </div>
 
