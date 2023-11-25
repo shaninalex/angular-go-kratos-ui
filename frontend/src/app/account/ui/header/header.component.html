@@ -17,7 +17,7 @@
 
             <div class="d-flex align-items-center gap-2">
                 <div id="theme-switcher"></div>
-                <div class="small">(user info goes here)</div>
+                <div class="small" *ngIf="(traits$ | async ) as traits">{{ traits.email }}</div>
                 <div id="logout"></div>
             </div>
         </div>

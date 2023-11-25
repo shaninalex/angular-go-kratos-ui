@@ -10,11 +10,9 @@ import { SettingsComponent } from './pages/settings/settings.component';
 import { HeaderComponent } from './ui/header/header.component';
 import { ThemeSwitcherComponent } from './ui/theme-switcher/theme-switcher.component';
 import { HomeComponent } from './pages/home/home.component';
-import { FormProfileComponent } from './pages/settings/components/form-profile/form-profile.component';
-import { FormPasswordComponent } from './pages/settings/components/form-password/form-password.component';
-import { FormLookupSecretComponent } from './pages/settings/components/form-lookup-secret/form-lookup-secret.component';
 import { FormTotpComponent } from './pages/settings/components/form-totp/form-totp.component';
 import { ErrorComponent } from './pages/error/error.component';
+import { TextFormComponent } from './pages/settings/components/text-form/text-form.component';
 
 
 const routes: Routes = [
@@ -36,11 +34,9 @@ const routes: Routes = [
         HeaderComponent,
         ThemeSwitcherComponent,
         HomeComponent,
-        FormProfileComponent,
-        FormPasswordComponent,
-        FormLookupSecretComponent,
         FormTotpComponent,
         ErrorComponent,
+        TextFormComponent
     ],
     imports: [
         CommonModule,

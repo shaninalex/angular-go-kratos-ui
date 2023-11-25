@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Observable, shareReplay } from "rxjs";
+import { Observable, catchError, of, shareReplay } from "rxjs";
 import { HttpClient, HttpParams } from "@angular/common/http"
 import { GeneralError } from "../typedefs";
 
@@ -17,8 +17,8 @@ export class BackendService {
 
     getLogoutLink(): Observable<Logout> {
        return this.http.get<Logout>(`${this.api_url}/api/v2/auth/logout`, { withCredentials: true}).pipe(
-           shareReplay()
-       );
+            shareReplay(),
+        );
     }
 
     getSettingsForm(): Observable<Logout> {
