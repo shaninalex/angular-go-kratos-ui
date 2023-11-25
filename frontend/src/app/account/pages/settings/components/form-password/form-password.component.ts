@@ -1,4 +1,5 @@
-import { Component, ViewEncapsulation } from '@angular/core';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { FormSettings } from '../../settings.component';
 
 @Component({
     selector: '#form-password',
@@ -6,5 +7,6 @@ import { Component, ViewEncapsulation } from '@angular/core';
     encapsulation: ViewEncapsulation.None
 })
 export class FormPasswordComponent {
-
+    @Input() form_nodes: Array<any>;
+    @Input() form_settings: FormSettings;
 }
