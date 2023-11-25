@@ -2,7 +2,8 @@ import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Observable, finalize } from 'rxjs';
-import { AuthUIService } from '../../services/authui.service';
+import { UIService } from '../../../shared/ui.service';
+
 
 @Component({
   selector: '#register',
@@ -15,9 +16,9 @@ export class RegisterComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private auth: AuthService,
-        private uiService: AuthUIService
+        private uiService: UIService
     ) {
-        this.uiService.formTitle.next("Register");
+        this.uiService.title.next("Register");
     }
 
     ngOnInit(): void {

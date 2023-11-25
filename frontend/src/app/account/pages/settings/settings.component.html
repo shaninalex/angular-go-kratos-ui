@@ -1,4 +1,7 @@
-<h2>TODO: divide by groups</h2>
+
+<h4>TODO: divide by groups</h4>
+<h4>TODO: Verification</h4>
+
 <form [action]="form.ui.action" [method]="form.ui.method" *ngIf="(form$ | async) as form">
     <div class="formgroup" *ngFor="let node of form.ui.nodes">
         <input *ngIf="node.attributes.type === 'hidden'"
