@@ -1,11 +1,11 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
 import { BackendService } from '../../services/backend.service';
 
 @Component({
-    selector: 'app-settings',
+    selector: '#page-settings',
     templateUrl: './settings.component.html',
-    styleUrls: ['./settings.component.css']
+    encapsulation: ViewEncapsulation.None
 })
 export class SettingsComponent implements OnInit {
     form$: Observable<any>;

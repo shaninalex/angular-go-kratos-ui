@@ -7,6 +7,8 @@ import { ReactiveFormsModule } from '@angular/forms';
 import { LogoutComponent } from './ui/logout/logout.component';
 import { BackendService } from './services/backend.service';
 import { SettingsComponent } from './components/settings/settings.component';
+import { HeaderComponent } from './ui/header/header.component';
+import { ThemeSwitcherComponent } from './ui/theme-switcher/theme-switcher.component';
 
 
 const routes: Routes = [
@@ -21,6 +23,8 @@ const routes: Routes = [
         AccountComponent,
         LogoutComponent,
         SettingsComponent,
+        HeaderComponent,
+        ThemeSwitcherComponent,
     ],
     imports: [
         CommonModule,

@@ -14,4 +14,4 @@ npm run start
 ```
 
 ### Architecture
-![Alt text](./docs/images/app-architecture.png "App Architecture")
+![Alt text](./docs/images/app-architecture.png "App Architecture")Logout

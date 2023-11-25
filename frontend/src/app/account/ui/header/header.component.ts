@@ -1,10 +1,10 @@
 import { Component, ViewEncapsulation } from '@angular/core';
 
-
 @Component({
-    selector: '#page-account',
-    templateUrl: './account.component.html',
+    selector: '#header',
+    templateUrl: './header.component.html',
     encapsulation: ViewEncapsulation.None
 })
-export class AccountComponent {
+export class HeaderComponent {
+
 }
