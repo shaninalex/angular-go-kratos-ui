@@ -58,7 +58,10 @@ selfservice:
       ui_url: http://127.0.0.1:4200/auth/login
       lifespan: 10m
       after:
-        default_browser_return_url: http://127.0.0.1:4200/account
+        password:
+          default_browser_return_url: http://127.0.0.1:4200/account
+          hooks:
+            - hook: require_verified_address
 
     registration:
       lifespan: 10m
