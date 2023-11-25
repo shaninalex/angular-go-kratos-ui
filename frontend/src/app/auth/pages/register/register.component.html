@@ -22,12 +22,12 @@
         </div>
 
         <div *ngIf="node.attributes.type === 'submit'" class="d-flex justify-content-between align-items-center">
-            <button class="btn btn-sm btn-info"
+            <button class="btn btn-info"
                 [disabled]="node.attributes.disabled"
                 [name]="node.attributes.name"
                 [value]="node.attributes.value"
                 [type]="node.attributes.type">{{ node.meta.label?.text }}</button>
-            <a routerLink="/auth/login" class="btn btn-outline-info btn-sm">Login</a>
+            <a routerLink="/auth/login" class="btn btn-outline-info">Login</a>
         </div>
     </div>
 

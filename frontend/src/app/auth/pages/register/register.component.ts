@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
 import { Observable } from 'rxjs';
+import { AuthUIService } from '../../services/authui.service';
 
 @Component({
   selector: 'app-register',
@@ -14,8 +15,9 @@ export class RegisterComponent implements OnInit {
     constructor(
         private route: ActivatedRoute,
         private auth: AuthService,
+        private uiService: AuthUIService
     ) {
-        document.title = "Register";
+        this.uiService.formTitle.next("Register");
     }
 
     ngOnInit(): void {

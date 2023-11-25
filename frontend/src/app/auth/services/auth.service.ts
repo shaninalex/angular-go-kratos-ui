@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable, shareReplay } from "rxjs";
+import { Observable, catchError, of, shareReplay } from "rxjs";
 
 @Injectable()
 export class AuthService {
@@ -12,7 +12,11 @@ export class AuthService {
         let params = new HttpParams();
         if (flow) params = params.append("id", flow);
         return this.http.get<any>(`http://127.0.0.1:8080/api/v2/auth/get-login-form`, { params: params, withCredentials: true }).pipe(
-            shareReplay()
+            shareReplay(),
+            // catching error in login component instead of service
+            // catchError(error => {
+            //     return of(error);
+            // })
         );
     }
 

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../services/auth.service';
-import { Observable } from 'rxjs';
-import { ActivatedRoute } from '@angular/router';
+import { Observable, catchError } from 'rxjs';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthUIService } from '../../services/authui.service';
 
 
 @Component({
@@ -14,19 +15,25 @@ export class LoginComponent implements OnInit {
 
     constructor(
         private auth: AuthService,
+        private router: Router,
         private route: ActivatedRoute,
+        private uiService: AuthUIService
     ) {
-        document.title = "Login";
+        this.uiService.formTitle.next("Login");
     }
 
     ngOnInit(): void {
         this.route.queryParams.subscribe({
             next: params => {
-                if (params.hasOwnProperty("flow")) {
-                    this.form$ = this.auth.getLoginFlow(params["flow"]);
-                } else {
-                    this.form$ = this.auth.getLoginFlow();
-                }
+                this.form$ = this.auth.getLoginFlow(params["flow"]).pipe(
+                    catchError(error => {
+                        if (error.status == 410) {
+                            // From can be expired and server will return "410 Gone"
+                            console.log("Form is expired");
+                        }
+                        return this.router.navigate(["/auth/login"]);
+                    })
+                );
             }
         })
     }

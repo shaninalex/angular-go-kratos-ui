@@ -41,7 +41,17 @@ func main() {
 	})
 
 	router.GET("/api/v2/auth/get-login-form", func(c *gin.Context) {
-		// check if id exists - if exists - get existed login flow to show errors
+		form_id := c.Query("id")
+		if form_id != "" {
+			_, resp, err := client.FrontendApi.GetLoginFlow(c).Cookie(c.Request.Header.Get("Cookie")).Id(form_id).Execute()
+			if err != nil {
+				log.Println(err)
+				c.JSON(resp.StatusCode, gin.H{"error": err.Error()})
+				return
+			}
+			ProxyResponse(c, resp)
+		}
+
 		req := client.FrontendApi.CreateBrowserLoginFlow(c)
 		_, resp, err := client.FrontendApi.CreateBrowserLoginFlowExecute(req)
 		if err != nil {
@@ -102,7 +112,11 @@ func main() {
 func ProxyResponse(c *gin.Context, resp *http.Response) {
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Error reading response body"})
+		log.Println(err)
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error":   true,
+			"message": "Error reading response body",
+		})
 		return
 	}
 	for key, values := range resp.Header {

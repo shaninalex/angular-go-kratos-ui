@@ -1,3 +1,4 @@
+
 <form [action]="form.ui.action" [method]="form.ui.method" *ngIf="(form$ | async) as form">
     <div class="formgroup" *ngFor="let node of form.ui.nodes">
         <input *ngIf="node.attributes.type === 'hidden'"
@@ -18,16 +19,22 @@
                 [placeholder]="node.meta.label?.text"
             >
         </div>
-
+        
         <div *ngIf="node.attributes.type === 'submit'" class="d-flex justify-content-between align-items-center">
-            <button class="btn btn-sm btn-info"
-                [disabled]="node.attributes.disabled"
-                [name]="node.attributes.name"
-                [value]="node.attributes.value"
-                [type]="node.attributes.type">{{ node.meta.label?.text }}</button>
-
-            <a routerLink="/auth/register" class="btn btn-sm btn-outline-info">Register</a>
+            <button class="btn btn-info"
+            [disabled]="node.attributes.disabled"
+            [name]="node.attributes.name"
+            [value]="node.attributes.value"
+            [type]="node.attributes.type">{{ node.meta.label?.text }}</button>
+            
+            <a routerLink="/auth/register" class="btn btn-outline-info">Register</a>
         </div>
+    </div>
+
+    <div *ngFor="let message of form.ui.messages"
+        class="alert mt-4" 
+        [ngClass]="{'alert-danger': message.type === 'error'}" role="alert">
+        {{message.text}}
     </div>
 
 </form>

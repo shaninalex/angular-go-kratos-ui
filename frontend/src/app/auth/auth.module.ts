@@ -9,6 +9,7 @@ import { AuthService } from './services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AuthUIService } from './services/authui.service';
 
 
 const routes: Routes = [
@@ -37,6 +38,7 @@ const routes: Routes = [
     ],
     providers: [
         AuthService,
+        AuthUIService
     ]
 })
 export class AuthModule { }
