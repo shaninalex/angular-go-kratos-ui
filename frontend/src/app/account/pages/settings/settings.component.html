@@ -30,16 +30,15 @@
 </ul>
 
 <div *ngIf="active_tab === 'profile'">
-    <div id="form-profile" [form_nodes]="nodes_profile" [form_settings]="form_settings"></div>
+    <div text-form [form_nodes]="nodes_profile" [form_settings]="form_settings"></div>
 </div>
 <div *ngIf="active_tab === 'password'">
-    <div id="form-password" [form_nodes]="nodes_password" [form_settings]="form_settings"></div>
+    <div text-form [form_nodes]="nodes_password" [form_settings]="form_settings"></div>
 </div>
-<!-- <div *ngIf="active_tab === 'lookup_secret'">
-    {{nodes_lookup_secret | json}}
-    <div id="form-lookup_secret"></div>
+<div *ngIf="active_tab === 'lookup_secret'">
+    <div text-form [form_nodes]="nodes_lookup_secret" [form_settings]="form_settings"></div>
 </div>
-<div *ngIf="active_tab === 'totp'">
+<!-- <div *ngIf="active_tab === 'totp'">
     {{nodes_totp | json}}
     <div id="form-totp"></div>
 </div> -->
