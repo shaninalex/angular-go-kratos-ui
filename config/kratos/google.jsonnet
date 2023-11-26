@@ -10,7 +10,6 @@ local claims = {
         first: claims.given_name,
         last: claims.family_name,
       },
-      [if 'hd' in claims && claims.email_verified then 'hd' else null]: claims.hd,
     },
   },
 }
