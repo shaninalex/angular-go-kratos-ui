@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
-import { Observable, catchError, finalize } from 'rxjs';
+import { BackendService } from 'src/app/shared/backend.service';
+import { Observable, catchError } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UIService } from '../../../shared/ui.service';
 
@@ -14,7 +14,7 @@ export class LoginComponent implements OnInit {
     form$: Observable<any>;
 
     constructor(
-        private auth: AuthService,
+        private auth: BackendService,
         private router: Router,
         private route: ActivatedRoute,
         private uiService: UIService

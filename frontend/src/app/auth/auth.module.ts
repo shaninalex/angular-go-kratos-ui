@@ -5,7 +5,6 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { VerificationComponent } from './pages/verification/verification.component';
 import { RecoveryComponent } from './pages/recovery/recovery.component';
-import { AuthService } from './services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
@@ -34,9 +33,6 @@ const routes: Routes = [
         HttpClientModule,
         ReactiveFormsModule,
         RouterModule.forChild(routes),
-    ],
-    providers: [
-        AuthService
     ]
 })
 export class AuthModule { }
