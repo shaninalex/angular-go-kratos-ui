@@ -7,7 +7,7 @@ serve:
     cors:
       enabled: true
       allowed_origins:
-        - http://127.0.0.1:4200
+        - http://localhost:4200
       allowed_methods:
         - POST
         - GET
@@ -30,7 +30,7 @@ errors:
     redirect:
       enabled: true
       config:
-        to: http://127.0.0.1:4200/auth/login
+        to: http://localhost:4200/auth/login
         when:
           - error:
               - unauthorized

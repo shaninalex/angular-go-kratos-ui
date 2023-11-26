@@ -10,7 +10,7 @@ export class AccountService {
     constructor(private http: HttpClient) {}
 
     getSessionInformation(): Observable<any> {
-        return this.http.get<any>(`http://127.0.0.1:8080/api/v2/auth/check-session`, { withCredentials: true }).pipe(
+        return this.http.get<any>(`http://localhost:8080/api/v2/auth/check-session`, { withCredentials: true }).pipe(
             shareReplay()
         )
     }
