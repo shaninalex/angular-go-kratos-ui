@@ -48,8 +48,8 @@ services:
   kratos:
     image: oryd/kratos:v1.0.0
     container_name: kratos
-    environment:
-      - DSN=postgres://user:password@postgres:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
+    env_file:
+      - .env
     ports:
       - 4433:4433
       - 4434:4434

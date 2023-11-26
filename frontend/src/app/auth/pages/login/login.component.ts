@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
-import { Observable, catchError, finalize } from 'rxjs';
+import { BackendService } from 'src/app/shared/backend.service';
+import { Observable, catchError } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { UIService } from '../../../shared/ui.service';
 
@@ -14,17 +14,17 @@ export class LoginComponent implements OnInit {
     form$: Observable<any>;
 
     constructor(
-        private auth: AuthService,
+        private auth: BackendService,
         private router: Router,
         private route: ActivatedRoute,
         private uiService: UIService
     ) {
-        this.uiService.title.next("Login");
     }
-
+    
     ngOnInit(): void {
         this.route.queryParams.subscribe({
-                next: params => {
+            next: params => {
+                    this.uiService.title.next("Login");
                     this.form$ = this.auth.getLoginFlow(params["flow"]).pipe(
                         catchError(error => {
                             if (error.status == 410) {

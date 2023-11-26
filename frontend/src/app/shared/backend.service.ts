@@ -1,20 +1,48 @@
 import { HttpClient, HttpParams } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable, finalize, shareReplay } from "rxjs";
-import { UIService } from "../../shared/ui.service";
+import { GeneralError } from "../typedefs/error";
+import { UIService } from "./ui.service";
 
-@Injectable()
-export class AuthService {
+
+@Injectable({
+    providedIn: "root"
+})
+export class BackendService {
+    private api_url: string = "http://localhost:8080";
+
     constructor(
         private http: HttpClient,
         private uiService: UIService
-    ) { }
+    ) {}
 
     private handleRequest<T>(observable: Observable<T>): Observable<T> {
         return observable.pipe(
             finalize(() => this.uiService.loading.next(false)),
             shareReplay()
         );
+    }
+
+    getSessionInformation(): Observable<any> {
+        return this.handleRequest(this.http.get<any>(`http://localhost:8080/api/v2/auth/check-session`, { withCredentials: true }));
+    }
+
+    getLogoutLink(): Observable<any> {
+        return this.handleRequest(this.http.get<any>(`${this.api_url}/api/v2/auth/logout`, { withCredentials: true }));
+    }
+
+    getSettingsForm(): Observable<any> {
+        return this.handleRequest(this.http.get<any>(`${this.api_url}/api/v2/auth/settings`, { withCredentials: true }));
+    }
+
+    getError(error_id: string | null = null): Observable<GeneralError> {
+        let params = new HttpParams();
+        if (error_id) params = params.append("id", error_id);
+        return this.handleRequest(this.http.get<GeneralError>(`${this.api_url}/api/v2/auth/error`, { params: params, withCredentials: true }));
+    }
+
+    createVerificationFlow(): Observable<any> {
+        return this.handleRequest(this.http.get<any>(`${this.api_url}/api/v2/auth/create-verification-form`, { withCredentials: true }));
     }
 
     getLoginFlow(flow: string | null = null): Observable<any> {
@@ -26,7 +54,8 @@ export class AuthService {
     getRegistrationFlow(flow: string | null = null): Observable<any> {
         let params = new HttpParams();
         if (flow) params = params.append("id", flow);
-        return this.handleRequest(this.http.get<any>(`http://localhost:8080/api/v2/auth/get-registration-form`, { params: params, withCredentials: true }))
+        console.log(params)
+        return this.handleRequest(this.http.get<any>(`http://localhost:8080/api/v2/auth/get-registration-form`, { params: params, withCredentials: true }));
     }
 
     formGetVerification(flow: string): Observable<any> {

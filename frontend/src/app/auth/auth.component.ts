@@ -1,5 +1,5 @@
 import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
-import { Observable, map, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { UIService } from '../shared/ui.service';
 
 @Component({

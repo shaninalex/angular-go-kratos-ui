@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UIService } from 'src/app/shared/ui.service';
-import { BackendService } from '../../services/backend.service';
+import { BackendService } from 'src/app/shared/backend.service';
 import { FormSettings } from '../settings/settings.component';
 
 @Component({

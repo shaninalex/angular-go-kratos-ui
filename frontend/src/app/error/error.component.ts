@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { BackendService } from '../../services/backend.service';
+import { BackendService } from '../shared/backend.service';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
 import { GeneralError } from 'src/app/typedefs/error';

@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from '@angular/core';
-import { AuthService } from '../../services/auth.service';
+import { BackendService } from 'src/app/shared/backend.service';
 import { ActivatedRoute } from '@angular/router';
 import { Observable, tap} from 'rxjs';
 import { UIService } from '../../../shared/ui.service';
@@ -15,7 +15,7 @@ export class VerificationComponent {
     flow: string;
 
     constructor(
-        private auth: AuthService, 
+        private auth: BackendService, 
         private route: ActivatedRoute,
         private uiService: UIService,
     ) {
