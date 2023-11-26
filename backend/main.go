@@ -116,7 +116,6 @@ func main() {
 			return
 		}
 		ProxyResponse(c, resp)
-		return
 	})
 
 	router.GET("/api/v2/auth/error", func(c *gin.Context) {
