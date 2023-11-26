@@ -33,4 +33,10 @@ export class AuthService {
         let params = new HttpParams().append("flow", flow);
         return this.handleRequest(this.http.get<any>(`http://127.0.0.1:8080/api/v2/auth/get-verification-form`, { params: params, withCredentials: true }))
     }
+
+    getRecoveryFlow(flow: string | null = null): Observable<any> {
+        let params = new HttpParams();
+        if (flow) params = params.append("id", flow);
+        return this.handleRequest(this.http.get<any>(`http://127.0.0.1:8080/api/v2/auth/recovery-form`, { params: params, withCredentials: true }))
+    }
 }
