@@ -1,7 +1,7 @@
 import { ActivatedRouteSnapshot, CanActivateFn, Router, RouterStateSnapshot, UrlTree } from "@angular/router";
 import { Observable, catchError, map, of } from "rxjs";
 import { inject } from "@angular/core";
-import { AccountService } from "./account.service";
+import { BackendService } from "./backend.service";
 import { Store } from "@ngrx/store";
 import { AppState } from "../store/identity/reducer";
 import { SetIdentity } from "../store/identity/actions";
@@ -13,7 +13,7 @@ export function CanActiveteAccountPage(route: ActivatedRouteSnapshot, state: Rou
     boolean |
     UrlTree
 {
-    const currentUser = inject(AccountService).getSessionInformation();
+    const currentUser = inject(BackendService).getSessionInformation();
     const router = inject(Router);
     const store = inject(Store<AppState>);
 

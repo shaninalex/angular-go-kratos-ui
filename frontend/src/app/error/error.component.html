@@ -1,6 +1,7 @@
 <div *ngIf="(error$ | async) as err" class="alert alert-danger" role="alert">
-    <h4 class="alert-heading">{{ err.error.status }}</h4>
-    <p>{{ err.error.reason }}</p>
+    <h4 class="alert-heading">{{ err.error.status }} ( {{err.error.code}} )</h4>
+    <p *ngIf="err.error.reason">{{ err.error.reason }}</p>
+    <p>{{ err.error.message }}</p>
     <hr>
     Details:
     <div class="small"><b>Docs:</b> {{ err.error.details.docs }}</div>

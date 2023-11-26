@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
-import { BackendService } from '../../services/backend.service';
+import { BackendService } from 'src/app/shared/backend.service';
 import { UIService } from 'src/app/shared/ui.service';
 
 export interface FormSettings {

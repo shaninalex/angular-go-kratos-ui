@@ -1,5 +1,5 @@
 import { Component, ViewEncapsulation } from "@angular/core"
-import { BackendService } from "../../services/backend.service";
+import { BackendService } from "src/app/shared/backend.service";
 
 
 @Component({
