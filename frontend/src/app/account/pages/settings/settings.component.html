@@ -17,11 +17,6 @@
         [ngClass]="{'active': active_tab === 'totp'}"
         class="nav-link">TOTP</button>
     </li>
-    <li class="nav-item">
-      <button (click)="changeTab('verification')"
-        [ngClass]="{'active': active_tab === 'verification'}"
-        class="nav-link">Verification</button>
-    </li>
 </ul>
 
 <div *ngIf="active_tab === 'profile'">
@@ -32,7 +27,4 @@
 </div>
 <div *ngIf="active_tab === 'totp'">
     <div text-form [form_nodes]="nodes_totp" [form_settings]="form_settings"></div>
-</div>
-<div *ngIf="active_tab === 'verification'">
-    verification
 </div>

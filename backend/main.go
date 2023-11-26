@@ -116,6 +116,16 @@ func main() {
 		ProxyResponse(c, resp)
 	})
 
+	router.GET("/api/v2/auth/create-verification-form", func(c *gin.Context) {
+		_, resp, err := client.FrontendApi.CreateBrowserVerificationFlow(c).Execute()
+		if err != nil {
+			log.Println(err)
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		ProxyResponse(c, resp)
+	})
+
 	router.Run(fmt.Sprintf(":%d", port))
 }
 

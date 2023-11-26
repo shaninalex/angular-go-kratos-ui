@@ -10,6 +10,9 @@ import { UIService } from './shared/ui.service';
 import { StoreModule } from '@ngrx/store';
 import { identityReducer } from './store/identity/reducer';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { EffectsModule } from '@ngrx/effects';
+import { IdentityEffects } from './store/identity/effects';
+import { MessagesService } from './shared/messages.service';
 
 @NgModule({
     declarations: [
@@ -25,11 +28,13 @@ import { StoreDevtoolsModule } from '@ngrx/store-devtools';
         StoreModule.forRoot({
             identity: identityReducer
         }, {}),
-        StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() })
+        StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+        EffectsModule.forRoot([IdentityEffects])
     ],
     providers: [
         AccountService,
-        UIService
+        UIService,
+        MessagesService
     ],
     bootstrap: [AppComponent]
 })

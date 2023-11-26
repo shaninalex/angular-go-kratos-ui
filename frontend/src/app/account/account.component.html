@@ -1,9 +1,11 @@
 <div id="header" class="mb-4"></div>
 
 <div class="container">
-    
+    <div *ngFor="let m of messages" 
+        class="alert alert-{{m.type}}">
+        {{ m.text }}
+    </div>
+      
     <router-outlet></router-outlet>
-    <!-- <div id="page-settings"></div> -->
-    
 
 </div>
