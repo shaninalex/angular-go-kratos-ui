@@ -4,16 +4,16 @@ dsn: memory
 
 serve:
   public:
-    base_url: http://127.0.0.1:4433/
+    base_url: http://localhost:4433/
     cors:
       enabled: true
   admin:
     base_url: http://kratos:4434/
 
 selfservice:
-  default_browser_return_url: http://127.0.0.1:4200/
+  default_browser_return_url: http://localhost:4200/
   allowed_return_urls:
-    - http://127.0.0.1:4200
+    - http://localhost:4200
 
   methods:
     password:
@@ -31,41 +31,41 @@ selfservice:
 
   flows:
     error:
-      ui_url: http://127.0.0.1:4200/account/error
+      ui_url: http://localhost:4200/account/error
 
     settings:
-      ui_url: http://127.0.0.1:4200/settings
+      ui_url: http://localhost:4200/settings
       privileged_session_max_age: 15m
       required_aal: highest_available
 
     recovery:
       enabled: true
-      ui_url: http://127.0.0.1:4200/auth/recovery
+      ui_url: http://localhost:4200/auth/recovery
       use: code
 
     verification:
       enabled: true
-      ui_url: http://127.0.0.1:4200/auth/verification
+      ui_url: http://localhost:4200/auth/verification
       use: code
       after:
-        default_browser_return_url: http://127.0.0.1:4200/account
+        default_browser_return_url: http://localhost:4200/account
 
     logout:
       after:
-        default_browser_return_url: http://127.0.0.1:4200/auth/login
+        default_browser_return_url: http://localhost:4200/auth/login
 
     login:
-      ui_url: http://127.0.0.1:4200/auth/login
+      ui_url: http://localhost:4200/auth/login
       lifespan: 10m
       after:
         password:
-          default_browser_return_url: http://127.0.0.1:4200/account
+          default_browser_return_url: http://localhost:4200/account
           hooks:
             - hook: require_verified_address
 
     registration:
       lifespan: 10m
-      ui_url: http://127.0.0.1:4200/auth/registration
+      ui_url: http://localhost:4200/auth/registration
       after:
         password:
           hooks:
