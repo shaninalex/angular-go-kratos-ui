@@ -1,7 +1,8 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Observable, finalize } from 'rxjs';
+import { Observable } from 'rxjs';
 import { UIService } from '../../../shared/ui.service';
 import { BackendService } from 'src/app/shared/backend.service';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -14,14 +15,16 @@ export class RegisterComponent implements OnInit {
 
     constructor(
         private auth: BackendService,
-        private uiService: UIService
-    ) {
-        this.uiService.title.next("Register");
-    }
+        private route: ActivatedRoute,
+        private uiService: UIService,
+    ) {}
 
     ngOnInit(): void {
-        this.form$ = this.auth.getRegistrationFlow().pipe(
-            finalize(() => this.uiService.loading.next(false))
-        )
+        this.route.queryParams.subscribe({
+            next: params => {
+                this.uiService.title.next("Register");
+                this.form$ = this.auth.getRegistrationFlow(params["flow"]);
+            }
+        })
     }
 }

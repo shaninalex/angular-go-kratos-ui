@@ -33,14 +33,15 @@ selfservice:
         providers:
           - id: google
             provider: generic
-            client_id: ""
-            client_secret: ""
+            # Google client id and secret are set via env variables:
+            # client_id = SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_ID
+            # client_secret = SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_SECRET
             issuer_url: https://accounts.google.com
-            # mapper_url: "base64://{YOUR_BASE64_ENCODED_JSONNET_HERE}"
-            # Alternatively, use an URL:
-            mapper_url: https://storage.googleapis.com/abc-cde-prd/9cac9717f007808bf17
+            mapper_url: file:///etc/config/kratos/google.jsonnet
             scope:
               - email
+              - profile
+              - openid
       enabled: true
 
   flows:
@@ -72,10 +73,7 @@ selfservice:
       ui_url: http://localhost:4200/auth/login
       lifespan: 10m
       after:
-        password:
-          default_browser_return_url: http://localhost:4200/account
-          hooks:
-            - hook: require_verified_address
+        default_browser_return_url: http://localhost:4200/account
 
     registration:
       lifespan: 10m
@@ -85,6 +83,9 @@ selfservice:
           hooks:
             - hook: session
             - hook: show_verification_ui
+        oidc:
+          hooks:
+            - hook: session
 
 log:
   level: debug

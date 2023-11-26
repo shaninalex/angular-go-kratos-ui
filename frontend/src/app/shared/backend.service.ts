@@ -54,7 +54,8 @@ export class BackendService {
     getRegistrationFlow(flow: string | null = null): Observable<any> {
         let params = new HttpParams();
         if (flow) params = params.append("id", flow);
-        return this.handleRequest(this.http.get<any>(`http://localhost:8080/api/v2/auth/get-registration-form`, { params: params, withCredentials: true }))
+        console.log(params)
+        return this.handleRequest(this.http.get<any>(`http://localhost:8080/api/v2/auth/get-registration-form`, { params: params, withCredentials: true }));
     }
 
     formGetVerification(flow: string): Observable<any> {

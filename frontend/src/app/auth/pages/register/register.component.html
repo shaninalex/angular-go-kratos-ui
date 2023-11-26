@@ -30,6 +30,15 @@
                 [type]="node.attributes.type">{{ node.meta.label?.text }}</button>
         </div>
 
+        <div *ngFor="let message of form.ui.messages"
+            class="alert mt-4" 
+            [ngClass]="{
+                'alert-warning': message.type === 'error',
+                'alert-info': message.type === 'info'
+            }" 
+            role="alert">
+            {{message.text}}
+        </div>
     </form>
 
 </div>

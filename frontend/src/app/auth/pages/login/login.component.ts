@@ -19,12 +19,12 @@ export class LoginComponent implements OnInit {
         private route: ActivatedRoute,
         private uiService: UIService
     ) {
-        this.uiService.title.next("Login");
     }
-
+    
     ngOnInit(): void {
         this.route.queryParams.subscribe({
-                next: params => {
+            next: params => {
+                    this.uiService.title.next("Login");
                     this.form$ = this.auth.getLoginFlow(params["flow"]).pipe(
                         catchError(error => {
                             if (error.status == 410) {

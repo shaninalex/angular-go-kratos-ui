@@ -30,6 +30,18 @@ func main() {
 	router := gin.Default()
 
 	router.GET("/api/v2/auth/get-registration-form", func(c *gin.Context) {
+		form_id := c.Query("id")
+		if form_id != "" {
+			_, resp, err := client.FrontendApi.GetRegistrationFlow(c).Cookie(c.Request.Header.Get("Cookie")).Id(form_id).Execute()
+			if err != nil {
+				log.Println(err)
+				c.JSON(resp.StatusCode, gin.H{"error": err.Error()})
+				return
+			}
+			ProxyResponse(c, resp)
+			return
+		}
+
 		_, resp, err := client.FrontendApi.CreateBrowserRegistrationFlow(c).Execute()
 		if err != nil {
 			log.Println(err)
@@ -49,6 +61,7 @@ func main() {
 				return
 			}
 			ProxyResponse(c, resp)
+			return
 		}
 
 		req := client.FrontendApi.CreateBrowserLoginFlow(c)
@@ -103,6 +116,7 @@ func main() {
 			return
 		}
 		ProxyResponse(c, resp)
+		return
 	})
 
 	router.GET("/api/v2/auth/error", func(c *gin.Context) {
@@ -136,6 +150,7 @@ func main() {
 				return
 			}
 			ProxyResponse(c, resp)
+			return
 		}
 
 		_, resp, err := client.FrontendApi.CreateBrowserRecoveryFlow(c).Execute()
