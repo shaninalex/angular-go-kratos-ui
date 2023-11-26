@@ -1,0 +1,43 @@
+<form [action]="form_settings.action" [method]="form_settings.method">
+    <ng-container *ngFor="let node of form_settings.nodes">
+        <input *ngIf="node.attributes.type === 'hidden'" 
+            [disabled]="node.attributes.disabled"
+            [name]="node.attributes.name" 
+            [required]="node.attributes.required" 
+            [type]="node.attributes.type"
+            [value]="node.attributes.value">
+    </ng-container>
+
+    <div class="mb-3" *ngFor="let node of form_nodes">
+        <input *ngIf="node.type === 'input' && node.attributes.type !== 'submit'"
+            class="form-control"
+            [disabled]="node.attributes.disabled"
+            [name]="node.attributes.name"
+            [required]="node.attributes.required"
+            [type]="node.attributes.type"
+            [value]="node.attributes.value? node.attributes.value: null"
+            [placeholder]="node.meta.label?.text">
+        
+        <ng-container *ngIf="node.type === 'img'">
+            <p>{{node.meta.label.text}}</p>
+            <img class="img-fluid" 
+                [id]="node.attributes.id"
+                [width]="node.attributes.width"
+                [height]="node.attributes.height"
+                [src]="node.attributes.src" alt="">
+        </ng-container>
+        
+        <div class="alert alert-info my-3" role="alert" *ngIf="node.type === 'text'">
+            <h4 [id]="node.attributes.id" class="alert-heading">{{ node.attributes.text.text}}</h4>
+            <p [id]="node.meta.label.id">{{node.meta.label.text}}</p>
+        </div>
+        
+        <button 
+            *ngIf="node.attributes.type === 'submit'"
+            class="btn btn-info"
+            [disabled]="node.attributes.disabled"
+            [name]="node.attributes.name"
+            [value]="node.attributes.value"
+            [type]="node.attributes.type">{{ node.meta.label?.text }}</button>
+    </div>
+</form>
