@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { Observable, tap } from 'rxjs';
+import { Observable } from 'rxjs';
 import { BackendService } from '../../services/backend.service';
 import { UIService } from 'src/app/shared/ui.service';
 
@@ -16,10 +16,9 @@ export interface FormSettings {
 })
 export class SettingsComponent implements OnInit {
     form$: Observable<any>;
-    active_tab: string = "profile";
+    active_tab: string = "totp";
     nodes_profile: Array<any>;
     nodes_password: Array<any>;
-    nodes_lookup_secret: Array<any>;
     nodes_totp: Array<any>;
     form_settings: FormSettings = <FormSettings>{};
 
@@ -39,9 +38,7 @@ export class SettingsComponent implements OnInit {
                 this.form_settings.nodes = data.ui.nodes.filter((node:any) => node.group === "default");
                 this.nodes_profile = data.ui.nodes.filter((node:any) => node.group === "profile");
                 this.nodes_password = data.ui.nodes.filter((node:any) => node.group === "password");
-                this.nodes_lookup_secret = data.ui.nodes.filter((node:any) => node.group === "lookup_secret");
-                this.nodes_totp = data.ui.nodes.filter((node:any) => node.group === "totp");
-
+                this.nodes_totp = data.ui.nodes.filter((node:any) => node.group === "totp" || node.group === "lookup_secret");
             }
         });
     }

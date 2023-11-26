@@ -13,19 +13,9 @@
         class="nav-link" href="#">Change password</button>
     </li>
     <li class="nav-item">
-      <button (click)="changeTab('lookup_secret')"
-        [ngClass]="{'active': active_tab === 'lookup_secret'}"
-        class="nav-link" href="#">Lookup Secrets</button>
-    </li>
-    <li class="nav-item">
       <button (click)="changeTab('totp')"
         [ngClass]="{'active': active_tab === 'totp'}"
         class="nav-link">TOTP</button>
-    </li>
-    <li class="nav-item">
-      <button (click)="changeTab('verification')"
-        [ngClass]="{'active': active_tab === 'verification'}"
-        class="nav-link">Verification</button>
     </li>
 </ul>
 
@@ -35,13 +25,6 @@
 <div *ngIf="active_tab === 'password'">
     <div text-form [form_nodes]="nodes_password" [form_settings]="form_settings"></div>
 </div>
-<div *ngIf="active_tab === 'lookup_secret'">
-    <div text-form [form_nodes]="nodes_lookup_secret" [form_settings]="form_settings"></div>
-</div>
-<!-- <div *ngIf="active_tab === 'totp'">
-    {{nodes_totp | json}}
-    <div id="form-totp"></div>
-</div> -->
-<div *ngIf="active_tab === 'verification'">
-    verification
+<div *ngIf="active_tab === 'totp'">
+    <div text-form [form_nodes]="nodes_totp" [form_settings]="form_settings"></div>
 </div>

@@ -116,6 +116,37 @@ func main() {
 		ProxyResponse(c, resp)
 	})
 
+	router.GET("/api/v2/auth/create-verification-form", func(c *gin.Context) {
+		_, resp, err := client.FrontendApi.CreateBrowserVerificationFlow(c).Execute()
+		if err != nil {
+			log.Println(err)
+			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		ProxyResponse(c, resp)
+	})
+
+	router.GET("/api/v2/auth/recovery-form", func(c *gin.Context) {
+		form_id := c.Query("id")
+		if form_id != "" {
+			_, resp, err := client.FrontendApi.GetRecoveryFlow(c).Cookie(c.Request.Header.Get("Cookie")).Id(form_id).Execute()
+			if err != nil {
+				log.Println(err)
+				c.JSON(resp.StatusCode, gin.H{"error": err.Error()})
+				return
+			}
+			ProxyResponse(c, resp)
+		}
+
+		_, resp, err := client.FrontendApi.CreateBrowserRecoveryFlow(c).Execute()
+		if err != nil {
+			log.Println(err)
+			c.JSON(http.StatusBadRequest, gin.H{"error": "Unable to get login flow"})
+			return
+		}
+		ProxyResponse(c, resp)
+	})
+
 	router.Run(fmt.Sprintf(":%d", port))
 }
 

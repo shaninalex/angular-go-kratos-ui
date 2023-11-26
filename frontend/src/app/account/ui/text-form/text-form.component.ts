@@ -1,5 +1,5 @@
 import { Component, Input, ViewEncapsulation } from '@angular/core';
-import { FormSettings } from '../../settings.component';
+import { FormSettings } from '../../pages/settings/settings.component';
 
 @Component({
     selector: '[text-form]',

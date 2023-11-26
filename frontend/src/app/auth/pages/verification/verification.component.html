@@ -1,58 +1,54 @@
-<form [action]="form.ui.action" [method]="form.ui.method" *ngIf="(form$ | async) as form">
-
-    <div class="mb-3" *ngFor="let node of form.ui.nodes">
-
-        <input *ngIf="node.attributes.type === 'hidden'"
-            [disabled]="node.attributes.disabled"
-            [name]="node.attributes.name"
-            [required]="node.attributes.required"
-            [type]="node.attributes.type"
-            [value]="node.attributes.value"
-        >
-
-        <div class="mb-3" *ngIf="node.attributes.type !== 'submit' && node.attributes.type !== 'hidden'">
-            <a *ngIf="node.type == 'a'"
-                class="btn btn-info"
-                [href]="node.attributes.href">
-                {{ node.meta.label?.text }}
-            </a>
-
-            <input *ngIf="node.type == 'input'"
-                class="form-control"
+<div class="card-body">
+    <form [action]="form.ui.action" [method]="form.ui.method" *ngIf="(form$ | async) as form">
+        <div class="mb-3" *ngFor="let node of form.ui.nodes">
+            <input *ngIf="node.attributes.type === 'hidden'"
                 [disabled]="node.attributes.disabled"
                 [name]="node.attributes.name"
                 [required]="node.attributes.required"
                 [type]="node.attributes.type"
-                [value]="node.attributes.value? node.attributes.value: null"
-                [placeholder]="node.meta.label?.text"
-            >
-            <div class="text-sm" *ngFor="let m of node.messages"
-                [ngClass]="{
-                    'text-danger': m.type === 'error'
-                }"
-                >{{m.text}}</div>
-        </div>
-        
+                [value]="node.attributes.value">
 
-        <div *ngIf="node.attributes.type === 'submit'" class="flex justify-content-between align-items-center">
-            <button class="btn btn-info"
+            <div class="mb-3" *ngIf="node.attributes.type !== 'submit' && node.attributes.type !== 'hidden'">
+                <a *ngIf="node.type == 'a'"
+                    class="btn btn-info"
+                    [href]="node.attributes.href">
+                    {{ node.meta.label?.text }}
+                </a>
+
+                <input *ngIf="node.type == 'input'"
+                    class="form-control"
+                    [disabled]="node.attributes.disabled"
+                    [name]="node.attributes.name"
+                    [required]="node.attributes.required"
+                    [type]="node.attributes.type"
+                    [value]="node.attributes.value? node.attributes.value: null"
+                    [placeholder]="node.meta.label?.text"
+                >
+                <div class="text-sm" *ngFor="let m of node.messages"
+                    [ngClass]="{
+                        'text-danger': m.type === 'error'
+                    }"
+                    >{{m.text}}</div>
+            </div>
+            
+            <button *ngIf="node.attributes.type === 'submit'"
+                class="btn btn-info"
                 [name]="node.attributes.name"
                 [value]="node.attributes.value"
                 [disabled]="node.attributes.disabled"
                 [type]="node.attributes.type">{{ node.meta.label?.text }}</button>
+
         </div>
-    </div>
 
-
-    <div *ngFor="let message of form.ui.messages"
-        class="alert mt-4" 
-        [ngClass]="{
-            'alert-warning': message.type === 'error',
-            'alert-success': message.type === 'success',
-            'alert-info': message.type === 'info'
-        }" 
-        role="alert">
-        {{message.text}}
-    </div>
-
-</form>
+        <div *ngFor="let message of form.ui.messages"
+            class="alert mt-4" 
+            [ngClass]="{
+                'alert-warning': message.type === 'error',
+                'alert-success': message.type === 'success',
+                'alert-info': message.type === 'info'
+            }" 
+            role="alert">
+            {{message.text}}
+        </div>
+    </form>
+</div>

@@ -1,35 +1,41 @@
-<form [action]="form.ui.action" [method]="form.ui.method" *ngIf="(form$ | async) as form">
+<div class="card-body">
+    <form [action]="form.ui.action" [method]="form.ui.method" *ngIf="(form$ | async) as form">
 
-    <div class="formgroup" *ngFor="let node of form.ui.nodes">
+        <div class="formgroup" *ngFor="let node of form.ui.nodes">
 
-        <input *ngIf="node.attributes.type === 'hidden'"
-            [disabled]="node.attributes.disabled"
-            [name]="node.attributes.name"
-            [required]="node.attributes.required"
-            [type]="node.attributes.type"
-            [value]="node.attributes.value"
-        >
-
-        <div class="mb-3" *ngIf="node.attributes.type !== 'submit' && node.attributes.type !== 'hidden'">
-            <input pInputText class="form-control"
+            <input *ngIf="node.attributes.type === 'hidden'"
                 [disabled]="node.attributes.disabled"
                 [name]="node.attributes.name"
                 [required]="node.attributes.required"
                 [type]="node.attributes.type"
-                [value]="node.attributes.value? node.attributes.value: null"
-                [placeholder]="node.meta.label?.text"
+                [value]="node.attributes.value"
             >
-        </div>
 
-        <div *ngIf="node.attributes.type === 'submit'" class="d-flex justify-content-between align-items-center">
-            <button class="btn btn-info"
+            <div class="mb-3" *ngIf="node.attributes.type !== 'submit' && node.attributes.type !== 'hidden'">
+                <input pInputText class="form-control"
+                    [disabled]="node.attributes.disabled"
+                    [name]="node.attributes.name"
+                    [required]="node.attributes.required"
+                    [type]="node.attributes.type"
+                    [value]="node.attributes.value? node.attributes.value: null"
+                    [placeholder]="node.meta.label?.text"
+                >
+            </div>
+
+            <button *ngIf="node.attributes.type === 'submit'"
+                class="btn btn-info"
                 [disabled]="node.attributes.disabled"
                 [name]="node.attributes.name"
                 [value]="node.attributes.value"
                 [type]="node.attributes.type">{{ node.meta.label?.text }}</button>
-            <a routerLink="/auth/login" class="btn btn-link">Login</a>
         </div>
-    </div>
 
-</form>
+    </form>
 
+</div>
+
+<div class="card-footer">
+    <a routerLink="/auth/login" class="btn btn-link">Login</a>
+    or 
+    <a routerLink="/auth/recovery" class="btn btn-link">Recover</a>
+</div>

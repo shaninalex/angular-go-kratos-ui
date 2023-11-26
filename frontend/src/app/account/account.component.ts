@@ -1,4 +1,6 @@
 import { Component, ViewEncapsulation } from '@angular/core';
+import { MessagesService } from '../shared/messages.service';
+import { Message } from '../typedefs/messages';
 
 
 @Component({
@@ -7,4 +9,11 @@ import { Component, ViewEncapsulation } from '@angular/core';
     encapsulation: ViewEncapsulation.None
 })
 export class AccountComponent {
+    messages: Message[] = [];
+
+    constructor(
+        private messagesService: MessagesService
+    ) {
+        this.messages = this.messagesService.messages;
+    }
 }

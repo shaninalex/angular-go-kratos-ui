@@ -1,4 +1,5 @@
 import { createAction, props } from "@ngrx/store";
+import { Identity } from "src/app/typedefs/identity";
 
 
 export const SetIdentity = createAction(

@@ -10,9 +10,11 @@ import { SettingsComponent } from './pages/settings/settings.component';
 import { HeaderComponent } from './ui/header/header.component';
 import { ThemeSwitcherComponent } from './ui/theme-switcher/theme-switcher.component';
 import { HomeComponent } from './pages/home/home.component';
-import { FormTotpComponent } from './pages/settings/components/form-totp/form-totp.component';
 import { ErrorComponent } from './pages/error/error.component';
-import { TextFormComponent } from './pages/settings/components/text-form/text-form.component';
+import { TextFormComponent } from './ui/text-form/text-form.component';
+import { BrowserModule } from '@angular/platform-browser';
+import { MessagesService } from '../shared/messages.service';
+import { VerificationComponent } from './pages/verification/verification.component';
 
 
 const routes: Routes = [
@@ -20,6 +22,7 @@ const routes: Routes = [
         path: "", component: AccountComponent, children: [
             {path: "", component: HomeComponent },
             {path: "settings", component: SettingsComponent },
+            {path: "verification", component: VerificationComponent },
             {path: "error", component: ErrorComponent },
         ]
     }
@@ -34,9 +37,9 @@ const routes: Routes = [
         HeaderComponent,
         ThemeSwitcherComponent,
         HomeComponent,
-        FormTotpComponent,
         ErrorComponent,
-        TextFormComponent
+        TextFormComponent,
+        VerificationComponent
     ],
     imports: [
         CommonModule,
@@ -45,7 +48,7 @@ const routes: Routes = [
         RouterModule.forChild(routes)
     ],
     providers: [
-        BackendService
+        BackendService,
     ]
 })
 export class AccountModule { }

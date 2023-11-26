@@ -2,7 +2,7 @@ import { Component, ViewEncapsulation } from '@angular/core';
 import { BackendService } from '../../services/backend.service';
 import { ActivatedRoute } from '@angular/router';
 import { Observable } from 'rxjs';
-import { GeneralError } from '../../typedefs';
+import { GeneralError } from 'src/app/typedefs/error';
 
 @Component({
     selector: 'app-error',
