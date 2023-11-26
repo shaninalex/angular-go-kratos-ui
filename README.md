@@ -16,6 +16,7 @@ npm run start
 ### Architecture
 ![Alt text](./docs/images/app-architecture.png "App Architecture")
 
+
 ### Notes
 
 This is unusual how we can pass env parameters into `kratos.yml`. For more
@@ -100,3 +101,7 @@ example jsonnet file and add "name" propery like in `identity.schema.json`. The
 > more about the ID payload returned by Google, read the [related documentation](https://developers.google.com/identity/protocols/oauth2/openid-connect#an-id-tokens-payload).
 
 So, this variable is also absent in my jsonnet.
+
+### Notes
+Current configuration has open `kratos:4433` public port. Later I'll hide it by `oathkeeper` and handle forms submittions by `beckend` service
+
