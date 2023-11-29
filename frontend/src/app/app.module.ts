@@ -24,11 +24,10 @@ const routes: Routes = [
         loadChildren: () => import("./auth/auth.module").then(m => m.AuthModule)
     },
     {
-        path: "",
+        path: "app",
         canLoad: [CanActiveteAccountPage],
         loadChildren: () => import("./account/account.module").then(m => m.AccountModule)
     },
-    { path: "account", redirectTo: ""},
     { path: "404", component: NotFoundComponent },
     { path: "error", component: ErrorComponent },
     { path: "**", redirectTo: "404" }
