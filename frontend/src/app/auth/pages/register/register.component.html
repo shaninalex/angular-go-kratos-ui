@@ -11,7 +11,7 @@
                 [value]="node.attributes.value"
             >
 
-            <div class="mb-3" *ngIf="node.attributes.type !== 'submit' && node.attributes.type !== 'hidden'">
+            <div class="mb-3" *ngIf="node.attributes.type !== 'submit' && node.attributes.type !== 'hidden' && node.attributes.required">
                 <input pInputText class="form-control"
                     [disabled]="node.attributes.disabled"
                     [name]="node.attributes.name"

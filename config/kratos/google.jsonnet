@@ -10,6 +10,7 @@ local claims = {
         first: claims.given_name,
         last: claims.family_name,
       },
+      image: claims.picture
     },
   },
 }
