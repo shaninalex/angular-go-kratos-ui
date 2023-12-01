@@ -38,6 +38,11 @@
                             "type": "string"
                         }
                     }
+                },
+                "image": {
+                    "type": "string",
+                    "title": "User Image",
+                    "format": "string"
                 }
             },
             "required": [
