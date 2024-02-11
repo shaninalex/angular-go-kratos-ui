@@ -6,7 +6,7 @@ import { UIService } from 'src/app/shared/ui.service';
 
 @Component({
   selector: 'app-recovery',
-  templateUrl: './recovery.component.html',
+  template: `<generated-from [form]="form$" />`,
   encapsulation: ViewEncapsulation.None
 })
 export class RecoveryComponent {

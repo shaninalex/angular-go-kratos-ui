@@ -7,7 +7,7 @@ import { UIService } from '../../../shared/ui.service';
 
 @Component({
     selector: '#form-login',
-    templateUrl: './login.component.html',
+    template: `<generated-from [form]="form$" />`,
     encapsulation: ViewEncapsulation.None,
 })
 export class LoginComponent implements OnInit {

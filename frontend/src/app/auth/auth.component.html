@@ -3,13 +3,14 @@
         <div class="col-md-4 offset-md-4">
             <div class="card">
                 <div class="card-header">{{formTitle$ | async}}</div>
-                <div class="card-body" *ngIf="loading">
-                    <div class="spinner-border" role="status">
-                        <span class="visually-hidden">Loading...</span>
-                    </div>
+                <div class="card-body">
+                    @if (loading) {
+                        <div class="spinner-border" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    }
+                    <router-outlet />
                 </div>
-
-                <router-outlet />
             </div>
         </div>
     </div>
