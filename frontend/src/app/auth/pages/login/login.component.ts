@@ -7,7 +7,11 @@ import { UIService } from '../../../shared/ui.service';
 
 @Component({
     selector: '#form-login',
-    template: `<generated-from [form]="form$" />`,
+    template: `
+        <generated-from [form]="form$" />
+        <hr />
+        Does not have an account? <a routerLink="/auth/registration">Register</a>
+    `,
     encapsulation: ViewEncapsulation.None,
 })
 export class LoginComponent implements OnInit {

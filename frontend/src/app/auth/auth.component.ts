@@ -1,11 +1,12 @@
-import { Component, OnDestroy, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { Observable } from 'rxjs';
 import { UIService } from '../shared/ui.service';
 
 @Component({
     selector: '#auth',
     templateUrl: './auth.component.html',
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AuthComponent implements OnDestroy {
     formTitle$: Observable<string>;
