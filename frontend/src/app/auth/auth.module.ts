@@ -8,6 +8,7 @@ import { RecoveryComponent } from './pages/recovery/recovery.component';
 import { HttpClientModule } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
+import { GeneratedForm } from './components/generated-form/generated-form.component';
 
 
 const routes: Routes = [
@@ -26,7 +27,8 @@ const routes: Routes = [
         LoginComponent,
         RegisterComponent,
         VerificationComponent,
-        RecoveryComponent
+        RecoveryComponent,
+        GeneratedForm
     ],
     imports: [
         CommonModule,

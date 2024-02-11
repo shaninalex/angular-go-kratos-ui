@@ -1,0 +1,50 @@
+@if (form | async; as form) {
+    <form [action]="form.ui.action" [method]="form.ui.method">
+        @for (node of form.ui.nodes; track node.id) {
+            @if (node.attributes.type === 'hidden') {
+                <input [disabled]="node.attributes.disabled" [name]="node.attributes.name" [required]="node.attributes.required"
+                    [type]="node.attributes.type" [value]="node.attributes.value">
+            }
+  
+            @if (node.attributes.type !== 'submit' &&
+                node.attributes.type !== 'hidden' &&
+                node.attributes.name !== 'traits.image') {
+                <div class="mb-3">
+                    @if (node.type == 'a') {
+                    <a class="btn btn-info" [href]="node.attributes.href">
+                        {{ node.meta.label?.text }}
+                    </a>
+                    }
+  
+                    @if (node.type === 'input') {
+                    <input class="form-control" [disabled]="node.attributes.disabled" [name]="node.attributes.name"
+                        [required]="node.attributes.required" [type]="node.attributes.type"
+                        [value]="node.attributes.value? node.attributes.value: null" [placeholder]="node.meta.label?.text" />
+                    }
+  
+                    @for (message of node.messages; track message.id) {
+                    <span class="text-danger small" [ngClass]="{'text-danger': message.type === 'error'}">
+                        {{ message.text }}
+                    </span>
+                    }
+                </div>
+            }
+  
+            @if (node.attributes.type === 'submit') {
+                <div class="mb-3">
+                    <button class="btn btn-info" [disabled]="node.attributes.disabled" [name]="node.attributes.name"
+                        [value]="node.attributes.value" [type]="node.attributes.type">{{ node.meta.label?.text }}</button>
+                </div>
+            }
+        }
+  
+        @for (message of form.ui.messages; track message.id) {
+            <div class="alert mt-4" role="alert" [ngClass]="{
+                            'alert-warning': message.type === 'error',
+                            'alert-success': message.type === 'success',
+                            'alert-info': message.type === 'info'}">
+                {{message.text}}
+            </div>
+        }
+    </form>
+  }

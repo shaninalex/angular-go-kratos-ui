@@ -61,10 +61,10 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "kratos-ui:build:production"
+              "buildTarget": "kratos-ui:build:production"
             },
             "development": {
-              "browserTarget": "kratos-ui:build:development"
+              "buildTarget": "kratos-ui:build:development"
             }
           },
           "defaultConfiguration": "development"
@@ -72,7 +72,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "kratos-ui:build"
+            "buildTarget": "kratos-ui:build"
           }
         },
         "test": {

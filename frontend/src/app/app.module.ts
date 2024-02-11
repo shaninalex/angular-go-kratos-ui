@@ -48,7 +48,7 @@ const routes: Routes = [
         StoreModule.forRoot({
             identity: identityReducer
         }, {}),
-        StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() }),
+        StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() , connectInZone: true}),
         EffectsModule.forRoot([IdentityEffects]),
         RouterModule.forRoot(routes)
     ],

@@ -7,7 +7,11 @@ import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: '#register',
-  templateUrl: './register.component.html',
+  template: `
+    <generated-from [form]="form$" />
+    <hr />
+    Already have an account? <a routerLink="/auth/login">Login</a>
+  `,
   encapsulation: ViewEncapsulation.None
 })
 export class RegisterComponent implements OnInit {

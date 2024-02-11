@@ -7,7 +7,7 @@ import { UIService } from '../../../shared/ui.service';
 
 @Component({
   selector: 'app-verification',
-  templateUrl: './verification.component.html',
+  template: `<generated-from [form]="form$" />`,
   encapsulation: ViewEncapsulation.None
 })
 export class VerificationComponent {
