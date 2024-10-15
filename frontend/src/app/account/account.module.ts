@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
 import { RouterModule, Routes } from '@angular/router';
 import { AccountComponent } from './account.component';
@@ -24,8 +24,7 @@ const routes: Routes = [
 ];
 
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         AccountComponent,
         LogoutComponent,
         SettingsComponent,
@@ -34,12 +33,7 @@ const routes: Routes = [
         HomeComponent,
         TextFormComponent,
         VerificationComponent
-    ],
-    imports: [
-        CommonModule,
+    ], imports: [CommonModule,
         ReactiveFormsModule,
-        HttpClientModule,
-        RouterModule.forChild(routes)
-    ],
-})
+        RouterModule.forChild(routes)], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AccountModule { }

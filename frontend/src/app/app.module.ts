@@ -1,7 +1,7 @@
 import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppComponent } from './app.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UIService } from './shared/ui.service';
@@ -34,29 +34,23 @@ const routes: Routes = [
 ];
 
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         AppComponent,
         ErrorComponent,
     ],
-    imports: [
-        BrowserModule,
-        HttpClientModule,
+    bootstrap: [AppComponent], imports: [BrowserModule,
         FormsModule,
         ReactiveFormsModule,
         BrowserAnimationsModule,
         StoreModule.forRoot({
             identity: identityReducer
         }, {}),
-        StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode() , connectInZone: true}),
+        StoreDevtoolsModule.instrument({ maxAge: 25, logOnly: !isDevMode(), connectInZone: true }),
         EffectsModule.forRoot([IdentityEffects]),
-        RouterModule.forRoot(routes)
-    ],
-    providers: [
+        RouterModule.forRoot(routes)], providers: [
         BackendService,
         UIService,
-        MessagesService
-    ],
-    bootstrap: [AppComponent]
-})
+        MessagesService,
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }
