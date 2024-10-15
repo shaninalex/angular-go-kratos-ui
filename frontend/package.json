@@ -18,13 +18,14 @@
     "@angular/platform-browser": "^18.2.8",
     "@angular/platform-browser-dynamic": "^18.2.8",
     "@angular/router": "^18.2.8",
-    "@ngrx/effects": "^17.1.0",
-    "@ngrx/store": "^17.1.0",
-    "@ngrx/store-devtools": "^17.1.0",
+    "@ngrx/effects": "^18.1.0",
+    "@ngrx/store": "^18.1.0",
+    "@ngrx/store-devtools": "^18.1.0",
     "bootstrap": "^5.3.2",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
-    "zone.js": "~0.14.3"
+    "zone.js": "~0.14.3",
+    "@ngrx/operators": "^18.0.0"
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.2.8",
