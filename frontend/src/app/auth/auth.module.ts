@@ -5,7 +5,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
 import { VerificationComponent } from './pages/verification/verification.component';
 import { RecoveryComponent } from './pages/recovery/recovery.component';
-import { HttpClientModule } from '@angular/common/http';
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
 import { RouterModule, Routes } from '@angular/router';
 import { ReactiveFormsModule } from '@angular/forms';
 import { GeneratedForm } from './components/generated-form/generated-form.component';
@@ -21,20 +21,14 @@ const routes: Routes = [
 ];
 
 
-@NgModule({
-    declarations: [
+@NgModule({ declarations: [
         AuthComponent,
         LoginComponent,
         RegisterComponent,
         VerificationComponent,
         RecoveryComponent,
         GeneratedForm
-    ],
-    imports: [
-        CommonModule,
-        HttpClientModule,
+    ], imports: [CommonModule,
         ReactiveFormsModule,
-        RouterModule.forChild(routes),
-    ]
-})
+        RouterModule.forChild(routes)], providers: [provideHttpClient(withInterceptorsFromDi())] })
 export class AuthModule { }
