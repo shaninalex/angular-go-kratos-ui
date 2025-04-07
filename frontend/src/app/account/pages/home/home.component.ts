@@ -7,7 +7,8 @@ import { selectIdentity } from 'src/app/store/identity/selectors';
 
 @Component({
     selector: 'app-home',
-    templateUrl: './home.component.html'
+    templateUrl: './home.component.html',
+    standalone: false
 })
 export class HomeComponent {
     session$: Observable<any>;

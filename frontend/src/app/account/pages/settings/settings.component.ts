@@ -12,7 +12,8 @@ export interface FormSettings {
 @Component({
     selector: '#page-settings',
     templateUrl: './settings.component.html',
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class SettingsComponent implements OnInit {
     form$: Observable<any>;

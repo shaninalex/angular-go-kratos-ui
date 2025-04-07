@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
     selector: 'generated-from',
     templateUrl: './generated-form.component.html',
     encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class GeneratedForm {
     @Input() form: Observable<any>;

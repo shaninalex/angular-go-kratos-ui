@@ -7,6 +7,7 @@ import { UIService } from '../shared/ui.service';
     templateUrl: './auth.component.html',
     encapsulation: ViewEncapsulation.None,
     changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class AuthComponent implements OnDestroy {
     formTitle$: Observable<string>;

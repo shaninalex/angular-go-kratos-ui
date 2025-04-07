@@ -7,7 +7,8 @@ import { Component } from '@angular/core';
             <span *ngIf="dark">☀</span>
             <span *ngIf="!dark">🌙</span>
         </button>
-    `
+    `,
+    standalone: false
 })
 export class ThemeSwitcherComponent {
     dark: boolean = true; // true = "dark", false = "light"

@@ -5,9 +5,10 @@ import { BackendService } from 'src/app/shared/backend.service';
 import { UIService } from 'src/app/shared/ui.service';
 
 @Component({
-  selector: 'app-recovery',
-  template: `<generated-from [form]="form$" />`,
-  encapsulation: ViewEncapsulation.None
+    selector: 'app-recovery',
+    template: `<generated-from [form]="form$" />`,
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class RecoveryComponent {
     form$: Observable<any>;

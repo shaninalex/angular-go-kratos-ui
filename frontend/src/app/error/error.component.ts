@@ -7,7 +7,8 @@ import { GeneralError } from 'src/app/typedefs/error';
 @Component({
     selector: 'app-error',
     templateUrl: './error.component.html',
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class ErrorComponent {
     error$: Observable<GeneralError>;

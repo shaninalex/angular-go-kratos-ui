@@ -14,7 +14,8 @@ interface Traits {
 @Component({
     selector: '#header',
     templateUrl: './header.component.html',
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class HeaderComponent {
     traits$: Observable<Traits>;

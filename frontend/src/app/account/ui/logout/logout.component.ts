@@ -5,7 +5,8 @@ import { BackendService } from "src/app/shared/backend.service";
 @Component({
     selector: "#logout",
     template: `<button type="button" class="btn btn-link" (click)="performLogout()">logout</button>`,
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class LogoutComponent {
     constructor(private backend: BackendService) {}

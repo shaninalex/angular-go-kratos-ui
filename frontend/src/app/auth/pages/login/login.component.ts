@@ -13,6 +13,7 @@ import { UIService } from '../../../shared/ui.service';
         Does not have an account? <a routerLink="/auth/registration">Register</a>
     `,
     encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class LoginComponent implements OnInit {
     form$: Observable<any>;

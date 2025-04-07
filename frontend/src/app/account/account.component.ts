@@ -6,7 +6,8 @@ import { Message } from '../typedefs/messages';
 @Component({
     selector: '#page-account',
     templateUrl: './account.component.html',
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class AccountComponent {
     messages: Message[] = [];

@@ -6,13 +6,14 @@ import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
-  selector: '#register',
-  template: `
+    selector: '#register',
+    template: `
     <generated-from [form]="form$" />
     <hr />
     Already have an account? <a routerLink="/auth/login">Login</a>
   `,
-  encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class RegisterComponent implements OnInit {
     form$: Observable<any>; // TODO: Types for registration form

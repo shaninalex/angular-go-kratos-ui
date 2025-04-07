@@ -5,8 +5,9 @@ import { BackendService } from 'src/app/shared/backend.service';
 import { FormSettings } from '../settings/settings.component';
 
 @Component({
-  selector: 'app-verification',
-  templateUrl: './verification.component.html'
+    selector: 'app-verification',
+    templateUrl: './verification.component.html',
+    standalone: false
 })
 export class VerificationComponent implements OnInit {
     form$: Observable<any>;

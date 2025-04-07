@@ -6,9 +6,10 @@ import { UIService } from '../../../shared/ui.service';
 
 
 @Component({
-  selector: 'app-verification',
-  template: `<generated-from [form]="form$" />`,
-  encapsulation: ViewEncapsulation.None
+    selector: 'app-verification',
+    template: `<generated-from [form]="form$" />`,
+    encapsulation: ViewEncapsulation.None,
+    standalone: false
 })
 export class VerificationComponent {
     form$: Observable<any>;
