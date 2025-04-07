@@ -1,4 +1,4 @@
-version: '3.7'
+name: 'angular-kratos'
 
 volumes:
   postgres_data:
@@ -11,13 +11,13 @@ services:
     container_name: backend
     restart: on-failure
     ports:
-      - 8000:8000
+      - '8000:8000'
     environment:
       - PORT=8000
       - KRATOS_URL=http://kratos:4433
     depends_on:
       - kratos
-  
+
   postgres:
     image: postgres:15
     container_name: database
@@ -26,7 +26,7 @@ services:
       - POSTGRES_PASSWORD=password
       - POSTGRES_MULTIPLE_DATABASES=application,kratos
     ports:
-      - 5432:5432
+      - '5432:5432'
     volumes:
       - ./config/database/:/docker-entrypoint-initdb.d/
       - postgres_data:/var/lib/postgresql/data/
@@ -37,7 +37,7 @@ services:
       retries: 5
 
   kratos-migrate:
-    image: oryd/kratos:v1.0.0
+    image: oryd/kratos
     container_name: kratos_db_migrate
     environment:
       - DSN=postgres://user:password@postgres:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
@@ -46,25 +46,25 @@ services:
     command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
 
   kratos:
-    image: oryd/kratos:v1.0.0
+    image: oryd/kratos
     container_name: kratos
     env_file:
       - .env
     ports:
-      - 4433:4433
-      - 4434:4434
+      - '4433:4433'
+      - '4434:4434'
     volumes:
       - ./config/kratos:/etc/config/kratos
     command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
 
   oathkeeper:
-    image: oryd/oathkeeper:v0.40
+    image: oryd/oathkeeper
     container_name: api_gateway
     depends_on:
       - kratos
     ports:
-      - 8080:4455
-      - 4456:4456
+      - '8080:4455'
+      - '4456:4456'
     command: serve proxy -c "/etc/config/oathkeeper/oathkeeper.yml"
     environment:
       - LOG_LEVEL=debug
