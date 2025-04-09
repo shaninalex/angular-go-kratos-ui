@@ -11,9 +11,9 @@ serve:
     base_url: http://kratos:4434/
 
 selfservice:
-  default_browser_return_url: http://localhost:4200/app
+  default_browser_return_url: http://localhost:4200
   allowed_return_urls:
-    - http://localhost:4200/app
+    - http://localhost:4200
 
   methods:
     password:
@@ -49,7 +49,7 @@ selfservice:
       ui_url: http://localhost:4200/error
 
     settings:
-      ui_url: http://localhost:4200/app/settings
+      ui_url: http://localhost:4200/settings
       privileged_session_max_age: 15m
       required_aal: highest_available
 
@@ -63,7 +63,7 @@ selfservice:
       ui_url: http://localhost:4200/auth/verification
       use: code
       after:
-        default_browser_return_url: http://localhost:4200/app
+        default_browser_return_url: http://localhost:4200
 
     logout:
       after:
@@ -73,7 +73,7 @@ selfservice:
       ui_url: http://localhost:4200/auth/login
       lifespan: 10m
       after:
-        default_browser_return_url: http://localhost:4200/app
+        default_browser_return_url: http://localhost:4200
 
     registration:
       lifespan: 10m

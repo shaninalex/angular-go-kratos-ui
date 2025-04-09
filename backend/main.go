@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -159,6 +160,35 @@ func main() {
 			return
 		}
 		ProxyResponse(c, resp)
+	})
+
+	router.POST("/api/v2/auth/login", func(ctx *gin.Context) {
+		formId := ctx.Query("flow")
+		if formId == "" {
+			ctx.JSON(400, gin.H{"error": "flow id was not provided"})
+			return
+		}
+
+		var payload ory.UpdateLoginFlowWithPasswordMethod
+		err := ctx.ShouldBindJSON(&payload)
+		if err != nil {
+			ctx.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
+
+		_, resp, _ := client.FrontendApi.UpdateLoginFlow(ctx).
+			Cookie(ctx.Request.Header.Get("Cookie")).
+			UpdateLoginFlowBody(ory.UpdateLoginFlowBody{
+				UpdateLoginFlowWithPasswordMethod: &payload,
+			}).
+			Flow(formId).
+			Execute()
+		defer resp.Body.Close()
+
+		b, _ := io.ReadAll(resp.Body)
+		var respData map[string]interface{}
+		_ = json.Unmarshal(b, &respData)
+		ctx.JSON(resp.StatusCode, respData)
 	})
 
 	router.Run(fmt.Sprintf(":%d", port))
