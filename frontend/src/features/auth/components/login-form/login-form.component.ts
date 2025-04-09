@@ -1,25 +1,53 @@
 import {Component, inject} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
 import {LoginFlow} from '@ory/kratos-client';
-import {filter, map, Observable, switchMap} from 'rxjs';
+import {filter, map, Observable, switchMap, tap} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
-import {AuthService} from '../../api/auth-api.service';
+import {AuthFormService} from '@features/auth/api/auth-api.service';
 import {environment} from '@environments/environment.development';
-import {ApiResponse} from '@shared/api';
-import {OryInputComponent} from '@shared/ui';
+import {FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {FormControlService} from '@features/auth/api/form-control.service';
+import {InputBase} from '@features/auth/api/interfaces';
+
 
 @Component({
     selector: 'auth-login-form',
     imports: [
         AsyncPipe,
-        OryInputComponent,
+        ReactiveFormsModule,
     ],
-    providers: [AuthService],
+    providers: [AuthFormService, FormControlService],
     template: `
         @if (loginFlow$ | async; as loginFlow) {
-            <form [action]="loginFlow.ui.action" method="post" class="flex flex-col gap-4">
-                @for (node of loginFlow.ui.nodes; track node) {
-                    <ory-input [node]="node"/>
+            <form [formGroup]="form" (submit)="onSubmit()" class="flex flex-col gap-4">
+                @for (input of formEntries; track $index) {
+                    @switch (input.controlType) {
+                        @case ('hidden') {
+                            <input [formControlName]="input.name"
+                                   [type]="input.controlType"
+                                   [id]="input.name"
+                            />
+                        }
+                        @case ('submit') {
+                            <div>
+                                <input class="btn"
+                                       [formControlName]="input.name"
+                                       [type]="input.controlType"
+                                       [id]="input.name"
+                                />
+                            </div>
+                        }
+                        @default {
+                            <div>
+                                <input class="input"
+                                        [formControlName]="input.name"
+                                        [type]="input.controlType"
+                                        [id]="input.name"
+                                        [placeholder]="input.placeholder"
+                                />
+                            </div>
+                        }
+                    }
                 }
             </form>
         } @else {
@@ -28,7 +56,11 @@ import {OryInputComponent} from '@shared/ui';
 })
 export class LoginFormComponent {
     private route: ActivatedRoute = inject(ActivatedRoute);
-    private authService: AuthService = inject(AuthService);
+    private authService: AuthFormService = inject(AuthFormService);
+    private formService: FormControlService = inject(FormControlService)
+
+    formEntries: InputBase[] = [];
+    form: FormGroup = new FormGroup({});
 
     loginFlow$: Observable<LoginFlow> = this.route.queryParams.pipe(
         map((params: Params) => {
@@ -38,9 +70,20 @@ export class LoginFormComponent {
             }
             return params["flow"];
         }),
-        filter((flowId) => flowId !== null),
-        switchMap((flowId: string) => this.authService.GetLoginForm(flowId).pipe(
-            map((data: LoginFlow) => data)
-        ))
+        filter((flowId): flowId is string => flowId !== null),
+        switchMap((flowId: string) => this.authService.GetLoginForm(flowId)),
+        tap((data: LoginFlow) => {
+            this.form = this.formService.toFormGroup(data.ui);
+            this.formEntries = this.formService.toFormInputs(data.ui);
+        })
     );
+
+    onSubmit(): void {
+        if (!this.form.valid) {
+            console.warn("Form invalid", this.form.errors);
+            return;
+        }
+
+        console.log("Submitting:", this.form.value);
+    }
 }

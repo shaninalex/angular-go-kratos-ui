@@ -15,7 +15,7 @@ export const AUTH_URLS = {
 }
 
 @Injectable({providedIn: "root"})
-export class AuthService {
+export class AuthFormService {
     http: HttpClient = inject(HttpClient)
 
     public GetLoginForm(flow: string | null = null): Observable<LoginFlow> {
