@@ -1,5 +1,5 @@
 import {FormGroup} from '@angular/forms';
-import {UiContainer} from '@ory/kratos-client/api';
+import {UiContainer, UpdateLoginFlowWithPasswordMethod} from '@ory/kratos-client/api';
 
 export interface IKratosFormControlService {
     toFormGroup(ui: UiContainer): FormGroup
