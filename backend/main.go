@@ -191,6 +191,64 @@ func main() {
 		ctx.JSON(resp.StatusCode, respData)
 	})
 
+	router.POST("/api/v2/auth/register", func(ctx *gin.Context) {
+		formId := ctx.Query("flow")
+		if formId == "" {
+			ctx.JSON(400, gin.H{"error": "flow id was not provided"})
+			return
+		}
+
+		var payload ory.UpdateRegistrationFlowWithPasswordMethod
+		err := ctx.ShouldBindJSON(&payload)
+		if err != nil {
+			ctx.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
+
+		_, resp, _ := client.FrontendApi.UpdateRegistrationFlow(ctx).
+			Cookie(ctx.Request.Header.Get("Cookie")).
+			UpdateRegistrationFlowBody(ory.UpdateRegistrationFlowBody{
+				UpdateRegistrationFlowWithPasswordMethod: &payload,
+			}).
+			Flow(formId).
+			Execute()
+		defer resp.Body.Close()
+
+		b, _ := io.ReadAll(resp.Body)
+		var respData map[string]interface{}
+		_ = json.Unmarshal(b, &respData)
+		ctx.JSON(resp.StatusCode, respData)
+	})
+
+	// TODO: make oidc logic
+	//router.POST("/api/v2/auth/login-oidc", func(ctx *gin.Context) {
+	//	formId := ctx.Query("flow")
+	//	if formId == "" {
+	//		ctx.JSON(400, gin.H{"error": "flow id was not provided"})
+	//		return
+	//	}
+	//	var payload ory.UpdateLoginFlowWithOidcMethod
+	//	err := ctx.ShouldBindJSON(&payload)
+	//	if err != nil {
+	//		ctx.JSON(400, gin.H{"error": err.Error()})
+	//		return
+	//	}
+	//	_, resp, _ := client.FrontendApi.UpdateLoginFlow(ctx).
+	//		Cookie(ctx.Request.Header.Get("Cookie")).
+	//		UpdateLoginFlowBody(ory.UpdateLoginFlowBody{
+	//			UpdateLoginFlowWithOidcMethod: &payload,
+	//		}).
+	//		Flow(formId).
+	//		Execute()
+	//	defer resp.Body.Close()
+	//
+	//	b, _ := io.ReadAll(resp.Body)
+	//	var respData map[string]interface{}
+	//	_ = json.Unmarshal(b, &respData)
+	//	ctx.JSON(resp.StatusCode, respData)
+	//	//ctx.Redirect(http.StatusFound, flow.)
+	//})
+
 	router.Run(fmt.Sprintf(":%d", port))
 }
 

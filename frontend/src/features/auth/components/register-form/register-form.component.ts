@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
-import {LoginFlow, UiText} from '@ory/kratos-client';
+import {LoginFlow, UiText, UpdateRegistrationFlowWithPasswordMethod} from '@ory/kratos-client';
 import {filter, map, Observable, switchMap, tap} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {environment} from '@environments/environment.development';
@@ -10,15 +10,15 @@ import {KratosFormAdapter} from '@features/auth/adapters/form.adapter';
 
 
 @Component({
-    selector: 'auth-login-form',
+    selector: 'auth-register-form',
     imports: [
         AsyncPipe,
         ReactiveFormsModule,
     ],
     providers: [AuthFormService, AuthSubmitService, AuthSubmitService],
-    templateUrl: 'login-form.component.html'
+    templateUrl: 'register-form.component.html'
 })
-export class LoginFormComponent {
+export class RegisterFormComponent {
     private route: ActivatedRoute = inject(ActivatedRoute);
     private flowID: string
     private authService: AuthFormService = inject(AuthFormService);
@@ -29,17 +29,17 @@ export class LoginFormComponent {
     form: FormGroup = new FormGroup({});
     kForm: KratosFormAdapter = new KratosFormAdapter();
 
-    loginFlow$: Observable<LoginFlow> = this.route.queryParams.pipe(
+    registerFlow$: Observable<LoginFlow> = this.route.queryParams.pipe(
         map((params: Params) => {
             if (!params.hasOwnProperty("flow")) {
-                window.location.href = environment.AUTH_URL_LOGIN_REDIRECT;
+                window.location.href = environment.AUTH_URL_REGISTRATION_REDIRECT;
                 return null;
             }
             this.flowID = params["flow"];
             return params["flow"];
         }),
         filter((flowId): flowId is string => flowId !== null),
-        switchMap((flowId: string) => this.authService.GetLoginForm(flowId)),
+        switchMap((flowId: string) => this.authService.GetRegistrationForm(flowId)),
         tap((data: LoginFlow) => {
             this.kForm.init(data.ui)
             this.form = this.kForm.formGroup;
@@ -53,13 +53,21 @@ export class LoginFormComponent {
             console.log(this.form);
             return;
         }
-        const payload = {
+
+        const payload: UpdateRegistrationFlowWithPasswordMethod = {
             csrf_token: this.form.get('csrf_token')?.value,
-            identifier: this.form.get('identifier')?.value,
             method: 'password',
             password: this.form.get('password')?.value,
+            traits: {
+                email: this.form.value['traits.email'],
+                name: {
+                    first: this.form.value['traits.name.first'],
+                    last: this.form.value['traits.name.last'],
+                }
+            }
         }
-        this.submitService.login(payload, this.flowID).subscribe({
+        console.log(payload)
+        this.submitService.register(payload, this.flowID).subscribe({
             next: data => {
                 if (data.data.ui.messages) {
                     this.kForm.formMessages = data.data.ui.messages;

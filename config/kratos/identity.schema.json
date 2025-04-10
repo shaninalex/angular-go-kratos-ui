@@ -38,15 +38,11 @@
                             "type": "string"
                         }
                     }
-                },
-                "image": {
-                    "type": "string",
-                    "title": "User Image",
-                    "format": "string"
                 }
             },
             "required": [
-                "email"
+                "email",
+                "name"
             ],
             "additionalProperties": false
         }
