@@ -6,7 +6,7 @@ import {
     FlowError,
     LoginFlow,
     UpdateLoginFlowWithOidcMethod,
-    UpdateRegistrationFlowWithPasswordMethod
+    UpdateRegistrationFlowWithPasswordMethod, UpdateRegistrationFlowWithProfileMethod
 } from '@ory/kratos-client';
 import {catchError, EMPTY, shareReplay} from 'rxjs';
 import {AUTH_URLS} from '@features/auth/api/auth-form.service';
@@ -42,7 +42,7 @@ export class AuthSubmitService {
         );
     }
 
-    register(payload: UpdateRegistrationFlowWithPasswordMethod, flow: string) {
+    register(payload: UpdateRegistrationFlowWithProfileMethod, flow: string) {
         let params = new HttpParams().set("flow", flow);
         return this.http.post<ApiResponse<LoginFlow>>(SUBMIT_URLS.REGISTER, payload, {params: params, withCredentials: true}).pipe(
             shareReplay(),

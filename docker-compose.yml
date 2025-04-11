@@ -37,7 +37,7 @@ services:
       retries: 5
 
   kratos-migrate:
-    image: oryd/kratos
+    image: oryd/kratos:v1.3.1
     container_name: kratos_db_migrate
     environment:
       - DSN=postgres://user:password@postgres:5432/kratos?sslmode=disable&max_conns=20&max_idle_conns=4
@@ -46,7 +46,7 @@ services:
     command: -c /etc/config/kratos/kratos.yml migrate sql -e --yes
 
   kratos:
-    image: oryd/kratos
+    image: oryd/kratos:v1.3.1
     container_name: kratos
     env_file:
       - .env
@@ -58,7 +58,7 @@ services:
     command: serve -c /etc/config/kratos/kratos.yml --dev --watch-courier
 
   oathkeeper:
-    image: oryd/oathkeeper
+    image: oryd/oathkeeper:v0.40.9
     container_name: api_gateway
     depends_on:
       - kratos

@@ -33,7 +33,7 @@ func main() {
 	router.GET("/api/v2/auth/get-registration-form", func(c *gin.Context) {
 		form_id := c.Query("id")
 		if form_id != "" {
-			_, resp, err := client.FrontendApi.GetRegistrationFlow(c).Cookie(c.Request.Header.Get("Cookie")).Id(form_id).Execute()
+			_, resp, err := client.FrontendAPI.GetRegistrationFlow(c).Cookie(c.Request.Header.Get("Cookie")).Id(form_id).Execute()
 			if err != nil {
 				log.Println(err)
 				c.JSON(resp.StatusCode, gin.H{"error": err.Error()})
@@ -43,7 +43,7 @@ func main() {
 			return
 		}
 
-		_, resp, err := client.FrontendApi.CreateBrowserRegistrationFlow(c).Execute()
+		_, resp, err := client.FrontendAPI.CreateBrowserRegistrationFlow(c).Execute()
 		if err != nil {
 			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Unable to get registration flow"})
@@ -55,7 +55,7 @@ func main() {
 	router.GET("/api/v2/auth/get-login-form", func(c *gin.Context) {
 		form_id := c.Query("id")
 		if form_id != "" {
-			_, resp, err := client.FrontendApi.GetLoginFlow(c).Cookie(c.Request.Header.Get("Cookie")).Id(form_id).Execute()
+			_, resp, err := client.FrontendAPI.GetLoginFlow(c).Cookie(c.Request.Header.Get("Cookie")).Id(form_id).Execute()
 			if err != nil {
 				log.Println(err)
 				c.JSON(resp.StatusCode, gin.H{"error": err.Error()})
@@ -65,8 +65,8 @@ func main() {
 			return
 		}
 
-		req := client.FrontendApi.CreateBrowserLoginFlow(c)
-		_, resp, err := client.FrontendApi.CreateBrowserLoginFlowExecute(req)
+		req := client.FrontendAPI.CreateBrowserLoginFlow(c)
+		_, resp, err := client.FrontendAPI.CreateBrowserLoginFlowExecute(req)
 		if err != nil {
 			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Unable to get login flow"})
@@ -77,7 +77,7 @@ func main() {
 
 	router.GET("/api/v2/auth/get-verification-form", func(c *gin.Context) {
 		verification_flow_id := c.Query("flow")
-		_, resp, err := client.FrontendApi.GetVerificationFlow(c).Id(
+		_, resp, err := client.FrontendAPI.GetVerificationFlow(c).Id(
 			verification_flow_id,
 		).Cookie(c.Request.Header.Get("Cookie")).Execute()
 
@@ -90,7 +90,7 @@ func main() {
 	})
 
 	router.GET("/api/v2/auth/check-session", func(c *gin.Context) {
-		_, resp, err := client.FrontendApi.ToSession(c).Cookie(c.Request.Header.Get("Cookie")).Execute()
+		_, resp, err := client.FrontendAPI.ToSession(c).Cookie(c.Request.Header.Get("Cookie")).Execute()
 		if err != nil {
 			log.Println(err)
 			c.JSON(resp.StatusCode, gin.H{"error": err.Error()})
@@ -100,7 +100,7 @@ func main() {
 	})
 
 	router.GET("/api/v2/auth/logout", func(c *gin.Context) {
-		_, resp, err := client.FrontendApi.CreateBrowserLogoutFlow(c).Cookie(c.Request.Header.Get("Cookie")).Execute()
+		_, resp, err := client.FrontendAPI.CreateBrowserLogoutFlow(c).Cookie(c.Request.Header.Get("Cookie")).Execute()
 		if err != nil {
 			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -110,7 +110,7 @@ func main() {
 	})
 
 	router.GET("/api/v2/auth/settings", func(c *gin.Context) {
-		_, resp, err := client.FrontendApi.CreateBrowserSettingsFlow(c).Cookie(c.Request.Header.Get("Cookie")).Execute()
+		_, resp, err := client.FrontendAPI.CreateBrowserSettingsFlow(c).Cookie(c.Request.Header.Get("Cookie")).Execute()
 		if err != nil {
 			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -121,7 +121,7 @@ func main() {
 
 	router.GET("/api/v2/auth/error", func(c *gin.Context) {
 		error_id := c.Query("id")
-		_, resp, err := client.FrontendApi.GetFlowError(c).Id(error_id).Execute()
+		_, resp, err := client.FrontendAPI.GetFlowError(c).Id(error_id).Execute()
 		if err != nil {
 			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -131,7 +131,7 @@ func main() {
 	})
 
 	router.GET("/api/v2/auth/create-verification-form", func(c *gin.Context) {
-		_, resp, err := client.FrontendApi.CreateBrowserVerificationFlow(c).Execute()
+		_, resp, err := client.FrontendAPI.CreateBrowserVerificationFlow(c).Execute()
 		if err != nil {
 			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
@@ -143,7 +143,7 @@ func main() {
 	router.GET("/api/v2/auth/recovery-form", func(c *gin.Context) {
 		form_id := c.Query("id")
 		if form_id != "" {
-			_, resp, err := client.FrontendApi.GetRecoveryFlow(c).Cookie(c.Request.Header.Get("Cookie")).Id(form_id).Execute()
+			_, resp, err := client.FrontendAPI.GetRecoveryFlow(c).Cookie(c.Request.Header.Get("Cookie")).Id(form_id).Execute()
 			if err != nil {
 				log.Println(err)
 				c.JSON(resp.StatusCode, gin.H{"error": err.Error()})
@@ -153,7 +153,7 @@ func main() {
 			return
 		}
 
-		_, resp, err := client.FrontendApi.CreateBrowserRecoveryFlow(c).Execute()
+		_, resp, err := client.FrontendAPI.CreateBrowserRecoveryFlow(c).Execute()
 		if err != nil {
 			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Unable to get login flow"})
@@ -176,7 +176,7 @@ func main() {
 			return
 		}
 
-		_, resp, _ := client.FrontendApi.UpdateLoginFlow(ctx).
+		_, resp, _ := client.FrontendAPI.UpdateLoginFlow(ctx).
 			Cookie(ctx.Request.Header.Get("Cookie")).
 			UpdateLoginFlowBody(ory.UpdateLoginFlowBody{
 				UpdateLoginFlowWithPasswordMethod: &payload,
@@ -198,26 +198,22 @@ func main() {
 			return
 		}
 
-		var payload ory.UpdateRegistrationFlowWithPasswordMethod
+		var payload ory.UpdateRegistrationFlowWithProfileMethod
 		err := ctx.ShouldBindJSON(&payload)
 		if err != nil {
 			ctx.JSON(400, gin.H{"error": err.Error()})
 			return
 		}
 
-		_, resp, _ := client.FrontendApi.UpdateRegistrationFlow(ctx).
+		_, resp, _ := client.FrontendAPI.UpdateRegistrationFlow(ctx).
 			Cookie(ctx.Request.Header.Get("Cookie")).
 			UpdateRegistrationFlowBody(ory.UpdateRegistrationFlowBody{
-				UpdateRegistrationFlowWithPasswordMethod: &payload,
+				UpdateRegistrationFlowWithProfileMethod: &payload,
 			}).
 			Flow(formId).
 			Execute()
 		defer resp.Body.Close()
-
-		b, _ := io.ReadAll(resp.Body)
-		var respData map[string]interface{}
-		_ = json.Unmarshal(b, &respData)
-		ctx.JSON(resp.StatusCode, respData)
+		ProxyResponse(ctx, resp)
 	})
 
 	// TODO: make oidc logic

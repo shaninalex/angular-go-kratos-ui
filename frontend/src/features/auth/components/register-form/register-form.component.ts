@@ -1,6 +1,11 @@
 import {Component, inject} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
-import {LoginFlow, UiText, UpdateRegistrationFlowWithPasswordMethod} from '@ory/kratos-client';
+import {
+    LoginFlow,
+    UiText,
+    UpdateRegistrationFlowWithPasswordMethod,
+    UpdateRegistrationFlowWithProfileMethod
+} from '@ory/kratos-client';
 import {filter, map, Observable, switchMap, tap} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {environment} from '@environments/environment.development';
@@ -54,10 +59,10 @@ export class RegisterFormComponent {
             return;
         }
 
-        const payload: UpdateRegistrationFlowWithPasswordMethod = {
+        const payload: UpdateRegistrationFlowWithProfileMethod = {
             csrf_token: this.form.get('csrf_token')?.value,
-            method: 'password',
-            password: this.form.get('password')?.value,
+            method: "profile",
+            screen: "credential-selection",
             traits: {
                 email: this.form.value['traits.email'],
                 name: {
@@ -66,7 +71,6 @@ export class RegisterFormComponent {
                 }
             }
         }
-        console.log(payload)
         this.submitService.register(payload, this.flowID).subscribe({
             next: data => {
                 if (data.data.ui.messages) {
