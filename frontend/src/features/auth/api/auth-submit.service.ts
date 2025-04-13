@@ -1,15 +1,14 @@
 import {inject, Injectable} from '@angular/core';
 import {UpdateLoginFlowWithPasswordMethod} from '@ory/kratos-client/api';
-import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {ApiResponse} from '@shared/api';
 import {
-    FlowError,
     LoginFlow,
-    UpdateLoginFlowWithOidcMethod,
-    UpdateRegistrationFlowWithPasswordMethod, UpdateRegistrationFlowWithProfileMethod
+    RegistrationFlow,
+    SuccessfulNativeRegistration,
+    UpdateRegistrationFlowWithPasswordMethod
 } from '@ory/kratos-client';
-import {catchError, EMPTY, shareReplay} from 'rxjs';
-import {AUTH_URLS} from '@features/auth/api/auth-form.service';
+import {Observable, shareReplay} from 'rxjs';
 import {environment as env} from '@environments/environment.development';
 
 /*
@@ -27,7 +26,6 @@ For now, it's only for developing and proof of concept
 export const SUBMIT_URLS = {
     LOGIN: `${env.API_ROOT}/api/v2/auth/login`,
     REGISTER: `${env.API_ROOT}/api/v2/auth/register`,
-    // LOGIN_WITH_PROVIDER: `${env.API_ROOT}/api/v2/auth/login-oidc`,
 }
 
 
@@ -37,15 +35,19 @@ export class AuthSubmitService {
 
     login(payload: UpdateLoginFlowWithPasswordMethod, flow: string) {
         let params = new HttpParams().set("flow", flow);
-        return this.http.post<ApiResponse<LoginFlow>>(SUBMIT_URLS.LOGIN, payload, {params: params, withCredentials: true}).pipe(
+        return this.http.post<ApiResponse<LoginFlow>>(SUBMIT_URLS.LOGIN, payload, {
+            params: params,
+            withCredentials: true
+        }).pipe(
             shareReplay(),
         );
     }
 
-    register(payload: UpdateRegistrationFlowWithProfileMethod, flow: string) {
+    register(payload: UpdateRegistrationFlowWithPasswordMethod, flow: string): Observable<SuccessfulNativeRegistration | RegistrationFlow> {
         let params = new HttpParams().set("flow", flow);
-        return this.http.post<ApiResponse<LoginFlow>>(SUBMIT_URLS.REGISTER, payload, {params: params, withCredentials: true}).pipe(
-            shareReplay(),
-        );
+        return this.http.post<SuccessfulNativeRegistration | RegistrationFlow>(SUBMIT_URLS.REGISTER, payload, {
+            params: params,
+            withCredentials: true
+        })
     }
 }

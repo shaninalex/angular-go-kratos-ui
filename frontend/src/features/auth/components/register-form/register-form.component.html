@@ -1,12 +1,9 @@
 @if (registerFlow$ | async) {
-    <form [formGroup]="form" (submit)="onSubmit()" class="flex flex-col gap-4">
+    <form [formGroup]="form" (submit)="onSubmit()" class="flex flex-col gap-2">
         @for (input of formEntries; track $index) {
             @switch (input.controlType) {
                 @case ('hidden') {
-                    <input [formControlName]="input.name"
-                           [type]="input.controlType"
-                           [id]="input.name"
-                    />
+                    <input [formControlName]="input.name" [type]="input.controlType" [id]="input.name"/>
                 }
                 @case ('submit') {
                     <div>
@@ -14,7 +11,7 @@
                                [formControlName]="input.name"
                                [type]="input.controlType"
                                [id]="input.name"
-                               [value]="input.value"
+                               [value]="input.label"
                         />
                     </div>
                 }
@@ -26,20 +23,16 @@
                                [id]="input.name"
                                [placeholder]="input.placeholder"
                         />
-                        @if (form.get(input.name)?.errors && form.get(input.name)?.dirty) {
-                            <div class="text-red-500 text-sm">
-                                This field is required.
-                            </div>
+                        <!-- TODO: display frontend (angular) form errors -->
+                        @for (msg of input.messages; track $index) {
+                            <ui-text-message [msg]="msg"/>
                         }
                     </div>
                 }
             }
         }
         @for (msg of messages; track $index) {
-            <div class="bg-emerald-100" [id]="msg.id">
-                {{ msg.type }} - {{ msg.text }}
-
-            </div>
+            <ui-text-message [msg]="msg"/>
         }
     </form>
 } @else {

@@ -9,7 +9,7 @@ import {RouterLink} from '@angular/router';
         RouterLink
     ],
   template: `
-      <div>
+      <div class="w-2xs flex flex-col gap-4">
           <auth-register-form/>
           <div>
               Already have an account? <a class="underline" routerLink="/auth/login">Login</a>

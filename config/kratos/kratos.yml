@@ -42,7 +42,7 @@ selfservice:
               - email
               - profile
               - openid
-      enabled: true
+      enabled: false
 
   flows:
     error:
@@ -78,14 +78,15 @@ selfservice:
     registration:
       lifespan: 10m
       ui_url: http://localhost:4200/auth/registration
+      enable_legacy_one_step: true
       after:
         password:
           hooks:
-            - hook: session
+#            - hook: session
             - hook: show_verification_ui
-        oidc:
-          hooks:
-            - hook: session
+#        oidc:
+#          hooks:
+#            - hook: show_verification_ui
 
 log:
   level: debug

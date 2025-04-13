@@ -72,9 +72,9 @@ export class FormControlService implements IControlService {
                 required: attr.required,
                 controlType: attr.type,
                 placeholder: node.meta?.label?.text || '',
+                messages: node.messages,
             });
-        })
-            .filter((input): input is InputBase => input !== null);
+        }).filter((input): input is InputBase => input !== null);
     }
 
 

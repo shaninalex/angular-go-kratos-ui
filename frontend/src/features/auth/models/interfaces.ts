@@ -1,10 +1,12 @@
+import {UiText} from '@ory/kratos-client';
+
 export class InputBase {
     value: string;
     name: string;
     required: boolean;
     controlType: string;
     placeholder: string;
-    errors?: string[];
+    messages?: UiText[];
 
     constructor(
         options: {
@@ -13,7 +15,7 @@ export class InputBase {
             required?: boolean
             controlType?: string
             placeholder?: string
-            errors?: string[]
+            messages?: UiText[]
         } = {},
     ) {
         this.value = options.value ?? ''
@@ -21,7 +23,7 @@ export class InputBase {
         this.required = options.required ?? true
         this.controlType = options.controlType ?? 'text'
         this.placeholder = options.placeholder ?? ''
-        this.errors = options.errors ?? []
+        this.messages = options.messages ?? []
     }
 }
 

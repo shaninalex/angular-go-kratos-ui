@@ -4,14 +4,14 @@ import {
     LoginFlow,
     UiText,
     UpdateRegistrationFlowWithPasswordMethod,
-    UpdateRegistrationFlowWithProfileMethod
 } from '@ory/kratos-client';
-import {filter, map, Observable, switchMap, tap} from 'rxjs';
+import {catchError, filter, map, Observable, of, switchMap, tap} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {environment} from '@environments/environment.development';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {AuthFormService, AuthSubmitService, InputBase} from '@features/auth/api';
 import {KratosFormAdapter} from '@features/auth/adapters/form.adapter';
+import {UiTextMessage} from '@shared/ui/components/ui-text/ui-text.message';
 
 
 @Component({
@@ -19,6 +19,7 @@ import {KratosFormAdapter} from '@features/auth/adapters/form.adapter';
     imports: [
         AsyncPipe,
         ReactiveFormsModule,
+        UiTextMessage,
     ],
     providers: [AuthFormService, AuthSubmitService, AuthSubmitService],
     templateUrl: 'register-form.component.html'
@@ -58,29 +59,25 @@ export class RegisterFormComponent {
             console.log(this.form);
             return;
         }
-
-        const payload: UpdateRegistrationFlowWithProfileMethod = {
+        const payload: UpdateRegistrationFlowWithPasswordMethod = {
             csrf_token: this.form.get('csrf_token')?.value,
-            method: "profile",
-            screen: "credential-selection",
+            password: this.form.get('password')?.value,
+            method: "password",
             traits: {
                 email: this.form.value['traits.email'],
-                name: {
-                    first: this.form.value['traits.name.first'],
-                    last: this.form.value['traits.name.last'],
-                }
             }
         }
+
         this.submitService.register(payload, this.flowID).subscribe({
             next: data => {
-                if (data.data.ui.messages) {
-                    this.kForm.formMessages = data.data.ui.messages;
-                }
+                console.log("Success", data)
             },
-            error: data => {
-                if (data.error.ui.messages) {
-                    this.kForm.formMessages = data.error.ui.messages;
-                }
+            error: err => {
+                this.kForm.init(err.error.ui)
+                this.form = this.kForm.formGroup;
+                this.formEntries = this.kForm.formEntries;
+                this.messages = this.kForm.formMessages;
+                return of(err)
             }
         })
     }

@@ -25,24 +25,10 @@
                             "via": "email"
                         }
                     }
-                },
-                "name": {
-                    "type": "object",
-                    "properties": {
-                        "first": {
-                            "title": "First Name",
-                            "type": "string"
-                        },
-                        "last": {
-                            "title": "Last Name",
-                            "type": "string"
-                        }
-                    }
                 }
             },
             "required": [
-                "email",
-                "name"
+                "email"
             ],
             "additionalProperties": false
         }
