@@ -1,0 +1,40 @@
+@if (registerFlow$ | async) {
+    <form [formGroup]="form" (submit)="onSubmit()" class="flex flex-col gap-2">
+        @for (input of formEntries; track $index) {
+            @switch (input.controlType) {
+                @case ('hidden') {
+                    <input [formControlName]="input.name" [type]="input.controlType" [id]="input.name"/>
+                }
+                @case ('submit') {
+                    <div>
+                        <input class="btn"
+                               [formControlName]="input.name"
+                               [type]="input.controlType"
+                               [id]="input.name"
+                               [value]="input.name"
+                        />
+                    </div>
+                }
+                @default {
+                    <div>
+                        <input class="input"
+                               [formControlName]="input.name"
+                               [type]="input.controlType"
+                               [id]="input.name"
+                               [placeholder]="input.placeholder"
+                        />
+                        <!-- TODO: display frontend (angular) form errors -->
+                        @for (msg of input.messages; track $index) {
+                            <ui-text-message [msg]="msg"/>
+                        }
+                    </div>
+                }
+            }
+        }
+        @for (msg of messages; track $index) {
+            <ui-text-message [msg]="msg"/>
+        }
+    </form>
+} @else {
+    loading...
+}

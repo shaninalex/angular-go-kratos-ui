@@ -1,11 +1,12 @@
 import {Component, inject} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
-import {LoginFlow} from '@ory/kratos-client';
+import {LoginFlow, UiText} from '@ory/kratos-client';
 import {filter, map, Observable, switchMap, tap} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {environment} from '@environments/environment.development';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {AuthFormService, AuthSubmitService, FormControlService, InputBase} from '@features/auth/api';
+import {AuthFormService, AuthSubmitService, InputBase} from '@features/auth/api';
+import {KratosFormAdapter} from '@features/auth/adapters/form.adapter';
 
 
 @Component({
@@ -14,58 +15,19 @@ import {AuthFormService, AuthSubmitService, FormControlService, InputBase} from 
         AsyncPipe,
         ReactiveFormsModule,
     ],
-    providers: [AuthFormService, FormControlService, AuthSubmitService, AuthSubmitService],
-    template: `
-        @if (loginFlow$ | async; as loginFlow) {
-            <form [formGroup]="form" (submit)="onSubmit()" class="flex flex-col gap-4">
-                @for (input of formEntries; track $index) {
-                    @switch (input.controlType) {
-                        @case ('hidden') {
-                            <input [formControlName]="input.name"
-                                   [type]="input.controlType"
-                                   [id]="input.name"
-                            />
-                        }
-                        @case ('submit') {
-                            <div>
-                                <input class="btn"
-                                       [formControlName]="input.name"
-                                       [type]="input.controlType"
-                                       [id]="input.name"
-                                />
-                            </div>
-                        }
-                        @default {
-                            <div>
-                                <input class="input"
-                                       [formControlName]="input.name"
-                                       [type]="input.controlType"
-                                       [id]="input.name"
-                                       [placeholder]="input.placeholder"
-                                />
-                                @if (form.get(input.name)?.errors && form.get(input.name)?.dirty) {
-                                    <div class="text-red-500 text-sm">
-                                        This field is required.
-                                    </div>
-                                }
-                            </div>
-                        }
-                    }
-                }
-            </form>
-        } @else {
-            loading...
-        }`
+    providers: [AuthFormService, AuthSubmitService, AuthSubmitService],
+    templateUrl: 'login-form.component.html'
 })
 export class LoginFormComponent {
     private route: ActivatedRoute = inject(ActivatedRoute);
     private flowID: string
     private authService: AuthFormService = inject(AuthFormService);
-    private formService: FormControlService = inject(FormControlService)
     private submitService: AuthSubmitService = inject(AuthSubmitService)
 
+    messages: UiText[] = [];
     formEntries: InputBase[] = [];
     form: FormGroup = new FormGroup({});
+    kForm: KratosFormAdapter = new KratosFormAdapter();
 
     loginFlow$: Observable<LoginFlow> = this.route.queryParams.pipe(
         map((params: Params) => {
@@ -79,8 +41,10 @@ export class LoginFormComponent {
         filter((flowId): flowId is string => flowId !== null),
         switchMap((flowId: string) => this.authService.GetLoginForm(flowId)),
         tap((data: LoginFlow) => {
-            this.form = this.formService.toFormGroup(data.ui);
-            this.formEntries = this.formService.toFormInputs(data.ui);
+            this.kForm.init(data.ui)
+            this.form = this.kForm.formGroup;
+            this.formEntries = this.kForm.formEntries;
+            this.messages = this.kForm.formMessages;
         })
     );
 
@@ -95,8 +59,17 @@ export class LoginFormComponent {
             method: 'password',
             password: this.form.get('password')?.value,
         }
-        this.submitService.login(payload, this.flowID).subscribe(data => {
-            console.log(data);
+        this.submitService.login(payload, this.flowID).subscribe({
+            next: data => {
+                if (data.data.ui.messages) {
+                    this.kForm.formMessages = data.data.ui.messages;
+                }
+            },
+            error: data => {
+                if (data.error.ui.messages) {
+                    this.kForm.formMessages = data.error.ui.messages;
+                }
+            }
         })
     }
 }

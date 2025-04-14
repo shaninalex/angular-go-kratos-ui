@@ -1,4 +1,4 @@
-version: v0.13.0
+version: v1.3.1
 
 dsn: memory
 
@@ -42,7 +42,7 @@ selfservice:
               - email
               - profile
               - openid
-      enabled: true
+      enabled: false
 
   flows:
     error:
@@ -78,14 +78,16 @@ selfservice:
     registration:
       lifespan: 10m
       ui_url: http://localhost:4200/auth/registration
+      enable_legacy_one_step: true
       after:
         password:
+          default_browser_return_url: http://localhost:4200/auth/verification
           hooks:
-            - hook: session
+#            - hook: session
             - hook: show_verification_ui
-        oidc:
-          hooks:
-            - hook: session
+#        oidc:
+#          hooks:
+#            - hook: show_verification_ui
 
 log:
   level: debug

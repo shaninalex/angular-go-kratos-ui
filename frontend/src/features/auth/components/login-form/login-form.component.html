@@ -1,0 +1,47 @@
+@if (loginFlow$ | async; as loginFlow) {
+    <form [formGroup]="form" (submit)="onSubmit()" class="flex flex-col gap-4">
+        @for (input of formEntries; track $index) {
+            @switch (input.controlType) {
+                @case ('hidden') {
+                    <input [formControlName]="input.name"
+                           [type]="input.controlType"
+                           [id]="input.name"
+                    />
+                }
+                @case ('submit') {
+                    <div>
+                        <input class="btn"
+                               [formControlName]="input.name"
+                               [type]="input.controlType"
+                               [id]="input.name"
+                               [value]="input.name"
+                        />
+                    </div>
+                }
+                @default {
+                    <div>
+                        <input class="input"
+                               [formControlName]="input.name"
+                               [type]="input.controlType"
+                               [id]="input.name"
+                               [placeholder]="input.placeholder"
+                        />
+                        @if (form.get(input.name)?.errors && form.get(input.name)?.dirty) {
+                            <div class="text-red-500 text-sm">
+                                This field is required.
+                            </div>
+                        }
+                    </div>
+                }
+            }
+        }
+        @for (msg of messages; track $index) {
+            <div class="bg-emerald-100" [id]="msg.id">
+                {{ msg.type }} - {{ msg.text }}
+
+            </div>
+        }
+    </form>
+} @else {
+    loading...
+}

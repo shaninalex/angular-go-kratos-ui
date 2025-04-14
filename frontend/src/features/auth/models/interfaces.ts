@@ -1,10 +1,4 @@
-import {FormGroup} from '@angular/forms';
-import {UiContainer, UpdateLoginFlowWithPasswordMethod} from '@ory/kratos-client/api';
-
-export interface IKratosFormControlService {
-    toFormGroup(ui: UiContainer): FormGroup
-    toFormInputs(ui: UiContainer): InputBase[]
-}
+import {UiText} from '@ory/kratos-client';
 
 export class InputBase {
     value: string;
@@ -12,14 +6,16 @@ export class InputBase {
     required: boolean;
     controlType: string;
     placeholder: string;
+    messages?: UiText[];
 
     constructor(
         options: {
-            value?: string;
-            name?: string;
-            required?: boolean;
-            controlType?: string;
+            value?: string
+            name?: string
+            required?: boolean
+            controlType?: string
             placeholder?: string
+            messages?: UiText[]
         } = {},
     ) {
         this.value = options.value ?? ''
@@ -27,5 +23,7 @@ export class InputBase {
         this.required = options.required ?? true
         this.controlType = options.controlType ?? 'text'
         this.placeholder = options.placeholder ?? ''
+        this.messages = options.messages ?? []
     }
 }
+

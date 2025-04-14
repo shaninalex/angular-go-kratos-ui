@@ -1,7 +1,8 @@
 - id: "backend"
   upstream:
     preserve_host: true
-    url: "http://backend:8000"
+    url: "http://host.docker.internal:8000" # for localhost backend
+#    url: "http://backend:8000" # for in-docker backend
   match:
     url: "http://localhost:8080/api/v2/auth/<**>"
     methods:
