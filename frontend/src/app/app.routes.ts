@@ -22,7 +22,7 @@ export const routes: Routes = [
                 component: RegisterPageComponent
             },
             {
-                path: 'verify',
+                path: 'verification',
                 component: VerifyPageComponent
             },
             {

@@ -1,4 +1,4 @@
-@if (registerFlow$ | async) {
+@if (verificationFlow$ | async) {
     <form [formGroup]="form" (submit)="onSubmit()" class="flex flex-col gap-2">
         @for (input of formEntries; track $index) {
             @switch (input.controlType) {
@@ -30,9 +30,6 @@
                     </div>
                 }
             }
-        }
-        @for (msg of messages; track $index) {
-            <ui-text-message [msg]="msg"/>
         }
     </form>
 } @else {

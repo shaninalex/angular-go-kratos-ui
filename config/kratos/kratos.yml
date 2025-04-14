@@ -81,6 +81,7 @@ selfservice:
       enable_legacy_one_step: true
       after:
         password:
+          default_browser_return_url: http://localhost:4200/auth/verification
           hooks:
 #            - hook: session
             - hook: show_verification_ui

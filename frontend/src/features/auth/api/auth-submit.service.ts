@@ -43,9 +43,9 @@ export class AuthSubmitService {
         );
     }
 
-    register(payload: UpdateRegistrationFlowWithPasswordMethod, flow: string): Observable<SuccessfulNativeRegistration | RegistrationFlow> {
+    register(payload: UpdateRegistrationFlowWithPasswordMethod, flow: string): Observable<SuccessfulNativeRegistration> {
         let params = new HttpParams().set("flow", flow);
-        return this.http.post<SuccessfulNativeRegistration | RegistrationFlow>(SUBMIT_URLS.REGISTER, payload, {
+        return this.http.post<SuccessfulNativeRegistration>(SUBMIT_URLS.REGISTER, payload, {
             params: params,
             withCredentials: true
         })

@@ -75,18 +75,21 @@ func main() {
 		ProxyResponse(c, resp)
 	})
 
-	router.GET("/api/v2/auth/get-verification-form", func(c *gin.Context) {
-		verification_flow_id := c.Query("flow")
-		_, resp, err := client.FrontendAPI.GetVerificationFlow(c).Id(
-			verification_flow_id,
-		).Cookie(c.Request.Header.Get("Cookie")).Execute()
+	router.GET("/api/v2/auth/get-verification-form", func(ctx *gin.Context) {
+		flowId := ctx.Query("flow")
+		_, resp, err := client.FrontendAPI.GetVerificationFlow(ctx).
+			Id(flowId).
+			Cookie(ctx.Request.Header.Get("Cookie")).
+			Execute()
 
 		if err != nil {
 			log.Println(err)
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
-		ProxyResponse(c, resp)
+		body, err := io.ReadAll(resp.Body)
+		ctx.Status(resp.StatusCode)
+		ctx.Writer.Write(body)
 	})
 
 	router.GET("/api/v2/auth/check-session", func(c *gin.Context) {
