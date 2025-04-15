@@ -6,7 +6,7 @@ import {
     LoginFlow,
     RegistrationFlow,
     SuccessfulNativeRegistration,
-    UpdateRegistrationFlowWithPasswordMethod
+    UpdateRegistrationFlowWithPasswordMethod, UpdateVerificationFlowWithCodeMethod
 } from '@ory/kratos-client';
 import {Observable, shareReplay} from 'rxjs';
 import {environment as env} from '@environments/environment.development';
@@ -26,6 +26,7 @@ For now, it's only for developing and proof of concept
 export const SUBMIT_URLS = {
     LOGIN: `${env.API_ROOT}/api/v2/auth/login`,
     REGISTER: `${env.API_ROOT}/api/v2/auth/register`,
+    VERIFY: `${env.API_ROOT}/api/v2/auth/verify`,
 }
 
 
@@ -46,6 +47,14 @@ export class AuthSubmitService {
     register(payload: UpdateRegistrationFlowWithPasswordMethod, flow: string): Observable<SuccessfulNativeRegistration> {
         let params = new HttpParams().set("flow", flow);
         return this.http.post<SuccessfulNativeRegistration>(SUBMIT_URLS.REGISTER, payload, {
+            params: params,
+            withCredentials: true
+        })
+    }
+
+    verify(payload: UpdateVerificationFlowWithCodeMethod, flow: string): Observable<SuccessfulNativeRegistration> {
+        let params = new HttpParams().set("flow", flow);
+        return this.http.post<SuccessfulNativeRegistration>(SUBMIT_URLS.VERIFY, payload, {
             params: params,
             withCredentials: true
         })

@@ -218,7 +218,30 @@ func main() {
 		defer resp.Body.Close()
 		ProxyResponse(ctx, resp)
 	})
+	router.POST("/api/v2/auth/verify", func(ctx *gin.Context) {
+		formId := ctx.Query("flow")
+		if formId == "" {
+			ctx.JSON(400, gin.H{"error": "flow id was not provided"})
+			return
+		}
 
+		var payload ory.UpdateVerificationFlowWithCodeMethod
+		err := ctx.ShouldBindJSON(&payload)
+		if err != nil {
+			ctx.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
+
+		_, resp, err := client.FrontendAPI.UpdateVerificationFlow(ctx).
+			Cookie(ctx.Request.Header.Get("Cookie")).
+			UpdateVerificationFlowBody(ory.UpdateVerificationFlowBody{
+				UpdateVerificationFlowWithCodeMethod: &payload,
+			}).
+			Flow(formId).
+			Execute()
+		defer resp.Body.Close()
+		ProxyResponse(ctx, resp)
+	})
 	router.Run(fmt.Sprintf(":%d", port))
 }
 

@@ -1,4 +1,4 @@
-@if (verificationFlow$ | async) {
+@if (flow$ | async) {
     <form [formGroup]="form" (submit)="onSubmit()" class="flex flex-col gap-2">
         @for (input of formEntries; track $index) {
             @switch (input.controlType) {

@@ -1,7 +1,12 @@
 import {Component, inject} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {AuthFormService, AuthSubmitService, InputBase} from '@features/auth/api';
-import {UiText, VerificationFlow} from '@ory/kratos-client';
+import {
+    UiText,
+    UpdateVerificationFlowWithCodeMethod,
+    UpdateVerificationFlowWithCodeMethodMethodEnum,
+    VerificationFlow
+} from '@ory/kratos-client';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {KratosFormAdapter} from '@features/auth/adapters/form.adapter';
 import {filter, map, Observable, switchMap, tap} from 'rxjs';
@@ -30,7 +35,7 @@ export class VerificationFormComponent {
     form: FormGroup = new FormGroup({});
     kForm: KratosFormAdapter = new KratosFormAdapter();
 
-    verificationFlow$: Observable<VerificationFlow> = this.route.queryParams.pipe(
+    flow$: Observable<VerificationFlow> = this.route.queryParams.pipe(
         map((params: Params) => {
             if (!params.hasOwnProperty("flow")) {
                 window.location.href = environment.AUTH_URL_REGISTRATION_REDIRECT;
@@ -51,6 +56,21 @@ export class VerificationFormComponent {
             return;
         }
         console.log(this.form.value)
+
+        const payload: UpdateVerificationFlowWithCodeMethod = {
+            csrf_token: this.form.get('csrf_token')?.value,
+            code: this.form.get('code')?.value,
+            method: UpdateVerificationFlowWithCodeMethodMethodEnum.Code,
+        }
+
+        this.submitService.verify(payload, this.flowID).subscribe({
+            next: data => {
+                console.log(data)
+            },
+            error: err => {
+                console.log(err.error)
+            }
+        })
     }
 
     private initializeForm(flow: VerificationFlow) {
