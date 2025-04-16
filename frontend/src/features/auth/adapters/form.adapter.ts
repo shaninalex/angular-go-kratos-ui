@@ -5,8 +5,8 @@ import {InputBase} from '@features/auth/models/interfaces';
 
 
 export class KratosFormAdapter {
-    controlService: IControlService
-
+    private controlService: IControlService
+    private state: string = "";
     private group: FormGroup = new FormGroup({});
     private entries: InputBase[] = [];
     private messages: UiText[] | undefined = [];

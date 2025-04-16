@@ -1,67 +1,34 @@
-<!-- a -->
-@if (node.type === 'a') {
-    <div>
-        <a [attr.id]="attr().id" [attr.href]="attr().href">
-            {{ node.meta.label?.text }}
-        </a>
-    </div>
-}
-
-<!-- image -->
-@if (node.type === 'img') {
-    <div>
-        <p>{{ node.meta.label?.text }}</p>
-        <img [attr.id]="attr().id" [attr.alt]="attr().name" [attr.width]="attr().width"
-             [attr.height]="attr().height" [attr.src]="attr().src"/>
-    </div>
-}
-
-<!-- input -->
-@if (node.attributes.node_type === 'input') {
-    @if (attr().type === 'submit') {
-        <div>
-            <button
-                class="input"
-                [attr.disabled]="attr().disabled ? true : null" [attr.name]="attr().name"
-                [attr.type]="attr().type"
-                [attr.value]="attr().value">
-                {{ node.meta.label?.text }}
-            </button>
-        </div>
+@if (attr().type === 'submit') {
+    <button
+        class="btn"
+        [attr.disabled]="attr().disabled ? true : null" [attr.name]="attr().name"
+        [attr.type]="attr().type"
+        [attr.value]="attr().value">
+        {{ node.meta.label?.text }}
+    </button>
+} @else {
+    @if (attr().type === 'hidden') {
+        <input [attr.disabled]="attr().disabled ? true : null" [attr.name]="attr().name"
+               [attr.required]="attr().required"
+               [attr.type]="attr().type" [attr.placeholder]="node.meta.label?.text"
+               [attr.value]="attr().value? attr().value: null"/>
     } @else {
-        @if (attr().type === 'hidden') {
-            <input [attr.disabled]="attr().disabled ? true : null" [attr.name]="attr().name"
-                   [attr.required]="attr().required"
-                   [attr.type]="attr().type" [attr.placeholder]="node.meta.label?.text"
-                   [attr.value]="attr().value? attr().value: null"/>
-        } @else {
-                <label>{{ node.meta.label?.text }}</label>
-                <input class="input"
-                       [placeholder]="node.meta.label?.text"
-                       [attr.autocomplete]="attr().autocomplete"
-                       [attr.value]="attr().value? attr().value: null"
-                       [attr.disabled]="attr().disabled ? true : null"
-                       [attr.name]="attr().name"
-                       [attr.type]="attr().type"
-                />
-                <!-- use material form field message -->
-                @for (message of node.messages; track message) {
-                    <div class="alert alert-danger" [class.text-danger]="message.type === 'error'"
-                         [class.text-info]="message.type === 'info'"
-                         [class.text-success]="message.type === 'success'">
-                        {{ message.text }}
-                    </div>
-                }
-        }
+            <label>{{ node.meta.label?.text }}</label>
+            <input class="input"
+                   [placeholder]="node.meta.label?.text"
+                   [attr.autocomplete]="attr().autocomplete"
+                   [attr.value]="attr().value? attr().value: null"
+                   [attr.disabled]="attr().disabled ? true : null"
+                   [attr.name]="attr().name"
+                   [attr.type]="attr().type"
+            />
+
+            @for (message of node.messages; track message) {
+                <div class="alert alert-danger" [class.text-danger]="message.type === 'error'"
+                     [class.text-info]="message.type === 'info'"
+                     [class.text-success]="message.type === 'success'">
+                    {{ message.text }}
+                </div>
+            }
     }
-}
-
-<!-- script (not implemented) -->
-
-<!-- text -->
-@if (node.type === 'text') {
-    <div>
-        <h4 [id]="attr().id">{{ attr().text.text }}</h4>
-        <p [id]="node.meta.label?.id">{{ node.meta.label?.text }}</p>
-    </div>
 }

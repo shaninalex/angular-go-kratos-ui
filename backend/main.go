@@ -218,6 +218,7 @@ func main() {
 		defer resp.Body.Close()
 		ProxyResponse(ctx, resp)
 	})
+
 	router.POST("/api/v2/auth/verify", func(ctx *gin.Context) {
 		formId := ctx.Query("flow")
 		if formId == "" {

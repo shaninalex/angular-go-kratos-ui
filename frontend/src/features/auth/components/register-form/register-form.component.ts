@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {AsyncPipe} from '@angular/common';
+import {AsyncPipe, JsonPipe} from '@angular/common';
 import {ActivatedRoute, Params, Router} from '@angular/router';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {
@@ -15,6 +15,8 @@ import {environment} from '@environments/environment.development';
 import {AuthFormService, AuthSubmitService, InputBase} from '@features/auth/api';
 import {KratosFormAdapter} from '@features/auth/adapters/form.adapter';
 import {UiTextMessage} from '@shared/ui/components/ui-text/ui-text.message';
+import {OryFormAdapter} from '@shared/adapters/ory/form.adapter';
+import {OryInputComponent} from '@shared/ui';
 
 
 @Component({
@@ -23,6 +25,8 @@ import {UiTextMessage} from '@shared/ui/components/ui-text/ui-text.message';
         AsyncPipe,
         ReactiveFormsModule,
         UiTextMessage,
+        OryInputComponent,
+        JsonPipe,
     ],
     providers: [AuthFormService, AuthSubmitService, AuthSubmitService],
     templateUrl: 'register-form.component.html'
@@ -34,10 +38,8 @@ export class RegisterFormComponent {
     private authService: AuthFormService = inject(AuthFormService);
     private submitService: AuthSubmitService = inject(AuthSubmitService)
 
-    messages: UiText[] = [];
-    formEntries: InputBase[] = [];
+    formWrapper: OryFormAdapter = new OryFormAdapter();
     form: FormGroup = new FormGroup({});
-    kForm: KratosFormAdapter = new KratosFormAdapter();
 
     registerFlow$: Observable<RegistrationFlow> = this.route.queryParams.pipe(
         map((params: Params) => {
@@ -95,14 +97,12 @@ export class RegisterFormComponent {
         if (flow?.ui) {
             this.initializeForm(flow);
         } else {
-            this.messages = [{ id: 0, type: 'error', text: 'Unexpected error occurred' }];
+            this.formWrapper.messages = [{ id: 0, type: 'error', text: 'Unexpected error occurred' }];
         }
     }
 
     private initializeForm(flow: RegistrationFlow) {
-        this.kForm.init(flow.ui);
-        this.form = this.kForm.formGroup;
-        this.formEntries = this.kForm.formEntries;
-        this.messages = this.kForm.formMessages;
+        this.formWrapper.init(flow);
+        this.form = this.formWrapper.form();
     }
 }
