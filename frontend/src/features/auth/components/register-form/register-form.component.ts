@@ -12,8 +12,7 @@ import {
 } from '@ory/kratos-client';
 import {catchError, filter, map, Observable, of, switchMap, tap} from 'rxjs';
 import {environment} from '@environments/environment.development';
-import {AuthFormService, AuthSubmitService, InputBase} from '@features/auth/api';
-import {KratosFormAdapter} from '@features/auth/adapters/form.adapter';
+import {AuthFormService, AuthSubmitService} from '@features/auth/api';
 import {UiTextMessage} from '@shared/ui/components/ui-text/ui-text.message';
 import {OryFormAdapter} from '@shared/adapters/ory/form.adapter';
 import {OryInputComponent} from '@shared/ui';
@@ -57,7 +56,7 @@ export class RegisterFormComponent {
 
     onSubmit(): void {
         if (!this.form.valid) {
-            console.log(this.form);
+            console.log(this.form.value)
             return;
         }
         const payload: UpdateRegistrationFlowWithPasswordMethod = {
@@ -68,6 +67,8 @@ export class RegisterFormComponent {
                 email: this.form.value['traits.email'],
             }
         }
+
+        console.log(this.form.value)
 
         this.submitService.register(payload, this.flowID).pipe(
             catchError(err => {

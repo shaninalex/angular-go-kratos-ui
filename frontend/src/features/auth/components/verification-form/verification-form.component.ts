@@ -8,18 +8,21 @@ import {
     VerificationFlow
 } from '@ory/kratos-client';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {KratosFormAdapter} from '@features/auth/adapters/form.adapter';
 import {filter, map, Observable, switchMap, tap} from 'rxjs';
 import {environment} from '@environments/environment.development';
-import {AsyncPipe} from '@angular/common';
+import {AsyncPipe, JsonPipe} from '@angular/common';
 import {UiTextMessage} from '@shared/ui/components/ui-text/ui-text.message';
+import {OryFormAdapter} from '@shared/adapters/ory/form.adapter';
+import {OryInputComponent} from '@shared/ui';
 
 @Component({
     selector: 'auth-verification-form',
     imports: [
         AsyncPipe,
         ReactiveFormsModule,
-        UiTextMessage
+        UiTextMessage,
+        JsonPipe,
+        OryInputComponent
     ],
     templateUrl: 'verification-form.component.html'
 })
@@ -30,10 +33,8 @@ export class VerificationFormComponent {
     private authService: AuthFormService = inject(AuthFormService);
     private submitService: AuthSubmitService = inject(AuthSubmitService)
 
-    messages: UiText[] = [];
-    formEntries: InputBase[] = [];
+    formWrapper: OryFormAdapter = new OryFormAdapter();
     form: FormGroup = new FormGroup({});
-    kForm: KratosFormAdapter = new KratosFormAdapter();
 
     flow$: Observable<VerificationFlow> = this.route.queryParams.pipe(
         map((params: Params) => {
@@ -74,9 +75,7 @@ export class VerificationFormComponent {
     }
 
     private initializeForm(flow: VerificationFlow) {
-        this.kForm.init(flow.ui);
-        this.form = this.kForm.formGroup;
-        this.formEntries = this.kForm.formEntries;
-        this.messages = this.kForm.formMessages;
+        this.formWrapper.init(flow);
+        this.form = this.formWrapper.form();
     }
 }

@@ -1,5 +1,5 @@
 import {AfterViewInit, Component, forwardRef, Injector, Input, OnInit} from '@angular/core';
-import {UiNode, UiNodeAttributes, UiNodeInputAttributes} from "@ory/kratos-client";
+import {UiNode, UiNodeInputAttributes} from "@ory/kratos-client";
 import {ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl} from '@angular/forms';
 
 // TODO: implement

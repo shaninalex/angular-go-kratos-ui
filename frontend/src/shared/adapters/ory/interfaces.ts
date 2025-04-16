@@ -13,7 +13,7 @@ export interface IFlow {
     /**
      * ExpiresAt is the time (UTC) when the request expires
      */
-    expires_at: string
+    expires_at?: string
     /**
      * State represents the state of this request
      */

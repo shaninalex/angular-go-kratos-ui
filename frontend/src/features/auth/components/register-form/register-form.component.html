@@ -17,7 +17,6 @@
                 @case ('script') {
                     {{ node.attributes | json }}
                 }
-
                 @default {
                     <div>Undefined node type: {{ node.type }}</div>
                 }
