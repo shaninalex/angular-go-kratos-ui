@@ -17,6 +17,8 @@
     "@angular/platform-browser": "^19.2.0",
     "@angular/platform-browser-dynamic": "^19.2.0",
     "@angular/router": "^19.2.0",
+    "@ngrx/store": "^19.1.0",
+    "@ngrx/store-devtools": "19.1.0",
     "@ory/kratos-client": "^1.3.8",
     "@tailwindcss/postcss": "^4.1.3",
     "postcss": "^8.5.3",

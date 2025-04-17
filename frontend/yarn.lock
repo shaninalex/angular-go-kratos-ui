@@ -1733,6 +1733,20 @@
     "@napi-rs/nice-win32-ia32-msvc" "1.0.1"
     "@napi-rs/nice-win32-x64-msvc" "1.0.1"
 
+"@ngrx/store-devtools@19.1.0":
+  version "19.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/store-devtools/-/store-devtools-19.1.0.tgz#a852538a2321cd4217e2a135ff2c665c753e4e88"
+  integrity sha512-c8sV5FQofqm7lF6HTJ4Bb7L/69TaIYHAwEFMbgqbsNoWDx+pilw/It6X9J3LnU8bXjQK4xg6qsgJ7fJIH5X2NA==
+  dependencies:
+    tslib "^2.0.0"
+
+"@ngrx/store@^19.1.0":
+  version "19.1.0"
+  resolved "https://registry.yarnpkg.com/@ngrx/store/-/store-19.1.0.tgz#9a35fe7b327486241157d75341f2de4c08545d53"
+  integrity sha512-8kKCSFahTpRTx3f/wwcDjItdFnk2IMoorWRjTI2U/MGWuEi4flqLNWcX99s759e7TI6PctiGsaS8jnJXIUS8Jg==
+  dependencies:
+    tslib "^2.0.0"
+
 "@ngtools/webpack@19.2.6":
   version "19.2.6"
   resolved "https://registry.npmjs.org/@ngtools/webpack/-/webpack-19.2.6.tgz"

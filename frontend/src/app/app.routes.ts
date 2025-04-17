@@ -7,6 +7,7 @@ import {
     VerifyPageComponent
 } from '@pages/auth';
 import {DashboardWrapperComponent, HomePageComponent} from '@pages/dashboard';
+import {AuthGuard} from '@features/auth/guard/auth.guard';
 
 export const routes: Routes = [
     {
@@ -38,6 +39,7 @@ export const routes: Routes = [
     {
         path: '',
         component: DashboardWrapperComponent,
+        canMatch: [AuthGuard],
         children: [
             {
                 path: '',
