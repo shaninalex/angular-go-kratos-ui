@@ -6,7 +6,7 @@ import {AsyncPipe, JsonPipe} from '@angular/common';
 import {environment} from '@environments/environment.development';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {AuthFormService, AuthSubmitService} from '@features/auth/api';
-import {OryInputComponent} from "@shared/ui";
+import {OryInputComponent, OryTextComponent} from "@shared/ui";
 import {UiTextMessage} from "@shared/ui/components/ui-text/ui-text.message";
 import {OryFormAdapter} from '@shared/adapters';
 
@@ -19,6 +19,7 @@ import {OryFormAdapter} from '@shared/adapters';
         JsonPipe,
         OryInputComponent,
         UiTextMessage,
+        OryTextComponent,
     ],
     providers: [AuthFormService, AuthSubmitService, AuthSubmitService],
     templateUrl: 'login-form.component.html'
@@ -32,7 +33,7 @@ export class LoginFormComponent {
     formWrapper: OryFormAdapter = new OryFormAdapter()
     form: FormGroup = new FormGroup({});
 
-    loginFlow$: Observable<LoginFlow> = this.route.queryParams.pipe(
+    flow$: Observable<LoginFlow> = this.route.queryParams.pipe(
         map((params: Params) => {
             if (!params.hasOwnProperty("flow")) {
                 window.location.href = environment.AUTH_URL_LOGIN_REDIRECT;

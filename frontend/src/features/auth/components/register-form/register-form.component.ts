@@ -15,7 +15,7 @@ import {environment} from '@environments/environment.development';
 import {AuthFormService, AuthSubmitService} from '@features/auth/api';
 import {UiTextMessage} from '@shared/ui/components/ui-text/ui-text.message';
 import {OryFormAdapter} from '@shared/adapters';
-import {OryInputComponent} from '@shared/ui';
+import {OryInputComponent, OryTextComponent} from '@shared/ui';
 
 
 @Component({
@@ -26,6 +26,7 @@ import {OryInputComponent} from '@shared/ui';
         UiTextMessage,
         OryInputComponent,
         JsonPipe,
+        OryTextComponent,
     ],
     providers: [AuthFormService, AuthSubmitService, AuthSubmitService],
     templateUrl: 'register-form.component.html'
@@ -40,7 +41,7 @@ export class RegisterFormComponent {
     formWrapper: OryFormAdapter = new OryFormAdapter();
     form: FormGroup = new FormGroup({});
 
-    registerFlow$: Observable<RegistrationFlow> = this.route.queryParams.pipe(
+    flow$: Observable<RegistrationFlow> = this.route.queryParams.pipe(
         map((params: Params) => {
             if (!params.hasOwnProperty("flow")) {
                 window.location.href = environment.AUTH_URL_REGISTRATION_REDIRECT;

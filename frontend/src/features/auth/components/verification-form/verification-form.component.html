@@ -3,7 +3,7 @@
         @for (node of formWrapper.getNodes(); track $index) {
             @switch (node.type) {
                 @case ('text') {
-                    {{ node.attributes | json }}
+                    <ory-text [node]="node" />
                 }
                 @case ('input') {
                     <ory-input [formControlName]="formWrapper.processNode().inputAttributes(node).name"
@@ -13,7 +13,7 @@
                     {{ node.attributes | json }}
                 }
                 @case ('a') {
-                    {{ node.attributes | json }}
+                    <ory-link [node]="node" />
                 }
                 @case ('script') {
                     {{ node.attributes | json }}

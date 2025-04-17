@@ -13,7 +13,8 @@ import {environment} from '@environments/environment.development';
 import {AsyncPipe, JsonPipe} from '@angular/common';
 import {UiTextMessage} from '@shared/ui/components/ui-text/ui-text.message';
 import {OryFormAdapter} from '@shared/adapters';
-import {OryInputComponent} from '@shared/ui';
+import {OryInputComponent, OryTextComponent} from '@shared/ui';
+import {OryLinkComponent} from '@shared/ui/components/ory-link/ory-link.component';
 
 @Component({
     selector: 'auth-verification-form',
@@ -22,7 +23,9 @@ import {OryInputComponent} from '@shared/ui';
         ReactiveFormsModule,
         UiTextMessage,
         JsonPipe,
-        OryInputComponent
+        OryInputComponent,
+        OryLinkComponent,
+        OryTextComponent
     ],
     templateUrl: 'verification-form.component.html'
 })

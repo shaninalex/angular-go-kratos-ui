@@ -1,9 +1,9 @@
-@if (registerFlow$ | async) {
+@if (flow$ | async) {
     <form [formGroup]="form" (submit)="onSubmit()" class="flex flex-col gap-2">
         @for (node of formWrapper.getNodes(); track $index) {
             @switch (node.type) {
                 @case ('text') {
-                    {{ node.attributes | json }}
+                    <ory-text [node]="node" />
                 }
                 @case ('input') {
                     <ory-input [formControlName]="formWrapper.processNode().inputAttributes(node).name"
