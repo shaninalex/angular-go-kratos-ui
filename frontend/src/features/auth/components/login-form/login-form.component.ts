@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {ActivatedRoute, Params} from '@angular/router';
-import {LoginFlow, UiText} from '@ory/kratos-client';
+import {LoginFlow} from '@ory/kratos-client';
 import {filter, map, Observable, switchMap, tap} from 'rxjs';
 import {AsyncPipe, JsonPipe} from '@angular/common';
 import {environment} from '@environments/environment.development';
@@ -8,7 +8,7 @@ import {FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {AuthFormService, AuthSubmitService} from '@features/auth/api';
 import {OryInputComponent} from "@shared/ui";
 import {UiTextMessage} from "@shared/ui/components/ui-text/ui-text.message";
-import {OryFormAdapter} from '@shared/adapters/ory/form.adapter';
+import {OryFormAdapter} from '@shared/adapters';
 
 
 @Component({

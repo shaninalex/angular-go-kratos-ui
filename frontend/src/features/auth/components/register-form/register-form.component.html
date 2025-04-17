@@ -6,7 +6,8 @@
                     {{ node.attributes | json }}
                 }
                 @case ('input') {
-                    <ory-input [node]="node" />
+                    <ory-input [formControlName]="formWrapper.processNode().inputAttributes(node).name"
+                               [node]="node"/>
                 }
                 @case ('img') {
                     {{ node.attributes | json }}

@@ -14,7 +14,7 @@ import {catchError, filter, map, Observable, of, switchMap, tap} from 'rxjs';
 import {environment} from '@environments/environment.development';
 import {AuthFormService, AuthSubmitService} from '@features/auth/api';
 import {UiTextMessage} from '@shared/ui/components/ui-text/ui-text.message';
-import {OryFormAdapter} from '@shared/adapters/ory/form.adapter';
+import {OryFormAdapter} from '@shared/adapters';
 import {OryInputComponent} from '@shared/ui';
 
 
@@ -59,6 +59,7 @@ export class RegisterFormComponent {
             console.log(this.form.value)
             return;
         }
+        console.log(this.form.value)
         const payload: UpdateRegistrationFlowWithPasswordMethod = {
             csrf_token: this.form.get('csrf_token')?.value,
             password: this.form.get('password')?.value,
@@ -68,7 +69,6 @@ export class RegisterFormComponent {
             }
         }
 
-        console.log(this.form.value)
 
         this.submitService.register(payload, this.flowID).pipe(
             catchError(err => {

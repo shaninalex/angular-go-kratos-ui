@@ -2,8 +2,6 @@ import {AfterViewInit, Component, forwardRef, Injector, Input, OnInit} from '@an
 import {UiNode, UiNodeInputAttributes} from "@ory/kratos-client";
 import {ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl} from '@angular/forms';
 
-// TODO: implement
-
 @Component({
     selector: 'ory-input',
     templateUrl: 'ory-input.component.html',
@@ -18,18 +16,20 @@ import {ControlValueAccessor, NG_VALUE_ACCESSOR, NgControl} from '@angular/forms
 export class OryInputComponent implements ControlValueAccessor, AfterViewInit {
     @Input() node: UiNode; // node of type UiNodeTypeEnum.Input
 
-    attr(): UiNodeInputAttributes {
-        return this.node.attributes as UiNodeInputAttributes;
-    }
+    @Input() type: string = 'text';
+    @Input() placeholder: string = '';
 
     value: string = '';
     disabled = false;
     private ngControl: NgControl | null = null;
-
     constructor(private injector: Injector) {}
 
     ngAfterViewInit(): void {
         this.ngControl = this.injector.get(NgControl, null, { self: true });
+    }
+
+    attr(): UiNodeInputAttributes {
+        return this.node.attributes as UiNodeInputAttributes;
     }
 
     onChange: (value: string) => void = () => {};

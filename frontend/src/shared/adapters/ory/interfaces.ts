@@ -1,4 +1,5 @@
 import {UiContainer} from '@ory/kratos-client/api';
+import {UiNode, UiNodeInputAttributes} from '@ory/kratos-client';
 
 /**
  * Unfortunately @ory/kratos-client does not provide global interface
@@ -26,4 +27,8 @@ export interface IFlow {
      * Form nodes and attributes
      */
     ui: UiContainer
+}
+
+export interface INodeAdapter {
+    inputAttributes(node: UiNode): UiNodeInputAttributes
 }

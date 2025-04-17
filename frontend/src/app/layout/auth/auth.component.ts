@@ -5,7 +5,7 @@ import {Component} from '@angular/core';
     imports: [],
     template: `
         <div class="flex items-center justify-center h-screen p-4">
-            <div class="border rounded p-4">
+            <div class="border rounded p-4 w-lg">
                 <ng-content/>
             </div>
         </div>

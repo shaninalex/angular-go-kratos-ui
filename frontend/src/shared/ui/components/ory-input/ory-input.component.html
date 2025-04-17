@@ -13,22 +13,26 @@
                [attr.type]="attr().type" [attr.placeholder]="node.meta.label?.text"
                [attr.value]="attr().value? attr().value: null"/>
     } @else {
-            <label>{{ node.meta.label?.text }}</label>
-            <input class="input"
-                   [placeholder]="node.meta.label?.text"
-                   [attr.autocomplete]="attr().autocomplete"
-                   [attr.value]="attr().value? attr().value: null"
-                   [attr.disabled]="attr().disabled ? true : null"
-                   [attr.name]="attr().name"
-                   [attr.type]="attr().type"
-            />
-
-            @for (message of node.messages; track message) {
-                <div class="alert alert-danger" [class.text-danger]="message.type === 'error'"
-                     [class.text-info]="message.type === 'info'"
-                     [class.text-success]="message.type === 'success'">
-                    {{ message.text }}
-                </div>
-            }
+        <label>{{ node.meta.label?.text }}</label>
+        <input
+            class="input"
+            [class.border-red-300]="hasError"
+            [class.touched]="isTouched"
+            [class.dirty]="isDirty"
+            [value]="value"
+            [disabled]="disabled"
+            [attr.type]="attr().type"
+            [placeholder]="node.meta.label?.text"
+            (input)="onInput($event)"
+            (blur)="onTouched()"
+        />
+        @for (message of node.messages; track message) {
+            <div class="text-sm mt-2 p-1 rounded"
+                 [class.bg-red-200]="message.type === 'error'"
+                 [class.bg-sky-200]="message.type === 'info'"
+                 [class.bg-emerald-200]="message.type === 'success'">
+                {{ message.text }}
+            </div>
+        }
     }
 }

@@ -1,6 +1,7 @@
-import {IFlow} from '@shared/adapters/ory/interfaces';
+import {IFlow, INodeAdapter} from '@shared/adapters/ory/interfaces';
 import {UiNode, UiNodeInputAttributes, UiText} from '@ory/kratos-client';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
+import {NodeAdapter} from '@shared/adapters/ory/node';
 
 
 // NOTE: we need loop through nodes and render them in same order
@@ -8,6 +9,11 @@ import {FormControl, FormGroup, Validators} from '@angular/forms';
 export class OryFormAdapter {
     private _nodes: UiNode[] = [];
     private _messages: UiText[] = [];
+    private readonly nodeAdapter: INodeAdapter;
+
+    constructor() {
+        this.nodeAdapter = new NodeAdapter()
+    }
 
     getNodes(): UiNode[] {
         return this._nodes;
@@ -15,6 +21,9 @@ export class OryFormAdapter {
 
     init(flow: IFlow) {
         this._nodes = flow.ui.nodes;
+        if (flow.ui.messages) {
+            this._messages = flow.ui.messages;
+        }
     }
 
     form(): FormGroup {
@@ -25,9 +34,11 @@ export class OryFormAdapter {
 
             // TODO: set validators based on attributes
             // email field should have Validators.email
+
+            const validators: Validators = this.setValidators(attr)
             controls[attr.name] = new FormControl(
                 attr.value ?? '',
-                attr.required ? Validators.required : []
+                validators,
             );
         }
         return new FormGroup(controls);
@@ -41,6 +52,10 @@ export class OryFormAdapter {
         this._messages.push(...msgs)
     }
 
+    public processNode(): INodeAdapter {
+        return this.nodeAdapter
+    }
+
     /**
      * Extracts input attributes from a UiNode if it's an input node.
      */
@@ -48,5 +63,16 @@ export class OryFormAdapter {
         return node.attributes.node_type === 'input'
             ? (node.attributes as UiNodeInputAttributes)
             : null;
+    }
+
+    private setValidators(attr: UiNodeInputAttributes): Validators[] {
+        let v: Validators[] = []
+        if (attr.required) {
+            v.push(Validators.required)
+        }
+        if (attr.type === "email") {
+            v.push(Validators.email)
+        }
+        return v;
     }
 }

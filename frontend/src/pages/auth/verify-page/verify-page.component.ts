@@ -7,9 +7,6 @@ import {VerificationFormComponent} from '@features/auth/components/verification-
         VerificationFormComponent
     ],
     template: `
-        <p>
-            verify-page works!
-        </p>
         <auth-verification-form />
     `
 })

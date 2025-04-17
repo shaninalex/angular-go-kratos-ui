@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {AuthFormService, AuthSubmitService, InputBase} from '@features/auth/api';
+import {AuthFormService, AuthSubmitService} from '@features/auth/api';
 import {
     UiText,
     UpdateVerificationFlowWithCodeMethod,
@@ -12,7 +12,7 @@ import {filter, map, Observable, switchMap, tap} from 'rxjs';
 import {environment} from '@environments/environment.development';
 import {AsyncPipe, JsonPipe} from '@angular/common';
 import {UiTextMessage} from '@shared/ui/components/ui-text/ui-text.message';
-import {OryFormAdapter} from '@shared/adapters/ory/form.adapter';
+import {OryFormAdapter} from '@shared/adapters';
 import {OryInputComponent} from '@shared/ui';
 
 @Component({
@@ -53,6 +53,7 @@ export class VerificationFormComponent {
 
     onSubmit(): void {
         if (!this.form.valid) {
+            console.log(this.form.value)
             console.log(this.form);
             return;
         }
