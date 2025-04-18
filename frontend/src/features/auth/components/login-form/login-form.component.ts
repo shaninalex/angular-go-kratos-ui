@@ -1,5 +1,5 @@
 import {Component, inject} from '@angular/core';
-import {ActivatedRoute, Params} from '@angular/router';
+import {ActivatedRoute, Params, Router} from '@angular/router';
 import {LoginFlow} from '@ory/kratos-client';
 import {filter, map, Observable, switchMap, tap} from 'rxjs';
 import {AsyncPipe, JsonPipe} from '@angular/common';
@@ -9,6 +9,9 @@ import {AuthFormService, AuthSubmitService} from '@features/auth/api';
 import {OryInputComponent, OryTextComponent} from "@shared/ui";
 import {UiTextMessage} from "@shared/ui/components/ui-text/ui-text.message";
 import {OryFormAdapter} from '@shared/adapters';
+import {Store} from '@ngrx/store';
+import {AppState} from '@shared/store';
+import {SetSession} from '@features/auth';
 
 
 @Component({
@@ -29,6 +32,8 @@ export class LoginFormComponent {
     private flowID: string
     private authService: AuthFormService = inject(AuthFormService);
     private submitService: AuthSubmitService = inject(AuthSubmitService)
+    private store: Store<AppState> = inject(Store<AppState>);
+    private router: Router = inject(Router);
 
     formWrapper: OryFormAdapter = new OryFormAdapter()
     form: FormGroup = new FormGroup({});
@@ -63,9 +68,7 @@ export class LoginFormComponent {
         }
         this.submitService.login(payload, this.flowID).subscribe({
             next: data => {
-                if (data.data.ui.messages) {
-                    this.formWrapper.messages = data.data.ui.messages;
-                }
+                this.router.navigate(['/'])
             },
             error: data => {
                 if (data.error.ui.messages) {

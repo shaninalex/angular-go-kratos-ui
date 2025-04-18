@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"fmt"
 	"io"
 	"log"
@@ -92,14 +91,17 @@ func main() {
 		ctx.Writer.Write(body)
 	})
 
-	router.GET("/api/v2/auth/check-session", func(c *gin.Context) {
-		_, resp, err := client.FrontendAPI.ToSession(c).Cookie(c.Request.Header.Get("Cookie")).Execute()
+	router.GET("/api/v2/auth/check-session", func(ctx *gin.Context) {
+		_, resp, err := client.FrontendAPI.ToSession(ctx).Cookie(ctx.Request.Header.Get("Cookie")).Execute()
 		if err != nil {
 			log.Println(err)
-			c.JSON(resp.StatusCode, gin.H{"error": err.Error()})
+			ctx.JSON(resp.StatusCode, gin.H{"error": err.Error()})
 			return
 		}
-		ProxyResponse(c, resp)
+
+		body, err := io.ReadAll(resp.Body)
+		ctx.Status(resp.StatusCode)
+		ctx.Writer.Write(body)
 	})
 
 	router.GET("/api/v2/auth/logout", func(c *gin.Context) {
@@ -187,11 +189,7 @@ func main() {
 			Flow(formId).
 			Execute()
 		defer resp.Body.Close()
-
-		b, _ := io.ReadAll(resp.Body)
-		var respData map[string]interface{}
-		_ = json.Unmarshal(b, &respData)
-		ctx.JSON(resp.StatusCode, respData)
+		ProxyResponse(ctx, resp)
 	})
 
 	router.POST("/api/v2/auth/register", func(ctx *gin.Context) {
@@ -243,6 +241,7 @@ func main() {
 		defer resp.Body.Close()
 		ProxyResponse(ctx, resp)
 	})
+
 	router.Run(fmt.Sprintf(":%d", port))
 }
 

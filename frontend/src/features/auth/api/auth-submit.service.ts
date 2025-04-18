@@ -4,7 +4,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {ApiResponse} from '@shared/api';
 import {
     LoginFlow,
-    RegistrationFlow,
+    RegistrationFlow, Session,
     SuccessfulNativeRegistration,
     UpdateRegistrationFlowWithPasswordMethod, UpdateVerificationFlowWithCodeMethod
 } from '@ory/kratos-client';
@@ -36,7 +36,7 @@ export class AuthSubmitService {
 
     login(payload: UpdateLoginFlowWithPasswordMethod, flow: string) {
         let params = new HttpParams().set("flow", flow);
-        return this.http.post<ApiResponse<LoginFlow>>(SUBMIT_URLS.LOGIN, payload, {
+        return this.http.post<ApiResponse<Session>>(SUBMIT_URLS.LOGIN, payload, {
             params: params,
             withCredentials: true
         }).pipe(
