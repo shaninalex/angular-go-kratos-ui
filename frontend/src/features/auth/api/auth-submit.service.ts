@@ -1,15 +1,16 @@
 import {inject, Injectable} from '@angular/core';
 import {UpdateLoginFlowWithPasswordMethod} from '@ory/kratos-client/api';
 import {HttpClient, HttpParams} from '@angular/common/http';
-import {ApiResponse} from '@shared/api';
-import {
-    LoginFlow,
-    RegistrationFlow, Session,
-    SuccessfulNativeRegistration,
-    UpdateRegistrationFlowWithPasswordMethod, UpdateVerificationFlowWithCodeMethod
-} from '@ory/kratos-client';
-import {Observable, shareReplay} from 'rxjs';
 import {environment as env} from '@environments/environment.development';
+import {Observable, shareReplay} from 'rxjs';
+import {
+    Session,
+    SuccessfulNativeRegistration,
+    UpdateRegistrationFlowWithPasswordMethod,
+    UpdateVerificationFlowWithCodeMethod,
+    VerificationFlow
+} from '@ory/kratos-client';
+import {ApiResponse} from '@shared/api';
 
 /*
 
@@ -52,9 +53,9 @@ export class AuthSubmitService {
         })
     }
 
-    verify(payload: UpdateVerificationFlowWithCodeMethod, flow: string): Observable<SuccessfulNativeRegistration> {
+    verify(payload: UpdateVerificationFlowWithCodeMethod, flow: string): Observable<VerificationFlow> {
         let params = new HttpParams().set("flow", flow);
-        return this.http.post<SuccessfulNativeRegistration>(SUBMIT_URLS.VERIFY, payload, {
+        return this.http.post<VerificationFlow>(SUBMIT_URLS.VERIFY, payload, {
             params: params,
             withCredentials: true
         })

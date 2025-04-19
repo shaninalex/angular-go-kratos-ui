@@ -7,13 +7,12 @@ import {
     ContinueWithVerificationUiActionEnum,
     RegistrationFlow,
     SuccessfulNativeRegistration,
-    UiText,
     UpdateRegistrationFlowWithPasswordMethod,
 } from '@ory/kratos-client';
 import {catchError, filter, map, Observable, of, switchMap, tap} from 'rxjs';
 import {environment} from '@environments/environment.development';
 import {AuthFormService, AuthSubmitService} from '@features/auth/api';
-import {UiTextMessage} from '@shared/ui/components/ui-text/ui-text.message';
+import {UiTextMessage} from '@shared/ui/components';
 import {OryFormAdapter} from '@shared/adapters';
 import {OryInputComponent, OryTextComponent} from '@shared/ui';
 
@@ -57,10 +56,9 @@ export class RegisterFormComponent {
 
     onSubmit(): void {
         if (!this.form.valid) {
-            console.log(this.form.value)
             return;
         }
-        console.log(this.form.value)
+
         const payload: UpdateRegistrationFlowWithPasswordMethod = {
             csrf_token: this.form.get('csrf_token')?.value,
             password: this.form.get('password')?.value,
@@ -69,7 +67,6 @@ export class RegisterFormComponent {
                 email: this.form.value['traits.email'],
             }
         }
-
 
         this.submitService.register(payload, this.flowID).pipe(
             catchError(err => {

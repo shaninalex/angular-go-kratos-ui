@@ -248,7 +248,6 @@ func main() {
 func ProxyResponse(c *gin.Context, resp *http.Response) {
 	body, err := io.ReadAll(resp.Body)
 	if err != nil {
-		log.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error":   true,
 			"message": "Error reading response body",
