@@ -2,7 +2,7 @@ import {HttpClient, HttpErrorResponse, HttpParams} from "@angular/common/http";
 import {inject, Injectable} from "@angular/core";
 import {catchError, EMPTY, Observable, shareReplay} from "rxjs";
 import {environment as env} from '@environments/environment.development';
-import {FlowError, LoginFlow, RecoveryFlow, RegistrationFlow, VerificationFlow} from '@ory/kratos-client';
+import {FlowError, LoginFlow, RecoveryFlow, RegistrationFlow, SettingsFlow, VerificationFlow} from '@ory/kratos-client';
 import {ApiResponse} from "@shared/api";
 
 export const AUTH_URLS = {
@@ -11,6 +11,7 @@ export const AUTH_URLS = {
     REGISTRATION: `${env.API_ROOT}/api/v2/auth/get-registration-form`,
     VERIFICATION: `${env.API_ROOT}/api/v2/auth/get-verification-form`,
     RECOVERY: `${env.API_ROOT}/api/v2/auth/recovery-form`,
+    SETTINGS: `${env.API_ROOT}/api/v2/auth/settings`,
     ERROR: `${env.API_ROOT}/api/v2/auth/error`,
 }
 
@@ -30,8 +31,17 @@ export class AuthFormService {
         return this.getForm<VerificationFlow>(AUTH_URLS.VERIFICATION, flow);
     }
 
-    public GetError(flow: string): Observable<ApiResponse<FlowError>> {
-        let params = new HttpParams().set("id", flow);
+    public GetSettingsForm() {
+        // create a settings GET: /api/v2/auth/settings
+        // submit POST: /api/v2/auth/settings
+        return this.getForm<SettingsFlow>(AUTH_URLS.SETTINGS);
+    }
+
+    public GetError(flow?: string): Observable<ApiResponse<FlowError>> {
+        const params = new HttpParams()
+        if (flow) {
+            params.set("id", flow);
+        }
         // this.uiService.loading.next(true);
         return this.http.get<ApiResponse<FlowError>>(AUTH_URLS.ERROR, {params: params, withCredentials: true}).pipe(
             shareReplay(),

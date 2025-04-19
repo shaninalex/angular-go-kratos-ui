@@ -1,4 +1,5 @@
-export { OryInputComponent } from './ory-input'
+export { OryInputComponent } from './ory-input/ory-input.component'
 export { OryLinkComponent} from './ory-link/ory-link.component'
 export { OryTextComponent} from './ory-text/ory-text.component'
+export { OryImageComponent } from './ory-image/ory-image.component'
 export { UiTextMessage } from './ui-text/ui-text.message'
