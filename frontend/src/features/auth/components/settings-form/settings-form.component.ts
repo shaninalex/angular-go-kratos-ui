@@ -2,10 +2,17 @@ import {Component, inject} from '@angular/core';
 import {AuthFormService} from '@features/auth/api';
 import {map, Observable} from 'rxjs';
 import {SettingsFlow} from '@ory/kratos-client';
-import {OryFormAdapter} from '@shared/adapters';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {OryInputComponent, UiTextMessage, OryImageComponent, OryTextComponent} from '@shared/ui';
-import {AsyncPipe, JsonPipe} from '@angular/common';
+import {
+    OryInputComponent,
+    UiTextMessage,
+    OryImageComponent,
+    OryTextComponent,
+    OryLinkComponent,
+    KeysPipe
+} from '@shared/ui';
+import {AsyncPipe, NgClass} from '@angular/common';
+import {OryFormManager} from '@shared/adapters/ory/form.manager';
 
 @Component({
     selector: 'auth-settings-form',
@@ -15,14 +22,16 @@ import {AsyncPipe, JsonPipe} from '@angular/common';
         UiTextMessage,
         AsyncPipe,
         OryImageComponent,
-        JsonPipe,
         OryTextComponent,
+        OryLinkComponent,
+        NgClass,
     ],
     templateUrl: 'settings-form.component.html'
 })
 export class SettingsFormComponent {
+    activeTab: string = 'profile'
     formService: AuthFormService = inject(AuthFormService)
-    formWrapper: OryFormAdapter = new OryFormAdapter();
+    formWrapper: OryFormManager = new OryFormManager();
     form: FormGroup = new FormGroup({});
     flow$: Observable<SettingsFlow> = this.formService.GetSettingsForm().pipe(
         map(data => {
@@ -33,10 +42,13 @@ export class SettingsFormComponent {
 
     initForm(data: SettingsFlow): void {
         this.formWrapper.init(data);
-        this.form = this.formWrapper.form();
+        this.form = this.formWrapper.getGroupForm(this.activeTab);
     }
 
-    onSubmit() {
+    onSubmit() { }
 
+    changeTab(group: string) {
+        this.activeTab = group
+        this.form = this.formWrapper.getGroupForm(this.activeTab);
     }
 }

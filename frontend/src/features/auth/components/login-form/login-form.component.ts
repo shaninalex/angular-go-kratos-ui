@@ -8,10 +8,9 @@ import {FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {AuthFormService, AuthSubmitService} from '@features/auth/api';
 import {OryInputComponent, OryTextComponent} from "@shared/ui";
 import {UiTextMessage} from "@shared/ui/components/ui-text/ui-text.message";
-import {OryFormAdapter} from '@shared/adapters';
+import {OryFormManager} from '@shared/adapters';
 import {Store} from '@ngrx/store';
 import {AppState} from '@shared/store';
-import {SetSession} from '@features/auth';
 
 
 @Component({
@@ -35,7 +34,7 @@ export class LoginFormComponent {
     private store: Store<AppState> = inject(Store<AppState>);
     private router: Router = inject(Router);
 
-    formWrapper: OryFormAdapter = new OryFormAdapter()
+    formWrapper: OryFormManager = new OryFormManager()
     form: FormGroup = new FormGroup({});
 
     flow$: Observable<LoginFlow> = this.route.queryParams.pipe(
@@ -51,7 +50,7 @@ export class LoginFormComponent {
         switchMap((flowId: string) => this.authService.GetLoginForm(flowId)),
         tap((data: LoginFlow) => {
             this.formWrapper.init(data)
-            this.form = this.formWrapper.form();
+            this.form = this.formWrapper.getForm();
         })
     );
 

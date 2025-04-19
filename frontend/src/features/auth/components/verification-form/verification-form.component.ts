@@ -11,7 +11,7 @@ import {
     VerificationFlow
 } from '@ory/kratos-client';
 import {AuthFormService, AuthSubmitService} from '@features/auth/api';
-import {OryFormAdapter} from '@shared/adapters';
+import {OryFormManager} from '@shared/adapters';
 import {OryInputComponent, OryTextComponent} from '@shared/ui';
 
 @Component({
@@ -33,7 +33,7 @@ export class VerificationFormComponent {
     private authService: AuthFormService = inject(AuthFormService);
     private submitService: AuthSubmitService = inject(AuthSubmitService)
 
-    formWrapper: OryFormAdapter = new OryFormAdapter();
+    formWrapper: OryFormManager = new OryFormManager();
     form: FormGroup = new FormGroup({});
 
     flow$: Observable<VerificationFlow> = this.route.queryParams.pipe(
@@ -82,12 +82,12 @@ export class VerificationFormComponent {
         if (flow?.ui) {
             this.initializeForm(flow);
         } else {
-            this.formWrapper.messages = [{ id: 0, type: 'error', text: 'Unexpected error occurred' }];
+            // this.formWrapper.messages = [{ id: 0, type: 'error', text: 'Unexpected error occurred' }];
         }
     }
 
     private initializeForm(flow: VerificationFlow) {
         this.formWrapper.init(flow);
-        this.form = this.formWrapper.form();
+        this.form = this.formWrapper.getForm();
     }
 }

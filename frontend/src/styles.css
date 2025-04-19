@@ -7,3 +7,7 @@
 .btn {
     @apply block border px-4 py-2 rounded cursor-pointer bg-emerald-200;
 }
+
+.btn.btn-default {
+    @apply bg-slate-200;
+}

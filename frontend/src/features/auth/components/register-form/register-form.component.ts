@@ -13,7 +13,7 @@ import {catchError, filter, map, Observable, of, switchMap, tap} from 'rxjs';
 import {environment} from '@environments/environment.development';
 import {AuthFormService, AuthSubmitService} from '@features/auth/api';
 import {UiTextMessage} from '@shared/ui/components';
-import {OryFormAdapter} from '@shared/adapters';
+import {OryFormManager} from '@shared/adapters';
 import {OryInputComponent, OryTextComponent} from '@shared/ui';
 
 
@@ -37,7 +37,7 @@ export class RegisterFormComponent {
     private authService: AuthFormService = inject(AuthFormService);
     private submitService: AuthSubmitService = inject(AuthSubmitService)
 
-    formWrapper: OryFormAdapter = new OryFormAdapter();
+    formWrapper: OryFormManager = new OryFormManager();
     form: FormGroup = new FormGroup({});
 
     flow$: Observable<RegistrationFlow> = this.route.queryParams.pipe(
@@ -96,12 +96,12 @@ export class RegisterFormComponent {
         if (flow?.ui) {
             this.initializeForm(flow);
         } else {
-            this.formWrapper.messages = [{ id: 0, type: 'error', text: 'Unexpected error occurred' }];
+            // this.formWrapper.messages = [{ id: 0, type: 'error', text: 'Unexpected error occurred' }];
         }
     }
 
     private initializeForm(flow: RegistrationFlow) {
         this.formWrapper.init(flow);
-        this.form = this.formWrapper.form();
+        this.form = this.formWrapper.getForm();
     }
 }

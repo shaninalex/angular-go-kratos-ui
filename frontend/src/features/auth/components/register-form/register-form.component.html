@@ -1,12 +1,12 @@
 @if (flow$ | async) {
     <form [formGroup]="form" (submit)="onSubmit()" class="flex flex-col gap-2">
-        @for (node of formWrapper.getNodes(); track $index) {
+        @for (node of formWrapper.renderAll(); track $index) {
             @switch (node.type) {
                 @case ('text') {
                     <ory-text [node]="node" />
                 }
                 @case ('input') {
-                    <ory-input [formControlName]="formWrapper.processNode().inputAttributes(node).name"
+                    <ory-input [formControlName]="formWrapper.inputAttr(node).name"
                                [node]="node"/>
                 }
                 @case ('img') {
@@ -23,7 +23,7 @@
                 }
             }
         }
-        @for (msg of formWrapper.messages; track $index) {
+        @for (msg of formWrapper.getMessages(); track $index) {
             <ui-text-message [msg]="msg"/>
         }
     </form>
