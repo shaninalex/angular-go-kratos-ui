@@ -4,8 +4,8 @@ import {map, Observable} from 'rxjs';
 import {SettingsFlow} from '@ory/kratos-client';
 import {OryFormAdapter} from '@shared/adapters';
 import {FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {OryInputComponent, UiTextMessage, OryImageComponent} from '@shared/ui';
-import {AsyncPipe} from '@angular/common';
+import {OryInputComponent, UiTextMessage, OryImageComponent, OryTextComponent} from '@shared/ui';
+import {AsyncPipe, JsonPipe} from '@angular/common';
 
 @Component({
     selector: 'auth-settings-form',
@@ -14,7 +14,9 @@ import {AsyncPipe} from '@angular/common';
         OryInputComponent,
         UiTextMessage,
         AsyncPipe,
-        OryImageComponent
+        OryImageComponent,
+        JsonPipe,
+        OryTextComponent,
     ],
     templateUrl: 'settings-form.component.html'
 })

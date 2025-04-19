@@ -1,15 +1,15 @@
 import {Component, Input} from '@angular/core';
 import {UiNode} from '@ory/kratos-client';
 import {UiNodeTextAttributes} from '@ory/kratos-client/api';
-import {UiTextMessage} from '@shared/ui';
 
 @Component({
     selector: 'ory-text',
-    imports: [
-        UiTextMessage
-    ],
     template: `
-        <ui-text-message [msg]="attr.text"/>
+        <label for="">{{ node.meta.label?.text }}</label>
+        <div class="input"
+             [id]="attr.id">
+            {{ attr.text.text }}
+        </div>
     `
 })
 export class OryTextComponent {

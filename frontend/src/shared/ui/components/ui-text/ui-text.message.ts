@@ -8,12 +8,14 @@ import {NgClass} from '@angular/common';
         NgClass
     ],
     template: `
-        <div class="p-2 rounded text-xs my-2" [id]="msg.id" [ngClass]="{
-            'bg-emerald-100': msg.type === UiTextTypeEnum.Success,
-            'bg-blue-100': msg.type === UiTextTypeEnum.Info,
-            'bg-red-100': msg.type === UiTextTypeEnum.Error,
-        }">
-        {{ msg.text }}
+        <div class="p-2 rounded text-xs my-2"
+             [id]="msg.id"
+             [ngClass]="{
+                'bg-emerald-100': msg.type === UiTextTypeEnum.Success,
+                'bg-blue-100': msg.type === UiTextTypeEnum.Info,
+                'bg-red-100': msg.type === UiTextTypeEnum.Error,
+            }">
+            {{ msg.text }}
         </div>
     `
 })

@@ -5,6 +5,7 @@ import {UiNode, UiNodeAnchorAttributes, UiNodeImageAttributes} from '@ory/kratos
     selector: 'ory-image',
     template: `
     <div>
+        <label for="">{{ node.meta.label?.text }}</label>
         <img class="block max-w-full"
             [src]="attr.src"
              [width]="attr.width"

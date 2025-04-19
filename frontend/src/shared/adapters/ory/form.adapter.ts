@@ -20,6 +20,7 @@ export class OryFormAdapter {
     }
 
     init(flow: IFlow) {
+        console.log(flow)
         this._nodes = flow.ui.nodes;
         if (flow.ui.messages) {
             this._messages = flow.ui.messages;
