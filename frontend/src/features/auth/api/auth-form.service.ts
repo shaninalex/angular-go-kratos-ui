@@ -30,10 +30,6 @@ export class AuthFormService {
         return this.getForm<VerificationFlow>(AUTH_URLS.VERIFICATION, flow);
     }
 
-    public GetRecoveryForm(flow: string | null = null): Observable<RecoveryFlow> {
-        return this.getForm<RecoveryFlow>(AUTH_URLS.RECOVERY, flow);
-    }
-
     public GetError(flow: string): Observable<ApiResponse<FlowError>> {
         let params = new HttpParams().set("id", flow);
         // this.uiService.loading.next(true);

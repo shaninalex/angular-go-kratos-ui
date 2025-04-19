@@ -6,8 +6,8 @@ import {
     RegisterPageComponent,
     VerifyPageComponent
 } from '@pages/auth';
-import {DashboardWrapperComponent, HomePageComponent} from '@pages/dashboard';
-import {AuthGuard} from '@features/auth/guard/auth.guard';
+import {DashboardWrapperComponent, HomePageComponent, SettingsPageComponent} from '@pages/dashboard';
+import {AuthGuard} from '@features/auth';
 
 export const routes: Routes = [
     {
@@ -43,7 +43,11 @@ export const routes: Routes = [
         children: [
             {
                 path: '',
-                component: HomePageComponent
+                component: HomePageComponent,
+            },
+            {
+                path: 'settings',
+                component: SettingsPageComponent
             }
         ]
     }

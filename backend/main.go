@@ -3,7 +3,6 @@ package main
 import (
 	"fmt"
 	"io"
-	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -34,7 +33,6 @@ func main() {
 		if form_id != "" {
 			_, resp, err := client.FrontendAPI.GetRegistrationFlow(c).Cookie(c.Request.Header.Get("Cookie")).Id(form_id).Execute()
 			if err != nil {
-				log.Println(err)
 				c.JSON(resp.StatusCode, gin.H{"error": err.Error()})
 				return
 			}
@@ -44,7 +42,6 @@ func main() {
 
 		_, resp, err := client.FrontendAPI.CreateBrowserRegistrationFlow(c).Execute()
 		if err != nil {
-			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Unable to get registration flow"})
 			return
 		}
@@ -56,7 +53,6 @@ func main() {
 		if form_id != "" {
 			_, resp, err := client.FrontendAPI.GetLoginFlow(c).Cookie(c.Request.Header.Get("Cookie")).Id(form_id).Execute()
 			if err != nil {
-				log.Println(err)
 				c.JSON(resp.StatusCode, gin.H{"error": err.Error()})
 				return
 			}
@@ -67,7 +63,6 @@ func main() {
 		req := client.FrontendAPI.CreateBrowserLoginFlow(c)
 		_, resp, err := client.FrontendAPI.CreateBrowserLoginFlowExecute(req)
 		if err != nil {
-			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Unable to get login flow"})
 			return
 		}
@@ -82,7 +77,6 @@ func main() {
 			Execute()
 
 		if err != nil {
-			log.Println(err)
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
@@ -94,7 +88,6 @@ func main() {
 	router.GET("/api/v2/auth/check-session", func(ctx *gin.Context) {
 		_, resp, err := client.FrontendAPI.ToSession(ctx).Cookie(ctx.Request.Header.Get("Cookie")).Execute()
 		if err != nil {
-			log.Println(err)
 			ctx.JSON(resp.StatusCode, gin.H{"error": err.Error()})
 			return
 		}
@@ -107,7 +100,6 @@ func main() {
 	router.GET("/api/v2/auth/logout", func(c *gin.Context) {
 		_, resp, err := client.FrontendAPI.CreateBrowserLogoutFlow(c).Cookie(c.Request.Header.Get("Cookie")).Execute()
 		if err != nil {
-			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
@@ -117,7 +109,6 @@ func main() {
 	router.GET("/api/v2/auth/settings", func(c *gin.Context) {
 		_, resp, err := client.FrontendAPI.CreateBrowserSettingsFlow(c).Cookie(c.Request.Header.Get("Cookie")).Execute()
 		if err != nil {
-			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
@@ -128,7 +119,6 @@ func main() {
 		error_id := c.Query("id")
 		_, resp, err := client.FrontendAPI.GetFlowError(c).Id(error_id).Execute()
 		if err != nil {
-			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
@@ -138,7 +128,6 @@ func main() {
 	router.GET("/api/v2/auth/create-verification-form", func(c *gin.Context) {
 		_, resp, err := client.FrontendAPI.CreateBrowserVerificationFlow(c).Execute()
 		if err != nil {
-			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
@@ -150,7 +139,6 @@ func main() {
 		if form_id != "" {
 			_, resp, err := client.FrontendAPI.GetRecoveryFlow(c).Cookie(c.Request.Header.Get("Cookie")).Id(form_id).Execute()
 			if err != nil {
-				log.Println(err)
 				c.JSON(resp.StatusCode, gin.H{"error": err.Error()})
 				return
 			}
@@ -160,7 +148,6 @@ func main() {
 
 		_, resp, err := client.FrontendAPI.CreateBrowserRecoveryFlow(c).Execute()
 		if err != nil {
-			log.Println(err)
 			c.JSON(http.StatusBadRequest, gin.H{"error": "Unable to get login flow"})
 			return
 		}

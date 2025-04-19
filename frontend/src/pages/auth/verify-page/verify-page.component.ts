@@ -1,5 +1,5 @@
 import {Component} from '@angular/core';
-import {VerificationFormComponent} from '@features/auth/components/verification-form/verification-form.component';
+import {VerificationFormComponent} from '@features/auth';
 
 @Component({
     selector: 'app-verify-page',
@@ -7,9 +7,8 @@ import {VerificationFormComponent} from '@features/auth/components/verification-
         VerificationFormComponent
     ],
     template: `
-        <auth-verification-form />
+        <auth-verification-form/>
     `
 })
 export class VerifyPageComponent {
-
 }
