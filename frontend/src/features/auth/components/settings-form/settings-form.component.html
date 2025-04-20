@@ -5,8 +5,8 @@
             @if (group !== "default") {
                 <button
                     class="btn btn-default"
-                    [ngClass]="{'btn-default': group !== activeTab}"
-                    (click)="changeTab(group)">
+                    [ngClass]="{'btn-default': group !== activeGroup}"
+                    (click)="changeGroup(group)">
                     {{ group }}
                 </button>
             }
@@ -14,32 +14,28 @@
     </div>
 
     <!-- TAB CONTENT -->
-    <form [formGroup]="form" (submit)="onSubmit()" class="flex flex-col gap-2">
-        @for (node of formWrapper.renderGroup(activeTab); track $index) {
-            @switch (node.type) {
-                @case ('text') {
-                    <ory-text [node]="node"/>
-                }
-                @case ('input') {
-                    <ory-input [formControlName]="formWrapper.inputAttr(node).name"
-                               [node]="node"/>
-                }
-                @case ('img') {
-                    <ory-image [node]="node"/>
-                }
-                @case ('a') {
-                    <ory-link [node]="node"/>
-                }
-                @case ('script') {
-                    <div class="text-red-600">Script node currently not supported</div>
-                }
-                @default {
-                    <div>Undefined node type: {{ node.type }}</div>
-                }
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        @for (group of formWrapper.groups; track $index) {
+            @if (group === activeGroup) {
+                <div [formGroupName]="group">
+                    @for (node of formWrapper.renderGroup(group); track $index) {
+                        @switch (node.type) {
+                            @case ('input') {
+                                <ory-input [node]="node" [formControlName]="formWrapper.inputAttr(node).name" />
+                            }
+                            @case ('img') {
+                                <ory-image [node]="node" />
+                            }
+                            @case ('text') {
+                                <ory-text [node]="node" />
+                            }
+                            @case ('a') {
+                                <ory-link [node]="node"/>
+                            }
+                        }
+                    }
+                </div>
             }
-        }
-        @for (msg of formWrapper.getMessages(); track $index) {
-            <ui-text-message [msg]="msg"/>
         }
     </form>
 } @else {

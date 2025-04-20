@@ -30,7 +30,6 @@ export const SUBMIT_URLS = {
     VERIFY: `${env.API_ROOT}/api/v2/auth/verify`,
 }
 
-
 @Injectable({providedIn: "root"})
 export class AuthSubmitService {
     http: HttpClient = inject(HttpClient)
@@ -59,5 +58,11 @@ export class AuthSubmitService {
             params: params,
             withCredentials: true
         })
+    }
+
+    updateSettings(formValues: Record<string, any>, groupName: string) {
+        // handle form based on active group
+        console.log("active group:", groupName)
+        console.log("values:", formValues)
     }
 }
