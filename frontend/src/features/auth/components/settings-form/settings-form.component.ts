@@ -6,10 +6,12 @@ import {FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {
     OryInputComponent,
     OryImageComponent,
-    OryTextComponent, OryLinkComponent,
+    OryTextComponent, OryLinkComponent, UiTextMessage,
 } from '@shared/ui';
 import {AsyncPipe, NgClass} from '@angular/common';
 import {GroupFormManager} from '@shared/adapters';
+
+type TGroup = "lookup_secret" | "oidc" | "passkey" | "password" | "profile" | "totp" | "webauthn";
 
 @Component({
     selector: 'auth-settings-form',
@@ -21,11 +23,13 @@ import {GroupFormManager} from '@shared/adapters';
         NgClass,
         OryInputComponent,
         OryLinkComponent,
+        UiTextMessage,
     ],
     templateUrl: 'settings-form.component.html'
 })
 export class SettingsFormComponent {
-    activeGroup: string = 'profile'
+    activeGroup: TGroup = "profile"
+    flowId: string = ''
     formService: AuthFormService = inject(AuthFormService)
     formWrapper: GroupFormManager = new GroupFormManager();
     form: FormGroup = new FormGroup({});
@@ -41,13 +45,16 @@ export class SettingsFormComponent {
     initForm(data: SettingsFlow): void {
         this.formWrapper.init(data);
         this.form = this.formWrapper.buildGroupForm();
+        this.flowId = data.id
     }
 
     onSubmit() {
-        this.submitService.updateSettings(this.form.value, this.activeGroup);
+        this.submitService.updateSettings(this.form.value, this.activeGroup, this.flowId).subscribe({
+            next: data => this.initForm(data)
+        });
     }
 
     changeGroup(group: string) {
-        this.activeGroup = group
+        this.activeGroup = group as TGroup
     }
 }

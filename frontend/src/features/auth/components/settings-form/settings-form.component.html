@@ -13,6 +13,10 @@
         }
     </div>
 
+    @for (msg of formWrapper.messages(); track $index) {
+        <ui-text-message [msg]="msg"/>
+    }
+
     <!-- TAB CONTENT -->
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         @for (group of formWrapper.groups; track $index) {

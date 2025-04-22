@@ -1,5 +1,5 @@
 import {FormControl, FormGroup, Validators} from '@angular/forms';
-import {UiNode, UiNodeInputAttributes} from '@ory/kratos-client';
+import {UiNode, UiNodeInputAttributes, UiText} from '@ory/kratos-client';
 import {IFlow} from './interfaces';
 import _ from 'lodash';
 
@@ -7,10 +7,14 @@ import _ from 'lodash';
 export class GroupFormManager {
     private _flow: IFlow;
     private _groups: Record<string, UiNode[]> = {};
+    private _messages: UiText[] = [];
 
     init(flow: IFlow): void {
         this._flow = flow;
         this._groups = _.groupBy(this._flow.ui.nodes, 'group');
+        if (flow.ui.messages) {
+            this._messages = flow.ui.messages;
+        }
     }
 
     buildGroupForm(): FormGroup {
@@ -39,6 +43,10 @@ export class GroupFormManager {
 
     renderGroup(group: string): UiNode[] {
         return this._groups[group]
+    }
+
+    messages(): UiText[] {
+        return this._messages;
     }
 
     private setValidators(attr: UiNodeInputAttributes): Validators[] {

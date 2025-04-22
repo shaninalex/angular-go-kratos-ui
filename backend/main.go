@@ -229,6 +229,31 @@ func main() {
 		ProxyResponse(ctx, resp)
 	})
 
+	router.POST("/api/v2/auth/settings", func(ctx *gin.Context) {
+		formId := ctx.Query("flow")
+		if formId == "" {
+			ctx.JSON(400, gin.H{"error": "flow id was not provided"})
+			return
+		}
+		var p ory.UpdateSettingsFlowBody
+		err := ctx.ShouldBindJSON(&p)
+		if err != nil {
+			ctx.JSON(400, gin.H{"error": err.Error()})
+			return
+		}
+		_, resp, err := client.FrontendAPI.UpdateSettingsFlow(ctx).
+			Cookie(ctx.Request.Header.Get("Cookie")).
+			UpdateSettingsFlowBody(p).
+			Flow(formId).
+			Execute()
+
+		if err != nil {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
+		ProxyResponse(ctx, resp)
+	})
+
 	router.Run(fmt.Sprintf(":%d", port))
 }
 
