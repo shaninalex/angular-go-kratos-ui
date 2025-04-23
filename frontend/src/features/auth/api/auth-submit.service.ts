@@ -8,11 +8,13 @@ import {
     SettingsFlow,
     SuccessfulNativeRegistration,
     UpdateRegistrationFlowWithPasswordMethod,
-    UpdateSettingsFlowBody, UpdateSettingsFlowWithProfileMethod,
+    UpdateSettingsFlowBody,
     UpdateVerificationFlowWithCodeMethod,
     VerificationFlow
 } from '@ory/kratos-client';
 import {ApiResponse} from '@shared/api';
+import {TGroup} from '@shared/adapters';
+
 
 /*
 
@@ -42,9 +44,7 @@ export class AuthSubmitService {
         return this.http.post<ApiResponse<Session>>(SUBMIT_URLS.LOGIN, payload, {
             params: params,
             withCredentials: true
-        }).pipe(
-            shareReplay(),
-        );
+        });
     }
 
     register(payload: UpdateRegistrationFlowWithPasswordMethod, flow: string): Observable<SuccessfulNativeRegistration> {
@@ -65,31 +65,78 @@ export class AuthSubmitService {
 
     updateSettings(
         formValues: Record<string, any>,
-        groupName: "lookup_secret" | "oidc" | "passkey" | "password" | "profile" | "totp" | "webauthn",
+        groupName: TGroup,
         flow: string,
     ) {
-        const basePayload = {
-            csrf_token: formValues["default"]?.csrf_token,
-            method: groupName,
-        };
-        let payload: Record<string, any> = { ...basePayload };
-
-        delete formValues[groupName]["method"]
-
-        if (groupName === "profile") {
-            payload['traits'] = {
-                "email": formValues[groupName]["traits.email"]
-            };
-        } else if (groupName === "password") {
-            payload['password'] = formValues[groupName]["password"];
-        }
-
-        // TODO: other settings
-
+        const f = new UpdateSettingsFactory(formValues)
+        const payload = f.payload(groupName)
         const params = new HttpParams().set("flow", flow);
         return this.http.post<SettingsFlow>(SUBMIT_URLS.SETTINGS, payload, {
             params,
             withCredentials: true,
         });
+    }
+}
+
+class UpdateSettingsFactory {
+    formValues: Record<string, any>;
+
+    constructor(formValues: Record<string, any>) {
+        this.formValues = formValues
+    }
+
+    payload(groupName: TGroup): UpdateSettingsFlowBody {
+        console.log(this.formValues)
+        const basePayload = {
+            csrf_token: this.formValues["default"]?.csrf_token,
+            method: groupName,
+        };
+        delete this.formValues[groupName]["method"]
+        let payload: Record<string, any> = {...basePayload};
+        switch (groupName) {
+            case "webauthn":
+                throw Error("not implemented")
+
+            case "profile":
+                payload['traits'] = {
+                    "email": this.formValues[groupName]["traits.email"]
+                };
+                break
+            case "password":
+                payload['password'] = this.formValues[groupName]["password"];
+                break
+            case "passkey":
+            case "oidc":
+                throw Error("not implemented")
+            case "totp":
+            case "lookup_secret":
+                payload = {
+                    ...payload,
+                    ...this.normalize(this.formValues[groupName]),
+                };
+                break
+            default:
+                throw Error("not implemented")
+        }
+        return payload as UpdateSettingsFlowBody
+    }
+
+    private normalize(p: Record<string, any>): Record<string, any> {
+        let result: Record<string, any> = {}
+        for (const key in p) {
+            const v = p[key];
+            if (v === "true") {
+                result[key] = true;
+            } else if (v === "false") {
+                result[key] = false;
+            // } else if (v === "" || v === null) {
+            //     result[key] = undefined;
+            // } else if (!isNaN(v) && v.trim() !== "") {
+            //     result[key] = Number(v);
+            } else {
+                result[key] = v;
+            }
+        }
+        return result
     }
 }

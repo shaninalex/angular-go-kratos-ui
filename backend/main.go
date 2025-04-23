@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io"
+	"log"
 	"net/http"
 	"os"
 	"strconv"
@@ -248,8 +249,7 @@ func main() {
 			Execute()
 
 		if err != nil {
-			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-			return
+			log.Println(err.Error())
 		}
 		ProxyResponse(ctx, resp)
 	})

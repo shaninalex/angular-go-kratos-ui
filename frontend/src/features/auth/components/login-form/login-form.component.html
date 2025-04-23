@@ -1,30 +1,27 @@
 @if (flow$ | async) {
-    <form [formGroup]="form" (submit)="onSubmit()" class="flex flex-col gap-4">
-        @for (node of formWrapper.renderAll(); track $index) {
-            @switch (node.type) {
-                @case ('text') {
-                    <ory-text [node]="node" />
+    @for (msg of formWrapper.messages(); track $index) {
+        <ui-text-message [msg]="msg"/>
+    }
+    <form [formGroup]="form" (ngSubmit)="onSubmit()">
+        @for (group of formWrapper.groups; track $index) {
+            <div [formGroupName]="group" class="flex flex-col gap-4">
+                @for (node of formWrapper.renderGroup(group); track $index) {
+                    @switch (node.type) {
+                        @case ('input') {
+                            <ory-input [node]="node" [formControlName]="formWrapper.inputAttr(node).name" />
+                        }
+                        @case ('img') {
+                            <ory-image [node]="node" />
+                        }
+                        @case ('text') {
+                            <ory-text [node]="node" />
+                        }
+                        @case ('a') {
+                            <ory-link [node]="node"/>
+                        }
+                    }
                 }
-                @case ('input') {
-                    <ory-input [formControlName]="formWrapper.inputAttr(node).name"
-                               [node]="node"/>
-                }
-                @case ('img') {
-                    {{ node.attributes | json }}
-                }
-                @case ('a') {
-                    {{ node.attributes | json }}
-                }
-                @case ('script') {
-                    {{ node.attributes | json }}
-                }
-                @default {
-                    <div>Undefined node type: {{ node.type }}</div>
-                }
-            }
-        }
-        @for (msg of formWrapper.getMessages(); track $index) {
-            <ui-text-message [msg]="msg"/>
+            </div>
         }
     </form>
 } @else {

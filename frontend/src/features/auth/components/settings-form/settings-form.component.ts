@@ -9,9 +9,8 @@ import {
     OryTextComponent, OryLinkComponent, UiTextMessage,
 } from '@shared/ui';
 import {AsyncPipe, NgClass} from '@angular/common';
-import {GroupFormManager} from '@shared/adapters';
+import {GroupFormManager, TGroup} from '@shared/adapters';
 
-type TGroup = "lookup_secret" | "oidc" | "passkey" | "password" | "profile" | "totp" | "webauthn";
 
 @Component({
     selector: 'auth-settings-form',
@@ -50,7 +49,8 @@ export class SettingsFormComponent {
 
     onSubmit() {
         this.submitService.updateSettings(this.form.value, this.activeGroup, this.flowId).subscribe({
-            next: data => this.initForm(data)
+            next: data => this.initForm(data),
+            error: err => this.initForm(err.error),
         });
     }
 

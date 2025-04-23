@@ -21,7 +21,7 @@
     <form [formGroup]="form" (ngSubmit)="onSubmit()">
         @for (group of formWrapper.groups; track $index) {
             @if (group === activeGroup) {
-                <div [formGroupName]="group">
+                <div [formGroupName]="group" class="flex flex-col gap-4">
                     @for (node of formWrapper.renderGroup(group); track $index) {
                         @switch (node.type) {
                             @case ('input') {

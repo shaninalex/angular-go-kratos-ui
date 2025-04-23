@@ -32,3 +32,5 @@ export interface IFlow {
 export interface INodeAdapter {
     inputAttributes(node: UiNode): UiNodeInputAttributes
 }
+
+export type TGroup = "lookup_secret" | "oidc" | "passkey" | "password" | "profile" | "totp" | "webauthn";

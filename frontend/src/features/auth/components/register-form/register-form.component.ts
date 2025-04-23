@@ -12,8 +12,8 @@ import {
 import {catchError, filter, map, Observable, of, switchMap, tap} from 'rxjs';
 import {environment} from '@environments/environment.development';
 import {AuthFormService, AuthSubmitService} from '@features/auth/api';
-import {UiTextMessage} from '@shared/ui/components';
-import {OryFormManager} from '@shared/adapters';
+import {OryImageComponent, OryLinkComponent, UiTextMessage} from '@shared/ui/components';
+import {GroupFormManager} from '@shared/adapters';
 import {OryInputComponent, OryTextComponent} from '@shared/ui';
 
 
@@ -24,8 +24,9 @@ import {OryInputComponent, OryTextComponent} from '@shared/ui';
         ReactiveFormsModule,
         UiTextMessage,
         OryInputComponent,
-        JsonPipe,
         OryTextComponent,
+        OryImageComponent,
+        OryLinkComponent,
     ],
     providers: [AuthFormService, AuthSubmitService, AuthSubmitService],
     templateUrl: 'register-form.component.html'
@@ -37,7 +38,7 @@ export class RegisterFormComponent {
     private authService: AuthFormService = inject(AuthFormService);
     private submitService: AuthSubmitService = inject(AuthSubmitService)
 
-    formWrapper: OryFormManager = new OryFormManager();
+    formWrapper: GroupFormManager = new GroupFormManager();
     form: FormGroup = new FormGroup({});
 
     flow$: Observable<RegistrationFlow> = this.route.queryParams.pipe(
@@ -60,11 +61,11 @@ export class RegisterFormComponent {
         }
 
         const payload: UpdateRegistrationFlowWithPasswordMethod = {
-            csrf_token: this.form.get('csrf_token')?.value,
-            password: this.form.get('password')?.value,
+            csrf_token: this.form.value["default"]["csrf_token"],
+            password: this.form.value["password"]["password"],
             method: "password",
             traits: {
-                email: this.form.value['traits.email'],
+                email: this.form.value["password"]['traits.email'],
             }
         }
 
@@ -102,6 +103,6 @@ export class RegisterFormComponent {
 
     private initializeForm(flow: RegistrationFlow) {
         this.formWrapper.init(flow);
-        this.form = this.formWrapper.getForm();
+        this.form = this.formWrapper.buildGroupForm();
     }
 }
