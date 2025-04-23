@@ -8,7 +8,14 @@
                 @for (node of formWrapper.renderGroup(group); track $index) {
                     @switch (node.type) {
                         @case ('input') {
-                            <ory-input [node]="node" [formControlName]="formWrapper.inputAttr(node).name" />
+                            @if (group === "oidc") {
+                                <ory-input [node]="node"
+                                           [formControlName]="formWrapper.inputAttr(node).name"
+                                           (onClick)="processOIDC($event)"
+                                />
+                            } @else {
+                                <ory-input [node]="node" [formControlName]="formWrapper.inputAttr(node).name" />
+                            }
                         }
                         @case ('img') {
                             <ory-image [node]="node" />

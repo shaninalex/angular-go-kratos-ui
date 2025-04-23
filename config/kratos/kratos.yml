@@ -42,7 +42,7 @@ selfservice:
               - email
               - profile
               - openid
-      enabled: false
+      enabled: true
 
   flows:
     error:
@@ -85,9 +85,9 @@ selfservice:
           hooks:
 #            - hook: session
             - hook: show_verification_ui
-#        oidc:
-#          hooks:
-#            - hook: show_verification_ui
+        oidc:
+          hooks:
+            - hook: show_verification_ui
 
 log:
   level: debug

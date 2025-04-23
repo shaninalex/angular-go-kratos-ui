@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {ActivatedRoute, Params, Router} from '@angular/router';
-import {LoginFlow} from '@ory/kratos-client';
+import {LoginFlow, UpdateLoginFlowBody, UpdateSettingsFlowWithOidcMethod} from '@ory/kratos-client';
 import {filter, map, Observable, switchMap, tap} from 'rxjs';
 import {AsyncPipe} from '@angular/common';
 import {environment} from '@environments/environment.development';
@@ -8,7 +8,7 @@ import {FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {AuthFormService, AuthSubmitService} from '@features/auth/api';
 import {OryImageComponent, OryInputComponent, OryLinkComponent, OryTextComponent} from "@shared/ui";
 import {UiTextMessage} from "@shared/ui/components/ui-text/ui-text.message";
-import {GroupFormManager} from '@shared/adapters';
+import {GroupFormManager, TGroup} from '@shared/adapters';
 
 
 @Component({
@@ -31,10 +31,11 @@ export class LoginFormComponent {
     private authService: AuthFormService = inject(AuthFormService);
     private submitService: AuthSubmitService = inject(AuthSubmitService)
     private router: Router = inject(Router);
+    private isOidc: boolean = false;
+    private provider: string = "";
 
     formWrapper: GroupFormManager = new GroupFormManager()
     form: FormGroup = new FormGroup({});
-
     flow$: Observable<LoginFlow> = this.route.queryParams.pipe(
         map((params: Params) => {
             if (!params.hasOwnProperty("flow")) {
@@ -52,24 +53,43 @@ export class LoginFormComponent {
         })
     );
 
+    processOIDC(v: string) {
+        this.isOidc = true
+        this.provider = v
+    }
+
     onSubmit(): void {
-        if (!this.form.valid) {
-            return;
+        let payload = {}
+        if (!this.isOidc) {
+            if (!this.form.valid) {
+                console.log(this.form.value)
+                return;
+            }
+            payload = {
+                csrf_token: this.form.value["default"]["csrf_token"],
+                identifier: this.form.value["default"]["identifier"],
+                method: 'password',
+                password: this.form.value["password"]["password"],
+            }
+        } else if (this.isOidc) {
+            payload = {
+                csrf_token: this.form.value["default"]["csrf_token"],
+                method: 'oidc',
+                provider: this.provider,
+            };
         }
 
-        // TODO: totp
-        // TODO: create payload based on form type or login method
-        const payload = {
-            csrf_token: this.form.value["default"]["csrf_token"],
-            identifier: this.form.value["default"]["identifier"],
-            method: 'password',
-            password: this.form.value["password"]["password"],
-        }
-        this.submitService.login(payload, this.flowID).subscribe({
+        this.submitService.login(payload as UpdateLoginFlowBody, this.flowID).subscribe({
             next: data => {
                 this.router.navigate(['/'])
             },
             error: err => {
+                if (err.status === 422 && this.isOidc && this.provider !== "") {
+                    if ( err.error.redirect_browser_to ) {
+                        window.location.href = err.error.redirect_browser_to
+                    }
+                    return
+                }
                 this.formWrapper.init(err.error)
                 this.form = this.formWrapper.buildGroupForm();
             }

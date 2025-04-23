@@ -3,7 +3,8 @@
         class="btn"
         [attr.disabled]="attr().disabled ? true : null" [attr.name]="attr().name"
         [attr.type]="attr().type"
-        [attr.value]="attr().value">
+        [attr.value]="attr().value"
+        (click)="OnClick(attr().value)">
         {{ node.meta.label?.text }}
     </button>
 } @else {
