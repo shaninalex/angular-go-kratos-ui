@@ -40,7 +40,7 @@ export class AuthFormService {
     public GetError(flow?: string): Observable<ApiResponse<FlowError>> {
         const params = new HttpParams()
         if (flow) {
-            params.set("id", flow);
+            params.set("flow", flow);
         }
         // this.uiService.loading.next(true);
         return this.http.get<ApiResponse<FlowError>>(AUTH_URLS.ERROR, {params: params, withCredentials: true}).pipe(

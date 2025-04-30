@@ -5,36 +5,26 @@ import (
 	"net/http"
 )
 
-func (s *App) GetRegistrationForm(ctx *gin.Context) {
-	resp, err := s.auth.RegisterForm(ctx, ctx.Query("id"), ctx.Request.Header.Get("Cookie"))
+func (s *App) getRegistrationForm(ctx *gin.Context) {
+	form, err := s.auth.RegisterForm(ctx, ctx.Query("flow"), ctx.Request.Header.Get("Cookie"))
 	if err != nil {
 		ctx.JSON(http.StatusBadRequest, gin.H{
-			"error":   "Unable to get registration flow",
+			"error":   "Unable to get registration form",
 			"details": err.Error(),
 		})
 		return
 	}
-	response(ctx, resp)
-
+	ctx.JSON(http.StatusOK, form)
 }
 
-func (s *App) GetLoginForm(ctx *gin.Context) {
-	form_id := ctx.Query("id")
-	if form_id != "" {
-		_, resp, err := s.client.FrontendAPI.GetLoginFlow(ctx).Cookie(ctx.Request.Header.Get("Cookie")).Id(form_id).Execute()
-		if err != nil {
-			ctx.JSON(resp.StatusCode, gin.H{"error": err.Error()})
-			return
-		}
-		response(ctx, resp)
-		return
-	}
-
-	req := s.client.FrontendAPI.CreateBrowserLoginFlow(ctx)
-	_, resp, err := s.client.FrontendAPI.CreateBrowserLoginFlowExecute(req)
+func (s *App) getLoginForm(ctx *gin.Context) {
+	form, err := s.auth.LoginForm(ctx, ctx.Query("flow"), ctx.Request.Header.Get("Cookie"))
 	if err != nil {
-		ctx.JSON(http.StatusBadRequest, gin.H{"error": "Unable to get login flow"})
+		ctx.JSON(http.StatusBadRequest, gin.H{
+			"error":   "Unable to get login form",
+			"details": err.Error(),
+		})
 		return
 	}
-	response(ctx, resp)
+	ctx.JSON(http.StatusOK, form)
 }
