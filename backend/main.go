@@ -162,7 +162,7 @@ func main() {
 			return
 		}
 
-		var payload ory.UpdateLoginFlowWithPasswordMethod
+		var payload ory.UpdateLoginFlowBody
 		err := ctx.ShouldBindJSON(&payload)
 		if err != nil {
 			ctx.JSON(400, gin.H{"error": err.Error()})
@@ -171,9 +171,7 @@ func main() {
 
 		_, resp, _ := client.FrontendAPI.UpdateLoginFlow(ctx).
 			Cookie(ctx.Request.Header.Get("Cookie")).
-			UpdateLoginFlowBody(ory.UpdateLoginFlowBody{
-				UpdateLoginFlowWithPasswordMethod: &payload,
-			}).
+			UpdateLoginFlowBody(payload).
 			Flow(formId).
 			Execute()
 		defer resp.Body.Close()

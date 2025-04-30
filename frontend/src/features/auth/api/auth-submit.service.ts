@@ -1,12 +1,11 @@
 import {inject, Injectable} from '@angular/core';
-import {UpdateLoginFlowWithPasswordMethod} from '@ory/kratos-client/api';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment as env} from '@environments/environment.development';
 import {Observable, shareReplay} from 'rxjs';
 import {
     Session,
     SettingsFlow,
-    SuccessfulNativeRegistration,
+    SuccessfulNativeRegistration, UpdateLoginFlowBody,
     UpdateRegistrationFlowWithPasswordMethod,
     UpdateSettingsFlowBody,
     UpdateVerificationFlowWithCodeMethod,
@@ -39,7 +38,7 @@ export const SUBMIT_URLS = {
 export class AuthSubmitService {
     http: HttpClient = inject(HttpClient)
 
-    login(payload: UpdateLoginFlowWithPasswordMethod, flow: string) {
+    login(payload: UpdateLoginFlowBody, flow: string) {
         let params = new HttpParams().set("flow", flow);
         return this.http.post<ApiResponse<Session>>(SUBMIT_URLS.LOGIN, payload, {
             params: params,
