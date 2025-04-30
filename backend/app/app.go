@@ -4,13 +4,11 @@ import (
 	"backend/app/auth"
 	"fmt"
 	"github.com/gin-gonic/gin"
-	ory "github.com/ory/kratos-client-go"
 	"os"
 	"strconv"
 )
 
 type App struct {
-	client *ory.APIClient
 	router *gin.Engine
 	auth   auth.IAuth
 }

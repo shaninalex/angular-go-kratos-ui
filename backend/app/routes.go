@@ -9,23 +9,25 @@ const (
 	RecoveryAction     = "/api/auth/recovery"
 	SettingsAction     = "/api/auth/settings"
 	ErrorAction        = "/api/auth/error"
+
+	LogoutAction  = "/api/auth/logout"
+	SessionAction = "/api/auth/session"
 )
 
 func (s *App) setupRoutes() {
-	// TODO: move endpoints to separate constants
 	s.router.GET(RegistrationAction, s.getRegistrationForm)
 	s.router.GET(LoginAction, s.getLoginForm)
-	s.router.GET(VerificationAction, func(ctx *gin.Context) {})
-	s.router.GET(RecoveryAction, func(c *gin.Context) {})
-	s.router.GET(SettingsAction, func(c *gin.Context) {})
-	s.router.GET(ErrorAction, func(c *gin.Context) {})
-
-	//s.router.GET("/api/v2/auth/check-session", func(ctx *gin.Context) {})
-	//s.router.GET("/api/v2/auth/logout", func(c *gin.Context) {})
-	//s.router.GET("/api/v2/auth/create-verification-form", func(c *gin.Context) {})
+	s.router.GET(VerificationAction, s.getVerificationForm)
+	//s.router.GET(VerificationCreateAction, func(c *gin.Context) {})
+	s.router.GET(RecoveryAction, s.getRecoveryForm)
+	s.router.GET(SettingsAction, s.getSettingsForm)
+	s.router.GET(ErrorAction, s.getErrorForm)
 
 	s.router.POST(LoginAction, func(ctx *gin.Context) {})
 	s.router.POST(RegistrationAction, func(ctx *gin.Context) {})
 	s.router.POST(VerificationAction, func(ctx *gin.Context) {})
 	s.router.POST(SettingsAction, func(ctx *gin.Context) {})
+
+	s.router.GET(SessionAction, s.sessionAction)
+	s.router.GET(LogoutAction, s.logoutAction)
 }

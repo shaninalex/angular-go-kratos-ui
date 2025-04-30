@@ -6,8 +6,8 @@ import {LogoutFlow, Session} from '@ory/kratos-client';
 
 export const BACKEND = {
     // TODO: change urls. Change "/api/v2/auth/get-<target>-form" to simple "/api/auth/<target>"
-    SESSION: `${env.API_ROOT}/api/v2/auth/check-session`,
-    LOGOUT: `${env.API_ROOT}/api/v2/auth/logout`,
+    SESSION: `${env.API_ROOT}/api/auth/session`,
+    LOGOUT: `${env.API_ROOT}/api/auth/logout`,
 }
 
 @Injectable({
