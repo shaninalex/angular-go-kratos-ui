@@ -7,12 +7,12 @@ import {ApiResponse} from "@shared/api";
 
 export const AUTH_URLS = {
     // TODO: change urls. Change "/api/v2/auth/get-<target>-form" to simple "/api/auth/<target>"
-    LOGIN: `${env.API_ROOT}/api/v2/auth/get-login-form`,
-    REGISTRATION: `${env.API_ROOT}/api/v2/auth/get-registration-form`,
-    VERIFICATION: `${env.API_ROOT}/api/v2/auth/get-verification-form`,
-    RECOVERY: `${env.API_ROOT}/api/v2/auth/recovery-form`,
-    SETTINGS: `${env.API_ROOT}/api/v2/auth/settings`,
-    ERROR: `${env.API_ROOT}/api/v2/auth/error`,
+    LOGIN: `${env.API_ROOT}/api/auth/login`,
+    REGISTRATION: `${env.API_ROOT}"/api/auth/registration"`,
+    VERIFICATION: `${env.API_ROOT}/api/auth/verification`,
+    RECOVERY: `${env.API_ROOT}/api/auth/recovery`,
+    SETTINGS: `${env.API_ROOT}/api/auth/settings`,
+    ERROR: `${env.API_ROOT}/api/auth/error`,
 }
 
 @Injectable({providedIn: "root"})

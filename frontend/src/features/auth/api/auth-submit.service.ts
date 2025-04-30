@@ -1,11 +1,12 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {environment as env} from '@environments/environment.development';
-import {Observable, shareReplay} from 'rxjs';
+import {Observable} from 'rxjs';
 import {
     Session,
     SettingsFlow,
-    SuccessfulNativeRegistration, UpdateLoginFlowBody,
+    SuccessfulNativeRegistration,
+    UpdateLoginFlowBody,
     UpdateRegistrationFlowWithPasswordMethod,
     UpdateSettingsFlowBody,
     UpdateVerificationFlowWithCodeMethod,
@@ -14,24 +15,11 @@ import {
 import {ApiResponse} from '@shared/api';
 import {TGroup} from '@shared/adapters';
 
-
-/*
-
-NOTE:
-
-AuthSubmitService and AuthFormServices probably should be global and moved into shared/api folder
-since they both will be used for settings form also.
-
-They both can be combined into single service.
-
-For now, it's only for developing and proof of concept
-
-*/
 export const SUBMIT_URLS = {
-    LOGIN: `${env.API_ROOT}/api/v2/auth/login`,
-    REGISTER: `${env.API_ROOT}/api/v2/auth/register`,
-    VERIFY: `${env.API_ROOT}/api/v2/auth/verify`,
-    SETTINGS: `${env.API_ROOT}/api/v2/auth/settings`,
+    LOGIN: `${env.API_ROOT}/api/auth/login`,
+    REGISTER: `${env.API_ROOT}/api/auth/registration`,
+    VERIFY: `${env.API_ROOT}/api/auth/verification`,
+    SETTINGS: `${env.API_ROOT}/api/auth/settings`,
 }
 
 @Injectable({providedIn: "root"})
@@ -128,10 +116,10 @@ class UpdateSettingsFactory {
                 result[key] = true;
             } else if (v === "false") {
                 result[key] = false;
-            // } else if (v === "" || v === null) {
-            //     result[key] = undefined;
-            // } else if (!isNaN(v) && v.trim() !== "") {
-            //     result[key] = Number(v);
+                // } else if (v === "" || v === null) {
+                //     result[key] = undefined;
+                // } else if (!isNaN(v) && v.trim() !== "") {
+                //     result[key] = Number(v);
             } else {
                 result[key] = v;
             }
