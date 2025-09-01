@@ -1,0 +1,169 @@
+version: v1.3.1
+
+dsn: postgres://postgres:postgres@localhost:5432/postgres?sslmode=disable&search_path=kratos
+
+serve:
+    public:
+        base_url: http://localhost:4433/
+        cors:
+            enabled: true
+            allowed_origins:
+                - http://localhost:4200
+                - http://localhost:8082
+                - http://localhost:8080
+            allowed_methods:
+                - POST
+                - GET
+                - PUT
+                - PATCH
+                - DELETE
+            allowed_headers:
+                - Authorization
+                - Cookie
+                - Content-Type
+            exposed_headers:
+                - Content-Type
+                - Set-Cookie
+    admin:
+        base_url: http://localhost:4434/
+
+selfservice:
+    default_browser_return_url: http://localhost:4200
+    allowed_return_urls:
+        - http://localhost:4200
+
+    methods:
+        password:
+            enabled: true
+        totp:
+            config:
+                issuer: Kratos
+            enabled: true
+        lookup_secret:
+            enabled: true
+        link:
+            enabled: true
+        code:
+            enabled: true
+        oidc:
+            config:
+                providers:
+                    - id: google
+                      provider: generic
+                        # Google client id and secret are set via env variables:
+                        # client_id = SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_ID
+                        # client_secret = SELFSERVICE_METHODS_OIDC_CONFIG_PROVIDERS_0_CLIENT_SECRET
+                      issuer_url: https://accounts.google.com
+                      mapper_url: file:///<absolute path to the kratos config folder>/kratos/jsonnet/oidc_mapper_google.jsonnet
+                      scope:
+                          - email
+                          - profile
+                          - openid
+            enabled: true
+
+    flows:
+        error:
+            ui_url: http://localhost:4200/auth/error
+
+        settings:
+            ui_url: http://localhost:4200/settings
+            privileged_session_max_age: 15m
+            required_aal: highest_available
+
+        recovery:
+            enabled: true
+            ui_url: http://localhost:4200/auth/recovery
+            use: code
+            after:
+                default_browser_return_url: http://localhost:4200
+
+        verification:
+            enabled: true
+            ui_url: http://localhost:4200/auth/verification
+            use: code
+            after:
+                default_browser_return_url: http://localhost:4200
+
+        logout:
+            after:
+                default_browser_return_url: http://localhost:4200/auth/login
+
+        login:
+            ui_url: http://localhost:4200/auth/login
+            lifespan: 10m
+            after:
+                password:
+                    default_browser_return_url: http://localhost:4200
+                    hooks:
+                        - hook: web_hook
+                          config:
+                              url: http://localhost:8000/api/auth/hook/login
+                              method: POST
+                              headers:
+                                  Authorization: Bearer very-secret-key
+                              body: file:///<absolute path to the kratos config folder>/kratos/jsonnet/hook_after.jsonnet
+                              response:
+                                  ignore: false
+                                  parse: false
+
+        registration:
+            lifespan: 10m
+            ui_url: http://localhost:4200/auth/registration
+            enable_legacy_one_step: true
+            after:
+                password:
+                    default_browser_return_url: http://localhost:4200/auth/verification
+                    hooks:
+                        - hook: show_verification_ui
+                        - hook: web_hook
+                          config:
+                              url: http://localhost:8000/api/auth/hook/registration
+                              method: POST
+                              headers:
+                                  Authorization: Bearer very-secret-key
+                              body: file:///<absolute path to the kratos config folder>/kratos/jsonnet/hook_after.jsonnet
+                              response:
+                                  ignore: false
+                                  parse: false
+                oidc:
+                    default_browser_return_url: http://localhost:4200/auth/verification
+                    hooks:
+                        - hook: show_verification_ui
+                        - hook: web_hook
+                          config:
+                              url: http://localhost:8000/api/auth/hook/registration
+                              method: POST
+                              headers:
+                                  Authorization: Bearer very-secret-key
+                              body: file:///<absolute path to the kratos config folder>/kratos/jsonnet/hook_after.jsonnet
+                              response:
+                                  ignore: false
+                                  parse: false
+log:
+    level: debug
+    format: text
+    leak_sensitive_values: true
+
+secrets:
+    cookie:
+        - PLEASE-CHANGE-ME-I-AM-VERY-INSECURE
+    cipher:
+        - 32-LONG-SECRET-NOT-SECURE-AT-ALL
+
+ciphers:
+    algorithm: xchacha20-poly1305
+
+hashers:
+    algorithm: bcrypt
+    bcrypt:
+        cost: 8
+
+identity:
+    default_schema_id: default
+    schemas:
+        - id: default
+          url: file:///<absolute path to the kratos config folder>/kratos/identity.schema.json
+
+courier:
+    smtp:
+        connection_uri: smtp://test:test@localhost:1025/?skip_ssl_verify=true

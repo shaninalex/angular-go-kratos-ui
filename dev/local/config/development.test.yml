@@ -1,0 +1,31 @@
+auth:
+  port: 8000
+
+project:
+  port: 8001
+
+org:
+  port: 8002
+
+app:
+  secret_key: "very-secret-key"
+
+db:
+  POSTGRES_USER: test
+  POSTGRES_PASSWORD: test
+  POSTGRES_DB: test
+  POSTGRES_HOST: localhost
+  POSTGRES_PORT: 5433
+
+email:
+  host: "smtp.gmail.com"
+  port: 587
+  user: "google user email"
+  pass: "app_secret"
+  from: "shanin.x@gmail.com"
+  tls: true
+  smtp: "smtps://test:test@mailslurper:1025/?skip_ssl_verify=true"
+
+kratos:
+  url_admin: "http://localhost:4434"
+  url_browser: "http://localhost:4433"
