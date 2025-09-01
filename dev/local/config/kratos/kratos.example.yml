@@ -94,17 +94,17 @@ selfservice:
             after:
                 password:
                     default_browser_return_url: http://localhost:4200
-                    hooks:
-                        - hook: web_hook
-                          config:
-                              url: http://localhost:8000/api/auth/hook/login
-                              method: POST
-                              headers:
-                                  Authorization: Bearer very-secret-key
-                              body: file:///<absolute path to the kratos config folder>/kratos/jsonnet/hook_after.jsonnet
-                              response:
-                                  ignore: false
-                                  parse: false
+#                    hooks:
+#                        - hook: web_hook
+#                          config:
+#                              url: http://localhost:8000/api/auth/hook/login
+#                              method: POST
+#                              headers:
+#                                  Authorization: Bearer very-secret-key
+#                              body: file:///<absolute path to the kratos config folder>/kratos/jsonnet/hook_after.jsonnet
+#                              response:
+#                                  ignore: false
+#                                  parse: false
 
         registration:
             lifespan: 10m
@@ -115,30 +115,30 @@ selfservice:
                     default_browser_return_url: http://localhost:4200/auth/verification
                     hooks:
                         - hook: show_verification_ui
-                        - hook: web_hook
-                          config:
-                              url: http://localhost:8000/api/auth/hook/registration
-                              method: POST
-                              headers:
-                                  Authorization: Bearer very-secret-key
-                              body: file:///<absolute path to the kratos config folder>/kratos/jsonnet/hook_after.jsonnet
-                              response:
-                                  ignore: false
-                                  parse: false
+#                        - hook: web_hook
+#                          config:
+#                              url: http://localhost:8000/api/auth/hook/registration
+#                              method: POST
+#                              headers:
+#                                  Authorization: Bearer very-secret-key
+#                              body: file:///<absolute path to the kratos config folder>/kratos/jsonnet/hook_after.jsonnet
+#                              response:
+#                                  ignore: false
+#                                  parse: false
                 oidc:
                     default_browser_return_url: http://localhost:4200/auth/verification
                     hooks:
                         - hook: show_verification_ui
-                        - hook: web_hook
-                          config:
-                              url: http://localhost:8000/api/auth/hook/registration
-                              method: POST
-                              headers:
-                                  Authorization: Bearer very-secret-key
-                              body: file:///<absolute path to the kratos config folder>/kratos/jsonnet/hook_after.jsonnet
-                              response:
-                                  ignore: false
-                                  parse: false
+#                        - hook: web_hook
+#                          config:
+#                              url: http://localhost:8000/api/auth/hook/registration
+#                              method: POST
+#                              headers:
+#                                  Authorization: Bearer very-secret-key
+#                              body: file:///<absolute path to the kratos config folder>/kratos/jsonnet/hook_after.jsonnet
+#                              response:
+#                                  ignore: false
+#                                  parse: false
 log:
     level: debug
     format: text

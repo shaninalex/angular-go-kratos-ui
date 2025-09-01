@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {TFlowUI} from '@client/shared/common';
+import {FormBuilderSubmitPayload, TFlowUI} from '@client/shared/common';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {UiNode} from '@ory/kratos-client';
 import {NgClass} from '@angular/common';
@@ -12,24 +12,58 @@ import {NgClass} from '@angular/common';
     ],
     template: `
         @if (formUI) {
-            <form
-                [formGroup]="form"
-            >
+            <form [formGroup]="form">
+                @if (formUI.ui.messages) {
+                    <div class="flex flex-col gap-1 mb-4">
+                        @for (message of formUI.ui.messages; track message.id) {
+                            <div class="text-sm rounded px-2"
+                                 [id]="message.id"
+                                 [ngClass]="{
+                                        'text-red-500 bg-red-50': message.type === 'error',
+                                        'text-lime-500 bg-lime-50': message.type === 'success',
+                                        'text-sky-500 bg-sky-50': message.type === 'info',
+                                    }"
+                            >
+                                {{ message.text }}
+                            </div>
+                        }
+                    </div>
+                }
                 @for (node of formUI.ui.nodes; track $index) {
                     <ng-container>
                         <!-- Input fields -->
                         @if (attr(node).type !== 'hidden' && attr(node).type !== 'submit') {
                             <div class="mb-4">
-                                <label>{{ label(node) }}</label>
+                                <label>
+                                    {{ label(node) }}
+                                    @if (attr(node).required) {
+                                        <span class="text-red-500">*</span>
+                                    }
+                                </label>
                                 <input
-                                    class="rounded-lg px-3 py-1 border block w-full border-slate-500 placeholder-slate-500"
+                                    class="mb-1 rounded-lg px-3 py-1 border block w-full border-slate-500 placeholder-slate-500"
                                     [attr.type]="attr(node).type"
                                     [formControlName]="attr(node).name"
                                     [attr.name]="attr(node).name"
-                                    [attr.required]="attr(node).required || null"
                                     [attr.autocomplete]="attr(node).autocomplete || null"
                                     [attr.placeholder]="label(node)"
                                 />
+                                @if (node.messages) {
+                                    <div class="flex flex-col gap-1">
+                                        @for (message of node.messages; track message.id) {
+                                            <div class="text-sm rounded px-2"
+                                                 [id]="message.id"
+                                                 [ngClass]="{
+                                        'text-red-500 bg-red-50': message.type === 'error',
+                                        'text-lime-500 bg-lime-50': message.type === 'success',
+                                        'text-sky-500 bg-sky-50': message.type === 'info',
+                                    }"
+                                            >
+                                                {{ message.text }}
+                                            </div>
+                                        }
+                                    </div>
+                                }
                             </div>
                         }
 
@@ -68,13 +102,13 @@ import {NgClass} from '@angular/common';
 })
 export class FormBuilderComponent implements OnInit {
     @Input() formUI!: TFlowUI;
-    @Output() formSubmit: EventEmitter<any> = new EventEmitter<any>(); // TODO: create type for submit form payload
+    @Output() formSubmit: EventEmitter<FormBuilderSubmitPayload> = new EventEmitter<FormBuilderSubmitPayload>(); // TODO: create type for submit form payload
     form: FormGroup = new FormGroup({});
 
     onSubmit(node: UiNode): void {
         this.formSubmit.emit({
-            values: this.form.value,
             group: node.group,
+            value: this.form.value,
         });
     }
 
@@ -102,9 +136,6 @@ export class FormBuilderComponent implements OnInit {
                 controls[this.attr(node).name] = new FormControl({value: this.attr(node).value || '', disabled: this.attr(node).disabled});
             }
             this.form = new FormGroup(controls);
-            this.form.valueChanges.subscribe(data => {
-                console.log(this.form.valid, this.form.errors);
-            })
         }
     }
 }

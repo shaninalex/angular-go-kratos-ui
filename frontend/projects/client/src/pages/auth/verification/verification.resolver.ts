@@ -6,5 +6,5 @@ import {inject} from '@angular/core';
 
 export const verificationFlowResolver: ResolveFn<VerificationFlow | undefined> = (route) => {
     const service = inject(AuthService)
-    return service.GetVerificationFlow()
+    return service.getVerificationFlow()
 };

@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {ActivatedRoute} from '@angular/router';
 import {AuthLayout} from '@client/shared/layouts/auth-layout/auth-layout';
-import {FormBuilderComponent} from '@client/features/auth';
+import {FormBuilderComponent} from '@client/shared/ui';
 
 @Component({
   selector: 'kr-verification',

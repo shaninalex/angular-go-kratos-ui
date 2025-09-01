@@ -6,5 +6,5 @@ import {tap} from 'rxjs';
 
 export const registrationFlowResolver: ResolveFn<RegistrationFlow | undefined> = (route) => {
     const service = inject(AuthService)
-    return service.RegistrationFlow()
+    return service.registrationFlow()
 };
