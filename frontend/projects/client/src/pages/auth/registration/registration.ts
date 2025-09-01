@@ -3,7 +3,8 @@ import {ActivatedRoute, RouterLink} from '@angular/router';
 import {AuthLayout} from '@client/shared/layouts/auth-layout/auth-layout';
 import {FormBuilderComponent} from '@client/features/auth';
 import {AuthService} from '@client/entities/auth';
-import {FormBuilderSubmitPayload, RegistrationFlowPayload} from '@client/shared/common';
+import {FormBuilderSubmitPayload, RegistrationFlowPayload, Traits} from '@client/shared/common';
+import {UpdateRegistrationFlowBody} from '@ory/kratos-client'
 
 @Component({
     selector: 'kr-registration',
@@ -25,37 +26,52 @@ export class Registration {
     api = inject(AuthService)
 
     onFormSubmit(data: FormBuilderSubmitPayload): void {
-        const payload: RegistrationFlowPayload = {
-            method: data.group,
-            csrf_token: data.value["csrf_token"],
-            password: data.value["password"],
-            traits: {
-                email: data.value["traits.email"],
-                name: {
-                    first: data.value["traits.name.first"],
-                    last: data.value["traits.name.last"],
+        let payload: UpdateRegistrationFlowBody;
+        switch (data.group) {
+            case 'oidc':
+                payload = this.withOidc(data.value["provider"]);
+                break;
+            case 'password':
+                payload = this.withPassword(data.value["password"], data.value["csrf_token"], data.value);
+                break;
+            default:
+                throw new Error(`Unsupported method: ${data.group}`);
+        }
+
+        this.api.SubmitRegistrationFlow(this.form.id, payload).subscribe({
+            next: (res) => {
+                console.log(data)
+                // TODO: handle success continuity response
+            },
+            error: (err) => {
+                if (err.error?.redirect_browser_to) {
+                    // if submitted form was oidc - do the redirect to provider
+                    window.location.href = err.error.redirect_browser_to;
+                } else {
+                    // set response form with errors
+                    this.form = err.error
                 }
             }
-        }
-        this.api.SubmitRegistrationFlow(this.form.id, payload).subscribe(data => {
-            console.log(data)
         })
+    }
+
+    withOidc(provider: string): UpdateRegistrationFlowBody {
+        return { method: 'oidc', provider };
+    }
+
+    withPassword(password: string, csrf: string, traits: any): UpdateRegistrationFlowBody {
+        return {
+            method: 'password',
+            password: password,
+            csrf_token: csrf,
+            traits: {
+                email: traits["traits.email"],
+                name: {
+                    first: traits["traits.name.first"],
+                    last: traits["traits.name.last"],
+                }
+            }
+        };
     }
 }
 
-/*
-
-{
-    "values": {
-        "provider": "google",
-        "csrf_token": "mSMjq/tQoSfNGqs3DXusuA6NYZTi0ZVuBRJn7WcG2J8oIvfW/bxht+5WBBMJamtzGVpNGpHfGexGngamYgmZPg==",
-        "traits.email": "",
-        "password": "",
-        "traits.name.first": "",
-        "traits.name.last": "",
-        "method": "password"
-    },
-    "group": "password"
-}
-
-*/

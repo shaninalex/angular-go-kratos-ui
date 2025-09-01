@@ -28,10 +28,6 @@
                 },
                 "name": {
                     "type": "object",
-                    "required": [
-                        "first",
-                        "last"
-                    ],
                     "properties": {
                         "first": {
                             "title": "First Name",
