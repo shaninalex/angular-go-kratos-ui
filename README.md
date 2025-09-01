@@ -1,7 +1,7 @@
 # Angular Kratos Ui
 
 > Start from scratch with new ideas and knowledge.
-> Older version you can find in [v0.0.0-outdated](https://github.com/shaninalex/angular-go-kratos-ui/releases/tag/v0.0.0-outdated)
+> Older version you can find in branch [old](https://github.com/shaninalex/angular-go-kratos-ui/tree/old) in tag [v0.0.0-outdated](https://github.com/shaninalex/angular-go-kratos-ui/releases/tag/v0.0.0-outdated)
 
 Project is under construction...
 
