@@ -1,0 +1,40 @@
+name: angular_kratos
+
+volumes:
+  postgres_data:
+#  postgres_test_data:
+
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DATABASES=postgres
+    ports:
+      - "5432:5432"
+    volumes:
+#      - ../database/init:/docker-entrypoint-initdb.d/
+      - postgres_data:/var/lib/postgresql/data/
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres -d postgres" ]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+#  postgres_test:
+#    image: postgres:15
+#    environment:
+#      - POSTGRES_USER=test
+#      - POSTGRES_PASSWORD=test
+#      - POSTGRES_DATABASES=test
+#    ports:
+#      - "5433:5432"
+#    volumes:
+#      - ../database/init:/docker-entrypoint-initdb.d/
+#      - postgres_test_data:/var/lib/postgresql/data/
+#    healthcheck:
+#      test: [ "CMD-SHELL", "pg_isready -U test -d test" ]
+#      interval: 5s
+#      timeout: 5s
+#      retries: 5

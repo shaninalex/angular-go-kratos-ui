@@ -1,2 +1,9 @@
 .env
 .idea
+.vscode
+.zed
+
+var/
+
+dev/local/config/kratos/kratos.yml
+dev/local/config/oathkeeper/oathkeeper.yml
