@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {TFlowUI} from '@client/shared/common';
+import {FormBuilderSubmitPayload, TFlowUI} from '@client/shared/common';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {UiNode} from '@ory/kratos-client';
 import {NgClass} from '@angular/common';
@@ -68,13 +68,13 @@ import {NgClass} from '@angular/common';
 })
 export class FormBuilderComponent implements OnInit {
     @Input() formUI!: TFlowUI;
-    @Output() formSubmit: EventEmitter<any> = new EventEmitter<any>(); // TODO: create type for submit form payload
+    @Output() formSubmit: EventEmitter<FormBuilderSubmitPayload> = new EventEmitter<FormBuilderSubmitPayload>(); // TODO: create type for submit form payload
     form: FormGroup = new FormGroup({});
 
     onSubmit(node: UiNode): void {
         this.formSubmit.emit({
-            values: this.form.value,
             group: node.group,
+            value: this.form.value,
         });
     }
 
@@ -102,9 +102,6 @@ export class FormBuilderComponent implements OnInit {
                 controls[this.attr(node).name] = new FormControl({value: this.attr(node).value || '', disabled: this.attr(node).disabled});
             }
             this.form = new FormGroup(controls);
-            this.form.valueChanges.subscribe(data => {
-                console.log(this.form.valid, this.form.errors);
-            })
         }
     }
 }

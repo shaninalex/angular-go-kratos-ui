@@ -1,7 +1,8 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
+import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {RegistrationFlow, LoginFlow, VerificationFlow} from '@ory/kratos-client';
+import {LoginFlow, RegistrationFlow, VerificationFlow} from '@ory/kratos-client';
+import {RegistrationFlowPayload} from '@client/shared/common';
 
 // Docs:
 // https://www.ory.sh/docs/kratos/reference/api
@@ -25,5 +26,18 @@ export class AuthService {
 
     GetVerificationFlow(): Observable<VerificationFlow> {
         return this.http.get<VerificationFlow>(`${baseURL}/self-service/verification/flows`, {withCredentials: true})
+    }
+
+    SubmitRegistrationFlow(flowID: string, payload: RegistrationFlowPayload): Observable<RegistrationFlow> {
+        let p = new HttpParams()
+        p = p.append("flow", flowID)
+        return this.http.post<RegistrationFlow>(
+            `${baseURL}/self-service/registration`,
+            payload,
+            {
+                params: p,
+                withCredentials: true,
+            },
+        )
     }
 }
