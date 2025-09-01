@@ -1,6 +1,6 @@
 import {Component, inject} from '@angular/core';
 import {ActivatedRoute, RouterLink} from '@angular/router';
-import {FormBuilderComponent} from '@client/features/auth'
+import {FormBuilderComponent} from '@client/shared/ui'
 import {AuthLayout} from '@client/shared/layouts/auth-layout/auth-layout';
 
 @Component({

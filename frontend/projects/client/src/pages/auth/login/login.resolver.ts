@@ -6,5 +6,5 @@ import {inject} from '@angular/core';
 export const loginFlowResolver: ResolveFn<LoginFlow | undefined> = (route) => {
     const service = inject(AuthService)
     // NOTE: if you already have session cookies - Ory/Kratos will redirect you back to the home page
-    return service.LoginFlow()
+    return service.loginFlow()
 };
