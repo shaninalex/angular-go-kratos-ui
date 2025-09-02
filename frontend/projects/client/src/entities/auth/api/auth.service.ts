@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {
     LoginFlow,
-    RegistrationFlow,
+    RegistrationFlow, SuccessfulNativeRegistration,
     UpdateLoginFlowBody,
     UpdateRegistrationFlowBody,
     VerificationFlow
@@ -64,20 +64,24 @@ export class AuthService {
         )
     }
 
-    submitRegistrationFlow(flowID: string, data: FormBuilderSubmitPayload): Observable<RegistrationFlow> {
+    submitRegistrationFlow(flowID: string, data: FormBuilderSubmitPayload): Observable<RegistrationFlow|SuccessfulNativeRegistration> {
         let payload: UpdateRegistrationFlowBody;
         switch (data.group) {
             case 'oidc':
                 payload = registrationWithOIDC(data.value['provider']);
                 break;
+            case 'password':
+                console.log(data)
+                payload = registrationWithPassword(data.value['password'], data.value['csrf_token'], data.value);
+                break;
             case 'profile':
-                payload = registrationWithProfile(data.value['password'], data.value['csrf_token'], data.value);
+                payload = registrationWithProfile(data.value['csrf_token'], data.value);
                 break;
             default:
                 throw new Error(`Unsupported method: ${data.group}`);
         }
         const p = new HttpParams().set("flow", flowID)
-        return this.http.post<RegistrationFlow>(
+        return this.http.post<RegistrationFlow|SuccessfulNativeRegistration>(
             `${baseURL}/self-service/registration`,
             payload,
             {

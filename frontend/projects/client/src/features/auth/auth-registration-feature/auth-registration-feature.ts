@@ -8,27 +8,36 @@ import {FormBuilderSubmitPayload} from '@client/shared/common';
     selector: 'kr-auth-registration-feature',
     imports: [FormBuilderComponent],
     template: `
-    <kr-form-builder
-      [formUI]="form"
-      (formSubmit)="onFormSubmit($event)" />
+        @if (ready) {
+            <kr-form-builder
+                [formUI]="form"
+                (formSubmit)="onFormSubmit($event)"
+            />
+        } @else {
+            loading...
+        }
   `
 })
 export class AuthRegistrationFeature {
     @Input() form!: RegistrationFlow;
     private api = inject(AuthService);
+    ready = true; // force rerender completely form-builder component
 
     onFormSubmit(data: FormBuilderSubmitPayload): void {
+        this.ready = false;
         this.api.submitRegistrationFlow(this.form.id, data).subscribe({
             next: (res) => {
+                this.ready = true;
                 console.log("success", res);
-                // maybe emit output event to page
+                // TODO: handle SuccessfulNativeRegistration type
             },
             error: (err) => {
                 if (err.error?.redirect_browser_to) {
                     window.location.href = err.error.redirect_browser_to;
                 } else {
-                    this.form = err.error; // re-render with errors
+                    this.form = { ...err.error };
                 }
+                this.ready = true;
             },
         });
     }

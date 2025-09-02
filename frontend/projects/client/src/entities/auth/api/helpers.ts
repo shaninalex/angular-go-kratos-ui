@@ -1,4 +1,5 @@
 import {UpdateLoginFlowBody, UpdateRegistrationFlowBody} from '@ory/kratos-client';
+import {UpdateRegistrationFlowWithProfileMethodScreenEnum} from '@ory/kratos-client/api';
 
 
 export function registrationWithOIDC(provider: string): UpdateRegistrationFlowBody {
@@ -8,7 +9,7 @@ export function registrationWithOIDC(provider: string): UpdateRegistrationFlowBo
 export function registrationWithPassword(password: string, csrf: string, traits: any): UpdateRegistrationFlowBody {
     return {
         method: 'password',
-        password,
+        password: password,
         csrf_token: csrf,
         traits: {
             email: traits['traits.email'],
@@ -21,11 +22,16 @@ export function registrationWithPassword(password: string, csrf: string, traits:
 }
 
 
-export function registrationWithProfile(password: string, csrf: string, traits: any): UpdateRegistrationFlowBody {
+export function registrationWithProfile(
+    // password: string,
+    csrf: string,
+    traits: any,
+    // screen: UpdateRegistrationFlowWithProfileMethodScreenEnum,
+): UpdateRegistrationFlowBody {
     return {
         method: 'profile',
         csrf_token: csrf,
-        screen: "credential-selection",
+        // screen: 'credential-selection',
         traits: {
             email: traits['traits.email'],
             name: {
@@ -43,7 +49,7 @@ export function loginWithOIDC(provider: string): UpdateLoginFlowBody {
 export function loginWithPassword(email: string, password: string, csrf: string): UpdateLoginFlowBody {
     return {
         method: 'password',
-        password: 'password',
+        password: password,
         csrf_token: csrf,
         identifier: email,
     };
