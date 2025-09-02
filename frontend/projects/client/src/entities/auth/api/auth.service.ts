@@ -1,8 +1,21 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
-import {LoginFlow, RegistrationFlow, UpdateRegistrationFlowBody, VerificationFlow} from '@ory/kratos-client';
+import {
+    LoginFlow,
+    RegistrationFlow,
+    UpdateLoginFlowBody,
+    UpdateRegistrationFlowBody,
+    VerificationFlow
+} from '@ory/kratos-client';
 import {FormBuilderSubmitPayload} from '@client/shared/common';
+import {
+    loginWithOIDC,
+    loginWithPassword,
+    registrationWithOIDC,
+    registrationWithPassword,
+    registrationWithProfile
+} from './helpers';
 
 // Docs:
 // https://www.ory.sh/docs/kratos/reference/api
@@ -28,14 +41,37 @@ export class AuthService {
         return this.http.get<VerificationFlow>(`${baseURL}/self-service/verification/flows`, {withCredentials: true})
     }
 
+    submitLoginFlow(flowID: string, data: FormBuilderSubmitPayload): Observable<LoginFlow> {
+        let payload: UpdateLoginFlowBody;
+        switch (data.group) {
+            case 'oidc':
+                payload = loginWithOIDC(data.value['provider']);
+                break;
+            case 'password':
+                payload = loginWithPassword(data.value['identifier'], data.value['password'], data.value['csrf_token']);
+                break;
+            default:
+                throw new Error(`Unsupported method: ${data.group}`);
+        }
+        const p = new HttpParams().set("flow", flowID)
+        return this.http.post<RegistrationFlow>(
+            `${baseURL}/self-service/login`,
+            payload,
+            {
+                params: p,
+                withCredentials: true,
+            },
+        )
+    }
+
     submitRegistrationFlow(flowID: string, data: FormBuilderSubmitPayload): Observable<RegistrationFlow> {
         let payload: UpdateRegistrationFlowBody;
         switch (data.group) {
             case 'oidc':
-                payload = this.withOidc(data.value['provider']);
+                payload = registrationWithOIDC(data.value['provider']);
                 break;
-            case 'password':
-                payload = this.withPassword(data.value['password'], data.value['csrf_token'], data.value);
+            case 'profile':
+                payload = registrationWithProfile(data.value['password'], data.value['csrf_token'], data.value);
                 break;
             default:
                 throw new Error(`Unsupported method: ${data.group}`);
@@ -49,24 +85,5 @@ export class AuthService {
                 withCredentials: true,
             },
         )
-    }
-
-    private withOidc(provider: string): UpdateRegistrationFlowBody {
-        return { method: 'oidc', provider };
-    }
-
-    private withPassword(password: string, csrf: string, traits: any): UpdateRegistrationFlowBody {
-        return {
-            method: 'password',
-            password,
-            csrf_token: csrf,
-            traits: {
-                email: traits['traits.email'],
-                name: {
-                    first: traits['traits.name.first'],
-                    last: traits['traits.name.last'],
-                },
-            },
-        };
     }
 }

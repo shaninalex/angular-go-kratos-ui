@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
 import {ActivatedRoute, RouterLink} from '@angular/router';
 import {AuthLayout} from '@client/shared/layouts/auth-layout/auth-layout';
-import {AuthRegistrationFeature} from '@client/features/auth-registration-feature';
+import {AuthRegistrationFeature} from '@client/features/auth/auth-registration-feature';
 
 @Component({
     selector: 'kr-registration',
