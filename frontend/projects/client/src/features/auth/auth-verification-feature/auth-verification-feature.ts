@@ -31,8 +31,8 @@ export class AuthVerificationFeature {
     onFormSubmit(data: FormBuilderSubmitPayload): void {
         this.ready = false;
         this.api.submitVerificationFlow(this.form.id, data).subscribe(data => {
+            this.form = data
             this.ready = true;
-            console.log(data)
         })
     }
 }
