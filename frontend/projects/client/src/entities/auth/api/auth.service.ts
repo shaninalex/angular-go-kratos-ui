@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {
-    LoginFlow, RecoveryFlow,
+    LoginFlow, LogoutFlow, RecoveryFlow,
     RegistrationFlow, SuccessfulNativeLogin, SuccessfulNativeRegistration,
     UpdateLoginFlowBody,
     UpdateRegistrationFlowBody,
@@ -41,9 +41,13 @@ export class AuthService {
         return this.http.get<RecoveryFlow>(`${baseURL}/self-service/recovery/browser`, {withCredentials: true})
     }
 
-    getVerificationFlow(flowID: string): Observable<VerificationFlow> {
+    verificationFlow(flowID: string): Observable<VerificationFlow> {
         const p = new HttpParams().set("id", flowID)
         return this.http.get<VerificationFlow>(`${baseURL}/self-service/verification/flows`, {params: p, withCredentials: true})
+    }
+
+    logoutFlow(): Observable<LogoutFlow> {
+        return this.http.get<LogoutFlow>(`${baseURL}/self-service/logout/browser`, {withCredentials: true})
     }
 
     submitLoginFlow(flowID: string, data: FormBuilderSubmitPayload): Observable<LoginFlow|SuccessfulNativeLogin> {

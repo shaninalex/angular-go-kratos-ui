@@ -31,7 +31,7 @@ export class Verification implements OnInit {
             filter(params => "flow" in params),
             map(params => params["flow"] as string),
             switchMap(flowID => {
-                return this.service.getVerificationFlow(flowID)
+                return this.service.verificationFlow(flowID)
             })
         ).subscribe(form=> {
             this.form = form

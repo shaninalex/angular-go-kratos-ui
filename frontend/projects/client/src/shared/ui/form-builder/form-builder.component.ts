@@ -142,7 +142,6 @@ export class FormBuilderComponent implements OnInit {
 
     ngOnInit() {
         if (this.formUI) {
-            console.log(this.formUI)
             const controls: Record<string, FormControl> = {};
             for (const node of this.formUI.ui.nodes) {
                 const attr = this.attr(node);
@@ -154,7 +153,6 @@ export class FormBuilderComponent implements OnInit {
                         disabled: attr.disabled,
                     });
                 }
-                // controls[this.attr(node).name] = new FormControl({value: this.attr(node).value || '', disabled: this.attr(node).disabled});
             }
             this.form = new FormGroup(controls);
         }
