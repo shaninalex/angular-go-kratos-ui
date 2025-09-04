@@ -1,3 +1,14 @@
+## 0.2.0 (2025-09-04)
+
+### Feat
+
+- logout flow #39
+- recovery flow #38
+
+### Fix
+
+- update verification after submit + verification continue url
+
 ## 0.1.0 (2025-09-04)
 
 ### Feat
