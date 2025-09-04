@@ -1,3 +1,16 @@
+## 0.1.0 (2025-09-04)
+
+### Feat
+
+- verification profile method #34
+- registration with profile method #34
+
+### Refactor
+
+- move auth features to `features/auth` #34
+- reorganize code
+- reorganize code
+
 ## 0.0.2 (2024-10-15)
 
 ### Fix
