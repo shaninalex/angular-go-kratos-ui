@@ -1,0 +1,68 @@
+import {
+    UpdateLoginFlowBody,
+    UpdateRegistrationFlowBody,
+    UpdateVerificationFlowWithCodeMethod
+} from '@ory/kratos-client';
+import {UpdateRegistrationFlowWithProfileMethodScreenEnum} from '@ory/kratos-client/api';
+
+
+export function registrationWithOIDC(provider: string): UpdateRegistrationFlowBody {
+    return {method: 'oidc', provider};
+}
+
+export function registrationWithPassword(password: string, csrf: string, traits: any): UpdateRegistrationFlowBody {
+    return {
+        method: 'password',
+        password: password,
+        csrf_token: csrf,
+        traits: {
+            email: traits['traits.email'],
+            name: {
+                first: traits['traits.name.first'],
+                last: traits['traits.name.last'],
+            },
+        },
+    };
+}
+
+
+export function registrationWithProfile(
+    // password: string,
+    csrf: string,
+    traits: any,
+    // screen: UpdateRegistrationFlowWithProfileMethodScreenEnum,
+): UpdateRegistrationFlowBody {
+    return {
+        method: 'profile',
+        csrf_token: csrf,
+        // screen: 'credential-selection',
+        traits: {
+            email: traits['traits.email'],
+            name: {
+                first: traits['traits.name.first'],
+                last: traits['traits.name.last'],
+            },
+        },
+    };
+}
+
+export function loginWithOIDC(provider: string): UpdateLoginFlowBody {
+    return {method: "oidc", provider}
+}
+
+export function loginWithPassword(email: string, password: string, csrf: string): UpdateLoginFlowBody {
+    return {
+        method: 'password',
+        password: password,
+        csrf_token: csrf,
+        identifier: email,
+    };
+}
+
+export function verificationWithCode(data : any): UpdateVerificationFlowWithCodeMethod {
+    return {
+        csrf_token: data["csrf_token"],
+        code: data["code"],
+        method: "code",
+    }
+}

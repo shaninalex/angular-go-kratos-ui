@@ -1,1 +1,1 @@
-export * from './auth-registration-feature'
+export * from './auth'
