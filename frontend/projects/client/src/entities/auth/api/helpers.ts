@@ -1,4 +1,8 @@
-import {UpdateLoginFlowBody, UpdateRegistrationFlowBody} from '@ory/kratos-client';
+import {
+    UpdateLoginFlowBody,
+    UpdateRegistrationFlowBody,
+    UpdateVerificationFlowWithCodeMethod
+} from '@ory/kratos-client';
 import {UpdateRegistrationFlowWithProfileMethodScreenEnum} from '@ory/kratos-client/api';
 
 
@@ -53,4 +57,12 @@ export function loginWithPassword(email: string, password: string, csrf: string)
         csrf_token: csrf,
         identifier: email,
     };
+}
+
+export function verificationWithCode(data : any): UpdateVerificationFlowWithCodeMethod {
+    return {
+        csrf_token: data["csrf_token"],
+        code: data["code"],
+        method: "code",
+    }
 }

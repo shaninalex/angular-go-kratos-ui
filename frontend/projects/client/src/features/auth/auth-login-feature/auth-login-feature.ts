@@ -3,6 +3,7 @@ import {FormBuilderComponent} from '@client/shared/ui';
 import {LoginFlow} from '@ory/kratos-client';
 import {AuthService} from '@client/entities/auth';
 import {FormBuilderSubmitPayload} from '@client/shared/common';
+import {Router} from '@angular/router';
 
 @Component({
     selector: 'kr-auth-login-feature',
@@ -15,13 +16,19 @@ import {FormBuilderSubmitPayload} from '@client/shared/common';
 })
 export class AuthLoginFeature {
     @Input() form!: LoginFlow;
+    router = inject(Router)
     private api = inject(AuthService);
 
     onFormSubmit(data: FormBuilderSubmitPayload): void {
         this.api.submitLoginFlow(this.form.id, data).subscribe({
             next: (res) => {
-                console.log("success", res);
-                // maybe emit output event to page
+                if ('continue_with' in res ) {
+                    const items = res.continue_with?.filter(item => item.action === "redirect_browser_to")
+                    if (items && items.length > 0) {
+                        const url = new URL(items[0].redirect_browser_to as string)
+                        this.router.navigate([url.pathname], {queryParams: {flow: url.searchParams.get("flow")}})
+                    }
+                }
             },
             error: (err) => {
                 if (err.error?.redirect_browser_to) {

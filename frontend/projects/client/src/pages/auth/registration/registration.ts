@@ -11,7 +11,7 @@ import {AuthRegistrationFeature} from '@client/features/auth/auth-registration-f
         AuthRegistrationFeature,
     ],
     template: `
-        <kr-auth-layout title="Registration" [ready]="!!form">
+        <kr-auth-layout title="Registration">
             <kr-auth-registration-feature [form]="form" />
             Already have an account? <a [routerLink]="['/auth/login']" class="underline">Login</a>
         </kr-auth-layout>

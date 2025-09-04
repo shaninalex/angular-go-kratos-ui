@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {
     LoginFlow,
-    RegistrationFlow, SuccessfulNativeRegistration,
+    RegistrationFlow, SuccessfulNativeLogin, SuccessfulNativeRegistration,
     UpdateLoginFlowBody,
     UpdateRegistrationFlowBody,
     VerificationFlow
@@ -14,7 +14,7 @@ import {
     loginWithPassword,
     registrationWithOIDC,
     registrationWithPassword,
-    registrationWithProfile
+    registrationWithProfile, verificationWithCode
 } from './helpers';
 
 // Docs:
@@ -37,11 +37,12 @@ export class AuthService {
         return this.http.get<RegistrationFlow>(`${baseURL}/self-service/registration/browser`, {withCredentials: true})
     }
 
-    getVerificationFlow(): Observable<VerificationFlow> {
-        return this.http.get<VerificationFlow>(`${baseURL}/self-service/verification/flows`, {withCredentials: true})
+    getVerificationFlow(flowID: string): Observable<VerificationFlow> {
+        const p = new HttpParams().set("id", flowID)
+        return this.http.get<VerificationFlow>(`${baseURL}/self-service/verification/flows`, {params: p, withCredentials: true})
     }
 
-    submitLoginFlow(flowID: string, data: FormBuilderSubmitPayload): Observable<LoginFlow> {
+    submitLoginFlow(flowID: string, data: FormBuilderSubmitPayload): Observable<LoginFlow|SuccessfulNativeLogin> {
         let payload: UpdateLoginFlowBody;
         switch (data.group) {
             case 'oidc':
@@ -65,13 +66,13 @@ export class AuthService {
     }
 
     submitRegistrationFlow(flowID: string, data: FormBuilderSubmitPayload): Observable<RegistrationFlow|SuccessfulNativeRegistration> {
-        let payload: UpdateRegistrationFlowBody;
+        let payload: any;
         switch (data.group) {
             case 'oidc':
+                console.log(data)
                 payload = registrationWithOIDC(data.value['provider']);
                 break;
             case 'password':
-                console.log(data)
                 payload = registrationWithPassword(data.value['password'], data.value['csrf_token'], data.value);
                 break;
             case 'profile':
@@ -83,6 +84,23 @@ export class AuthService {
         const p = new HttpParams().set("flow", flowID)
         return this.http.post<RegistrationFlow|SuccessfulNativeRegistration>(
             `${baseURL}/self-service/registration`,
+            payload,
+            {
+                params: p,
+                withCredentials: true,
+            },
+        )
+    }
+
+    submitVerificationFlow(flowID: string, data: FormBuilderSubmitPayload): Observable<VerificationFlow> {
+        let payload: any
+        switch (data.group) {
+            case "code":
+                payload = verificationWithCode(data.value)
+        }
+        const p = new HttpParams().set("flow", flowID)
+        return this.http.post<VerificationFlow>(
+            `${baseURL}/self-service/verification`,
             payload,
             {
                 params: p,
