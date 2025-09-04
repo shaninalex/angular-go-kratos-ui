@@ -1,5 +1,5 @@
 import {
-    UpdateLoginFlowBody,
+    UpdateLoginFlowBody, UpdateRecoveryFlowWithCodeMethod,
     UpdateRegistrationFlowBody,
     UpdateVerificationFlowWithCodeMethod
 } from '@ory/kratos-client';
@@ -65,4 +65,17 @@ export function verificationWithCode(data : any): UpdateVerificationFlowWithCode
         code: data["code"],
         method: "code",
     }
+}
+
+export function recoveryWithCode(data : any): UpdateRecoveryFlowWithCodeMethod {
+    let payload: UpdateRecoveryFlowWithCodeMethod = {
+        method: "code",
+        csrf_token: data["csrf_token"],
+        email: data["email"]
+    }
+
+    if ("code" in data) {
+        payload["code"] = data["code"]
+    }
+    return payload
 }

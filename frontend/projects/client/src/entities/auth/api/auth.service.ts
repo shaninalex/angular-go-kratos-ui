@@ -2,7 +2,7 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {
-    LoginFlow,
+    LoginFlow, RecoveryFlow,
     RegistrationFlow, SuccessfulNativeLogin, SuccessfulNativeRegistration,
     UpdateLoginFlowBody,
     UpdateRegistrationFlowBody,
@@ -11,7 +11,7 @@ import {
 import {FormBuilderSubmitPayload} from '@client/shared/common';
 import {
     loginWithOIDC,
-    loginWithPassword,
+    loginWithPassword, recoveryWithCode,
     registrationWithOIDC,
     registrationWithPassword,
     registrationWithProfile, verificationWithCode
@@ -35,6 +35,10 @@ export class AuthService {
 
     registrationFlow(): Observable<RegistrationFlow> {
         return this.http.get<RegistrationFlow>(`${baseURL}/self-service/registration/browser`, {withCredentials: true})
+    }
+
+    recoveryFlow(): Observable<RecoveryFlow> {
+        return this.http.get<RecoveryFlow>(`${baseURL}/self-service/recovery/browser`, {withCredentials: true})
     }
 
     getVerificationFlow(flowID: string): Observable<VerificationFlow> {
@@ -101,6 +105,23 @@ export class AuthService {
         const p = new HttpParams().set("flow", flowID)
         return this.http.post<VerificationFlow>(
             `${baseURL}/self-service/verification`,
+            payload,
+            {
+                params: p,
+                withCredentials: true,
+            },
+        )
+    }
+
+    submitRecoveryFlow(flowID: string, data: FormBuilderSubmitPayload): Observable<RecoveryFlow> {
+        let payload: any
+        switch (data.group) {
+            case "code":
+                payload = recoveryWithCode(data.value)
+        }
+        const p = new HttpParams().set("flow", flowID)
+        return this.http.post<RecoveryFlow>(
+            `${baseURL}/self-service/recovery`,
             payload,
             {
                 params: p,

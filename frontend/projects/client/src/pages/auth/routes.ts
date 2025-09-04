@@ -4,6 +4,8 @@ import {Registration} from './registration/registration';
 import {Verification} from './verification/verification';
 import {loginFlowResolver} from './login/login.resolver';
 import {registrationFlowResolver} from './registration/registration.resolver';
+import {Recovery} from './recovery/recovery';
+import {recoveryFlowResolver} from '@client/pages/auth/recovery/recovery.resolver';
 
 export const authRoutes: Routes = [
     {
@@ -18,7 +20,11 @@ export const authRoutes: Routes = [
     },
     {
         path: "auth/verification",
-        // resolve: {form: verificationFlowResolver},
         component: Verification,
+    },
+    {
+        path: "auth/recovery",
+        resolve: {form: recoveryFlowResolver},
+        component: Recovery,
     },
 ]

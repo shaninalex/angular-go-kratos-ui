@@ -10,7 +10,6 @@ import {RouterLink} from '@angular/router';
     imports: [
         ReactiveFormsModule,
         NgClass,
-        RouterLink,
     ],
     template: `
         @if (formUI) {
