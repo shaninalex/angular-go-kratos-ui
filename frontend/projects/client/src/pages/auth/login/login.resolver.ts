@@ -1,10 +1,19 @@
-import {ResolveFn} from '@angular/router';
+import {ResolveFn, Router} from '@angular/router';
 import {LoginFlow} from '@ory/kratos-client';
 import {AuthService} from '@client/entities/auth';
 import {inject} from '@angular/core';
+import {withGenericErrorHandling} from '@client/shared/common';
 
 export const loginFlowResolver: ResolveFn<LoginFlow | undefined> = (route) => {
     const service = inject(AuthService)
-    // NOTE: if you already have session cookies - Ory/Kratos will redirect you back to the home page
-    return service.loginFlow()
+    const router = inject(Router);
+
+    // This is working, but! This is resolver. Resolver should resolve, NOT handle errors
+    // for error handling use http middlewares
+    return service.loginFlow().pipe(
+        withGenericErrorHandling({
+            session_already_available: () => router.navigateByUrl("/"),
+            // can handle more error codes for later
+        })
+    )
 };
