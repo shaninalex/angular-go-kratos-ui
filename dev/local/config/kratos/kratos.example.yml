@@ -109,6 +109,7 @@ selfservice:
         registration:
             lifespan: 10m
             ui_url: http://localhost:4200/auth/registration
+            # The button "Back" works wierd. Or it's me or it's implementation is not full supported
             enable_legacy_one_step: true
             after:
                 password:

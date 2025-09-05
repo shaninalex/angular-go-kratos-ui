@@ -25,27 +25,6 @@ export function registrationWithPassword(password: string, csrf: string, traits:
     };
 }
 
-
-export function registrationWithProfile(
-    // password: string,
-    csrf: string,
-    traits: any,
-    // screen: UpdateRegistrationFlowWithProfileMethodScreenEnum,
-): UpdateRegistrationFlowBody {
-    return {
-        method: 'profile',
-        csrf_token: csrf,
-        // screen: 'credential-selection',
-        traits: {
-            email: traits['traits.email'],
-            name: {
-                first: traits['traits.name.first'],
-                last: traits['traits.name.last'],
-            },
-        },
-    };
-}
-
 export function loginWithOIDC(provider: string): UpdateLoginFlowBody {
     return {method: "oidc", provider}
 }

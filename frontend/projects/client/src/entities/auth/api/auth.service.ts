@@ -5,23 +5,22 @@ import {
     LoginFlow, LogoutFlow, RecoveryFlow,
     RegistrationFlow, SuccessfulNativeLogin, SuccessfulNativeRegistration,
     UpdateLoginFlowBody,
-    UpdateRegistrationFlowBody,
     VerificationFlow
 } from '@ory/kratos-client';
 import {FormBuilderSubmitPayload} from '@client/shared/common';
 import {
     loginWithOIDC,
-    loginWithPassword, recoveryWithCode,
+    loginWithPassword,
+    recoveryWithCode,
     registrationWithOIDC,
     registrationWithPassword,
-    registrationWithProfile, verificationWithCode
+    verificationWithCode
 } from './helpers';
+
+import {environment} from '@client/environments/environment.development';
 
 // Docs:
 // https://www.ory.sh/docs/kratos/reference/api
-
-// base Kratos url
-const baseURL = "http://localhost:4433"
 
 @Injectable({
     providedIn: 'root'
@@ -30,24 +29,24 @@ export class AuthService {
     http = inject(HttpClient);
 
     loginFlow(): Observable<LoginFlow> {
-        return this.http.get<LoginFlow>(`${baseURL}/self-service/login/browser`, {withCredentials: true})
+        return this.http.get<LoginFlow>(`${environment.KRATOS_ROOT}/self-service/login/browser`, {withCredentials: true})
     }
 
     registrationFlow(): Observable<RegistrationFlow> {
-        return this.http.get<RegistrationFlow>(`${baseURL}/self-service/registration/browser`, {withCredentials: true})
+        return this.http.get<RegistrationFlow>(`${environment.KRATOS_ROOT}/self-service/registration/browser`, {withCredentials: true})
     }
 
     recoveryFlow(): Observable<RecoveryFlow> {
-        return this.http.get<RecoveryFlow>(`${baseURL}/self-service/recovery/browser`, {withCredentials: true})
+        return this.http.get<RecoveryFlow>(`${environment.KRATOS_ROOT}/self-service/recovery/browser`, {withCredentials: true})
     }
 
     verificationFlow(flowID: string): Observable<VerificationFlow> {
         const p = new HttpParams().set("id", flowID)
-        return this.http.get<VerificationFlow>(`${baseURL}/self-service/verification/flows`, {params: p, withCredentials: true})
+        return this.http.get<VerificationFlow>(`${environment.KRATOS_ROOT}/self-service/verification/flows`, {params: p, withCredentials: true})
     }
 
     logoutFlow(): Observable<LogoutFlow> {
-        return this.http.get<LogoutFlow>(`${baseURL}/self-service/logout/browser`, {withCredentials: true})
+        return this.http.get<LogoutFlow>(`${environment.KRATOS_ROOT}/self-service/logout/browser`, {withCredentials: true})
     }
 
     submitLoginFlow(flowID: string, data: FormBuilderSubmitPayload): Observable<LoginFlow|SuccessfulNativeLogin> {
@@ -64,7 +63,7 @@ export class AuthService {
         }
         const p = new HttpParams().set("flow", flowID)
         return this.http.post<RegistrationFlow>(
-            `${baseURL}/self-service/login`,
+            `${environment.KRATOS_ROOT}/self-service/login`,
             payload,
             {
                 params: p,
@@ -83,15 +82,12 @@ export class AuthService {
             case 'password':
                 payload = registrationWithPassword(data.value['password'], data.value['csrf_token'], data.value);
                 break;
-            case 'profile':
-                payload = registrationWithProfile(data.value['csrf_token'], data.value);
-                break;
             default:
                 throw new Error(`Unsupported method: ${data.group}`);
         }
         const p = new HttpParams().set("flow", flowID)
         return this.http.post<RegistrationFlow|SuccessfulNativeRegistration>(
-            `${baseURL}/self-service/registration`,
+            `${environment.KRATOS_ROOT}/self-service/registration`,
             payload,
             {
                 params: p,
@@ -108,7 +104,7 @@ export class AuthService {
         }
         const p = new HttpParams().set("flow", flowID)
         return this.http.post<VerificationFlow>(
-            `${baseURL}/self-service/verification`,
+            `${environment.KRATOS_ROOT}/self-service/verification`,
             payload,
             {
                 params: p,
@@ -125,7 +121,7 @@ export class AuthService {
         }
         const p = new HttpParams().set("flow", flowID)
         return this.http.post<RecoveryFlow>(
-            `${baseURL}/self-service/recovery`,
+            `${environment.KRATOS_ROOT}/self-service/recovery`,
             payload,
             {
                 params: p,
