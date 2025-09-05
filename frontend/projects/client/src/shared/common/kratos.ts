@@ -1,4 +1,7 @@
-import {FlowError, LoginFlow, RecoveryFlow, RegistrationFlow, SettingsFlow, IdentityCredentialsOidcProvider} from '@ory/kratos-client';
+import {
+    FlowError, LoginFlow, RecoveryFlow, RegistrationFlow, SettingsFlow,
+    GenericError
+} from '@ory/kratos-client';
 import {UiContainer, UiNodeGroupEnum} from '@ory/kratos-client/api';
 
 export type TFlow = LoginFlow | RegistrationFlow | RecoveryFlow | SettingsFlow | FlowError;
@@ -16,4 +19,8 @@ export interface FormBuilderSubmitPayload {
     action: string,
     value: string,
     form: any
+}
+
+export function isGenericError(err: unknown): err is GenericError {
+    return typeof err === "object" && err !== null && "id" in err;
 }
