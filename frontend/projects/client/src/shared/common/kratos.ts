@@ -13,6 +13,7 @@ export type TFlowUI = TFlow & TFlowWithUI;
 // Docs: https://www.ory.sh/docs/kratos/reference/api#tag/frontend/operation/updateRegistrationFlow
 export interface FormBuilderSubmitPayload {
     group: UiNodeGroupEnum,
-    provider: string,
-    value: any
+    action: string,
+    value: string,
+    form: any
 }

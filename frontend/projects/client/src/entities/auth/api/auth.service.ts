@@ -53,13 +53,13 @@ export class AuthService {
         let payload: UpdateLoginFlowBody;
         switch (data.group) {
             case 'oidc':
-                payload = loginWithOIDC(data.provider);
+                payload = loginWithOIDC(data.value); // data.value contains OIDC provider
                 break;
             case 'password':
-                payload = loginWithPassword(data.value['identifier'], data.value['password'], data.value['csrf_token']);
+                payload = loginWithPassword(data.form);
                 break;
             default:
-                throw new Error(`Unsupported method: ${data.group}`);
+                throw new Error(`Unsupported method: ${data.action}`);
         }
         const p = new HttpParams().set("flow", flowID)
         return this.http.post<RegistrationFlow>(
@@ -76,14 +76,13 @@ export class AuthService {
         let payload: any;
         switch (data.group) {
             case 'oidc':
-                console.log(data)
-                payload = registrationWithOIDC(data.provider);
+                payload = registrationWithOIDC(data.value); // data.value contains OIDC provider
                 break;
             case 'password':
-                payload = registrationWithPassword(data.value['password'], data.value['csrf_token'], data.value);
+                payload = registrationWithPassword(data.form);
                 break;
             default:
-                throw new Error(`Unsupported method: ${data.group}`);
+                throw new Error(`Unsupported method: ${data.action}`);
         }
         const p = new HttpParams().set("flow", flowID)
         return this.http.post<RegistrationFlow|SuccessfulNativeRegistration>(
@@ -100,7 +99,7 @@ export class AuthService {
         let payload: any
         switch (data.group) {
             case "code":
-                payload = verificationWithCode(data.value)
+                payload = verificationWithCode(data.form)
         }
         const p = new HttpParams().set("flow", flowID)
         return this.http.post<VerificationFlow>(
@@ -117,7 +116,7 @@ export class AuthService {
         let payload: any
         switch (data.group) {
             case "code":
-                payload = recoveryWithCode(data.value)
+                payload = recoveryWithCode(data.form)
         }
         const p = new HttpParams().set("flow", flowID)
         return this.http.post<RecoveryFlow>(

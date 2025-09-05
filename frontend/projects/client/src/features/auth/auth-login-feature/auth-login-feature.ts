@@ -9,10 +9,10 @@ import {Router} from '@angular/router';
     selector: 'kr-auth-login-feature',
     imports: [FormBuilderComponent],
     template: `
-    <kr-form-builder
-      [formUI]="form"
-      (formSubmit)="onFormSubmit($event)" />
-  `
+        <kr-form-builder
+            [formUI]="form"
+            (formSubmit)="onFormSubmit($event)"/>
+    `
 })
 export class AuthLoginFeature {
     @Input() form!: LoginFlow;
@@ -22,7 +22,7 @@ export class AuthLoginFeature {
     onFormSubmit(data: FormBuilderSubmitPayload): void {
         this.api.submitLoginFlow(this.form.id, data).subscribe({
             next: (res) => {
-                if ('continue_with' in res ) {
+                if ('continue_with' in res) {
                     const items = res.continue_with?.filter(item => item.action === "redirect_browser_to")
                     if (items && items.length > 0) {
                         const url = new URL(items[0].redirect_browser_to as string)
