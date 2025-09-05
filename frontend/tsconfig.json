@@ -30,6 +30,9 @@
             ],
             "@client/shared/*": [
                 "./projects/client/src/shared/*"
+            ],
+            "@client/environments/*": [
+                "./projects/client/src/environments/*"
             ]
         }
     },
