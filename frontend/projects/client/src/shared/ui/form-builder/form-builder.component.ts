@@ -3,6 +3,7 @@ import {FormBuilderSubmitPayload, TFlowUI} from '@client/shared/common';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {UiNode} from '@ory/kratos-client';
 import {NgClass} from '@angular/common';
+import {makeLink} from './helpers';
 import {RouterLink} from '@angular/router';
 
 @Component({
@@ -10,6 +11,7 @@ import {RouterLink} from '@angular/router';
     imports: [
         ReactiveFormsModule,
         NgClass,
+        RouterLink,
     ],
     template: `
         @if (formUI) {
@@ -100,7 +102,7 @@ import {RouterLink} from '@angular/router';
                         @if (node.type === 'a') {
                             <div class="mb-4">
                                 <a class="border cursor-pointer rounded-lg px-3 py-1 disabled:bg-slate-200 disabled:pointer-events-none disabled:border-slate-200"
-                                   href="{{ attr(node).href }}">
+                                   [routerLink]="makePath(node)">
                                     {{ label(node) || attr(node).value }}
                                 </a>
                             </div>
@@ -138,6 +140,11 @@ export class FormBuilderComponent implements OnInit {
 
     label(node: UiNode): string | undefined {
         return node.meta?.label?.text
+    }
+
+    makePath(node: UiNode): string {
+        console.log(makeLink(this.attr(node).href))
+        return makeLink(this.attr(node).href)
     }
 
     ngOnInit() {
