@@ -1,46 +1,25 @@
 import {
-    UpdateLoginFlowBody, UpdateRecoveryFlowWithCodeMethod,
+    UpdateLoginFlowBody,
+    UpdateRecoveryFlowWithCodeMethod,
     UpdateRegistrationFlowBody,
     UpdateVerificationFlowWithCodeMethod
 } from '@ory/kratos-client';
-import {UpdateRegistrationFlowWithProfileMethodScreenEnum} from '@ory/kratos-client/api';
 
 
 export function registrationWithOIDC(provider: string): UpdateRegistrationFlowBody {
     return {method: 'oidc', provider};
 }
 
-export function registrationWithPassword(password: string, csrf: string, traits: any): UpdateRegistrationFlowBody {
+export function registrationWithPassword(form: any): UpdateRegistrationFlowBody {
     return {
         method: 'password',
-        password: password,
-        csrf_token: csrf,
+        password: form['password'],
+        csrf_token: form['csrf_token'],
         traits: {
-            email: traits['traits.email'],
+            email: form['traits.email'],
             name: {
-                first: traits['traits.name.first'],
-                last: traits['traits.name.last'],
-            },
-        },
-    };
-}
-
-
-export function registrationWithProfile(
-    // password: string,
-    csrf: string,
-    traits: any,
-    // screen: UpdateRegistrationFlowWithProfileMethodScreenEnum,
-): UpdateRegistrationFlowBody {
-    return {
-        method: 'profile',
-        csrf_token: csrf,
-        // screen: 'credential-selection',
-        traits: {
-            email: traits['traits.email'],
-            name: {
-                first: traits['traits.name.first'],
-                last: traits['traits.name.last'],
+                first: form['traits.name.first'],
+                last: form['traits.name.last'],
             },
         },
     };
@@ -50,16 +29,16 @@ export function loginWithOIDC(provider: string): UpdateLoginFlowBody {
     return {method: "oidc", provider}
 }
 
-export function loginWithPassword(email: string, password: string, csrf: string): UpdateLoginFlowBody {
+export function loginWithPassword(form: any): UpdateLoginFlowBody {
     return {
         method: 'password',
-        password: password,
-        csrf_token: csrf,
-        identifier: email,
+        password: form['password'],
+        csrf_token: form['csrf_token'],
+        identifier: form['identifier'],
     };
 }
 
-export function verificationWithCode(data : any): UpdateVerificationFlowWithCodeMethod {
+export function verificationWithCode(data: any): UpdateVerificationFlowWithCodeMethod {
     return {
         csrf_token: data["csrf_token"],
         code: data["code"],
@@ -67,15 +46,15 @@ export function verificationWithCode(data : any): UpdateVerificationFlowWithCode
     }
 }
 
-export function recoveryWithCode(data : any): UpdateRecoveryFlowWithCodeMethod {
+export function recoveryWithCode(data: any): UpdateRecoveryFlowWithCodeMethod {
     let payload: UpdateRecoveryFlowWithCodeMethod = {
         method: "code",
         csrf_token: data["csrf_token"],
-        email: data["email"]
+        email: data["email"],
     }
 
     if ("code" in data) {
-        payload["code"] = data["code"]
+        payload.code = data["code"]
     }
     return payload
 }
