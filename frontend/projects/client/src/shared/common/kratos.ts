@@ -1,4 +1,4 @@
-import {FlowError, LoginFlow, RecoveryFlow, RegistrationFlow, SettingsFlow} from '@ory/kratos-client';
+import {FlowError, LoginFlow, RecoveryFlow, RegistrationFlow, SettingsFlow, IdentityCredentialsOidcProvider} from '@ory/kratos-client';
 import {UiContainer, UiNodeGroupEnum} from '@ory/kratos-client/api';
 
 export type TFlow = LoginFlow | RegistrationFlow | RecoveryFlow | SettingsFlow | FlowError;
@@ -13,5 +13,6 @@ export type TFlowUI = TFlow & TFlowWithUI;
 // Docs: https://www.ory.sh/docs/kratos/reference/api#tag/frontend/operation/updateRegistrationFlow
 export interface FormBuilderSubmitPayload {
     group: UiNodeGroupEnum,
+    provider: string,
     value: any
 }

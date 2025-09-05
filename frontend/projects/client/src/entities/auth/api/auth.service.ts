@@ -54,7 +54,7 @@ export class AuthService {
         let payload: UpdateLoginFlowBody;
         switch (data.group) {
             case 'oidc':
-                payload = loginWithOIDC(data.value['provider']);
+                payload = loginWithOIDC(data.provider);
                 break;
             case 'password':
                 payload = loginWithPassword(data.value['identifier'], data.value['password'], data.value['csrf_token']);
@@ -78,7 +78,7 @@ export class AuthService {
         switch (data.group) {
             case 'oidc':
                 console.log(data)
-                payload = registrationWithOIDC(data.value['provider']);
+                payload = registrationWithOIDC(data.provider);
                 break;
             case 'password':
                 payload = registrationWithPassword(data.value['password'], data.value['csrf_token'], data.value);

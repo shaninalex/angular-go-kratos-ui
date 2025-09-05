@@ -121,6 +121,7 @@ export class FormBuilderComponent implements OnInit {
     onSubmit(node: UiNode): void {
         this.formSubmit.emit({
             group: node.group,
+            provider: this.attr(node).value,
             value: this.form.value,
         });
     }
