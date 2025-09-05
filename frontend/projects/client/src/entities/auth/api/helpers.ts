@@ -1,6 +1,4 @@
 import {
-    UiNodeAttributes,
-    UiNodeInputAttributes,
     UpdateLoginFlowBody,
     UpdateRecoveryFlowWithCodeMethod,
     UpdateRegistrationFlowBody,
@@ -59,10 +57,4 @@ export function recoveryWithCode(data: any): UpdateRecoveryFlowWithCodeMethod {
         payload.code = data["code"]
     }
     return payload
-}
-
-export function isInputAttributes(
-    attrs: UiNodeAttributes
-): attrs is UiNodeInputAttributes & { node_type: 'input' } {
-    return attrs.node_type === "input";
 }

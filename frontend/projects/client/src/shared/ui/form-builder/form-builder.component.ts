@@ -1,11 +1,12 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilderSubmitPayload, TFlowUI} from '@client/shared/common';
-import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {FormControl, FormGroup, ReactiveFormsModule, Validator, ValidatorFn, Validators} from '@angular/forms';
 import {UiNode, UiNodeInputAttributes} from '@ory/kratos-client';
 import {NgClass} from '@angular/common';
 import {makeLink} from './helpers';
 import {RouterLink} from '@angular/router';
-import {isInputAttributes} from '@client/entities/auth/api/helpers';
+import {isInputAttributes} from '@client/shared/ui';
+import {FormMessagesComponent} from './components/form-messages.component';
 
 @Component({
     selector: 'kr-form-builder',
@@ -13,76 +14,53 @@ import {isInputAttributes} from '@client/entities/auth/api/helpers';
         ReactiveFormsModule,
         NgClass,
         RouterLink,
+        FormMessagesComponent,
     ],
     template: `
         @if (formUI) {
             <form [formGroup]="form">
                 @if (formUI.ui.messages) {
-                    <div class="flex flex-col gap-1 mb-4">
-                        @for (message of formUI.ui.messages; track message.id) {
-                            <div class="text-sm rounded px-2"
-                                 [id]="message.id"
-                                 [ngClass]="{
-                                        'text-red-500 bg-red-50': message.type === 'error',
-                                        'text-lime-500 bg-lime-50': message.type === 'success',
-                                        'text-sky-500 bg-sky-50': message.type === 'info',
-                                    }"
-                            >
-                                {{ message.text }}
-                            </div>
-                        }
+                    <div class="mb-4">
+                        <kr-form-messages [messages]="formUI.ui.messages" />
                     </div>
                 }
                 @for (node of formUI.ui.nodes; track $index) {
                     <ng-container>
                         <!-- Input fields -->
-                        @if (node.type === 'input') {
-                            @if (attr(node).type !== 'hidden' && attr(node).type !== 'submit') {
+                        @if (node.type === 'input' && node.attributes.node_type === "input") {
+                            @if (node.attributes.type !== 'hidden' && node.attributes.type !== 'submit') {
                                 <div class="mb-4">
                                     <label>
                                         {{ label(node) }}
-                                        @if (attr(node).required) {
+                                        @if (node.attributes.required) {
                                             <span class="text-red-500">*</span>
                                         }
                                     </label>
                                     <input
                                         class="mb-1 rounded-lg px-3 py-1 border block w-full border-slate-500 placeholder-slate-500"
-                                        [attr.type]="attr(node).type"
-                                        [formControlName]="attr(node).name"
-                                        [attr.name]="attr(node).name"
-                                        [attr.autocomplete]="attr(node).autocomplete || null"
+                                        [attr.type]="node.attributes.type"
+                                        [formControlName]="node.attributes.name"
+                                        [attr.name]="node.attributes.name"
+                                        [attr.autocomplete]="node.attributes.autocomplete || null"
                                         [attr.placeholder]="label(node)"
                                     />
                                     @if (node.messages) {
-                                        <div class="flex flex-col gap-1">
-                                            @for (message of node.messages; track message.id) {
-                                                <div class="text-sm rounded px-2"
-                                                     [id]="message.id"
-                                                     [ngClass]="{
-                                            'text-red-500 bg-red-50': message.type === 'error',
-                                            'text-lime-500 bg-lime-50': message.type === 'success',
-                                            'text-sky-500 bg-sky-50': message.type === 'info',
-                                        }"
-                                                >
-                                                    {{ message.text }}
-                                                </div>
-                                            }
-                                        </div>
+                                        <kr-form-messages [messages]="node.messages" />
                                     }
                                 </div>
                             }
 
                             <!-- Hidden inputs -->
-                            @if (attr(node).type === 'hidden') {
+                            @if (node.attributes.type === 'hidden' && node.attributes.node_type === "input") {
                                 <input
                                     [attr.type]="'hidden'"
-                                    [formControlName]="attr(node).name"
-                                    [attr.name]="attr(node).name"
+                                    [formControlName]="node.attributes.name"
+                                    [attr.name]="node.attributes.name"
                                 />
                             }
 
                             <!-- Submit buttons -->
-                            @if (attr(node).type === 'submit') {
+                            @if (node.attributes.type === 'submit') {
                                 <div class="mb-4">
                                     <button
                                         type="submit"
@@ -91,20 +69,20 @@ import {isInputAttributes} from '@client/entities/auth/api/helpers';
                                             'bg-red-200 hover:bg-rose-300 border-red-300': node.group === 'oidc',
                                             'bg-green-200 hover:bg-green-300 border-green-300': node.group !== 'oidc'
                                         }"
-                                        [value]="attr(node).value"
                                         (click)="onSubmit(node)"
+                                        [disabled]="isSubmitDisabled(node)"
                                     >
-                                        {{ label(node) || attr(node).value }}
+                                        {{ label(node) || node.attributes.value }}
                                     </button>
                                 </div>
                             }
                         }
 
-                        @if (node.type === 'a') {
+                        @if (node.type === 'a' && node.attributes.node_type === "a") {
                             <div class="mb-4">
                                 <a class="border cursor-pointer rounded-lg px-3 py-1 disabled:bg-slate-200 disabled:pointer-events-none disabled:border-slate-200"
                                    [routerLink]="makePath(node)">
-                                    {{ label(node) || attr(node).value }}
+                                    {{ label(node) }}
                                 </a>
                             </div>
                         }
@@ -119,6 +97,23 @@ export class FormBuilderComponent implements OnInit {
     @Output() formSubmit: EventEmitter<FormBuilderSubmitPayload> = new EventEmitter<FormBuilderSubmitPayload>(); // TODO: create type for submit form payload
     form: FormGroup = new FormGroup({});
 
+    ngOnInit() {
+        if (this.formUI) {
+            const controls: Record<string, FormControl> = {};
+            for (const node of this.formUI.ui.nodes) {
+                if (node.attributes.node_type !== "input") continue
+                if (node.attributes.type === 'submit') continue; // don't add submit buttons to the form
+                if (!controls[node.attributes.name]) {
+                    controls[node.attributes.name] = new FormControl({
+                        value: node.attributes.value || '',
+                        disabled: node.attributes.disabled,
+                    }, this.formControlValidators(node));
+                }
+            }
+            this.form = new FormGroup(controls);
+        }
+    }
+
     onSubmit(node: UiNode): void {
         if (isInputAttributes(node.attributes)) {
             const inputAttrs: UiNodeInputAttributes = node.attributes;
@@ -131,35 +126,40 @@ export class FormBuilderComponent implements OnInit {
         }
     }
 
-    // Yeah, it's ugly...
-    attr(node: UiNode): any {
-        return node.attributes as any
-    }
-
     label(node: UiNode): string | undefined {
-        return node.meta?.label?.text
+        if (node.attributes.node_type === 'a') {
+            return node.attributes.title.text
+        }
+        return node.meta.label?.text
     }
 
     makePath(node: UiNode): string {
-        console.log(makeLink(this.attr(node).href))
-        return makeLink(this.attr(node).href)
+        if (node.attributes.node_type === "a") {
+            return makeLink(node.attributes.href)
+        }
+        return ""
     }
 
-    ngOnInit() {
-        if (this.formUI) {
-            const controls: Record<string, FormControl> = {};
-            for (const node of this.formUI.ui.nodes) {
-                const attr = this.attr(node);
-                if (attr.type === 'submit') continue; // don't add submit buttons to the form
+    isSubmitDisabled(node: UiNode): boolean {
+        const { attributes } = node;
 
-                if (!controls[attr.name]) {
-                    controls[attr.name] = new FormControl({
-                        value: attr.value || '',
-                        disabled: attr.disabled,
-                    });
-                }
-            }
-            this.form = new FormGroup(controls);
+        if (attributes.node_type !== "input" || attributes.name !== "method") {
+            return false;
         }
+
+        return Object.values(this.form.controls).some(control => !!control.errors);
+    }
+
+    private formControlValidators(node: UiNode): ValidatorFn[] {
+        let validatorsList: ValidatorFn[] = []
+        if (node.attributes.node_type === "input") {
+            if (node.attributes.name === "identifier" || node.attributes.type === "email") {
+                validatorsList.push(Validators.email)
+            }
+            if (node.attributes.required) {
+                validatorsList.push(Validators.required)
+            }
+        }
+        return validatorsList
     }
 }
