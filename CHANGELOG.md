@@ -1,3 +1,16 @@
+## 0.2.1 (2025-09-05)
+
+### Fix
+
+- remove profile type registration #40
+- oidc authentication #35
+- tag a with routerLink attribute instead of html href #36
+
+### Refactor
+
+- remove ugly methods + detect types + form messages  #46
+- update form builder type + comment about resend #41
+
 ## 0.2.0 (2025-09-04)
 
 ### Feat
