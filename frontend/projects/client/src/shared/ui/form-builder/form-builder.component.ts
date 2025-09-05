@@ -1,10 +1,11 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
 import {FormBuilderSubmitPayload, TFlowUI} from '@client/shared/common';
 import {FormControl, FormGroup, ReactiveFormsModule} from '@angular/forms';
-import {UiNode} from '@ory/kratos-client';
+import {UiNode, UiNodeInputAttributes} from '@ory/kratos-client';
 import {NgClass} from '@angular/common';
 import {makeLink} from './helpers';
 import {RouterLink} from '@angular/router';
+import {isInputAttributes} from '@client/entities/auth/api/helpers';
 
 @Component({
     selector: 'kr-form-builder',
@@ -119,19 +120,15 @@ export class FormBuilderComponent implements OnInit {
     form: FormGroup = new FormGroup({});
 
     onSubmit(node: UiNode): void {
-        this.formSubmit.emit({
-            group: node.group,
-            provider: this.attr(node).value,
-            value: this.form.value,
-        });
-    }
-
-    isSubmitDisabled(node: UiNode): boolean {
-        // attr(node).disabled || !form.valid
-        if (node.group === 'password') {
-            return !this.form.valid
+        if (isInputAttributes(node.attributes)) {
+            const inputAttrs: UiNodeInputAttributes = node.attributes;
+            this.formSubmit.emit({
+                group: node.group,
+                action: inputAttrs.name,
+                value: inputAttrs.value,
+                form: this.form.value,
+            });
         }
-        return false
     }
 
     // Yeah, it's ugly...
