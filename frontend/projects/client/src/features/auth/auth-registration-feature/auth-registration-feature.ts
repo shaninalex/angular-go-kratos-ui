@@ -12,7 +12,7 @@ import {HttpParams} from '@angular/common/http';
     template: `
         @if (ready) {
             <kr-form-builder
-                [formUI]="form"
+                [formUI]="form.ui"
                 (formSubmit)="onFormSubmit($event)"
             />
         } @else {

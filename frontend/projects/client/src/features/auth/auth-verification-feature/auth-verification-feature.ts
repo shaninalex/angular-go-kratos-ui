@@ -14,7 +14,7 @@ import {AuthService} from '@client/entities/auth';
     template: `
         @if (ready) {
             <kr-form-builder
-                [formUI]="form"
+                [formUI]="form.ui"
                 (formSubmit)="onFormSubmit($event)"
             />
         } @else {
@@ -24,7 +24,7 @@ import {AuthService} from '@client/entities/auth';
 })
 export class AuthVerificationFeature {
     @Input() form!: VerificationFlow;
-    api = inject(AuthService)
+    api = inject(AuthService);
     router = inject(Router);
     ready = true; // force rerender completely form-builder component
 

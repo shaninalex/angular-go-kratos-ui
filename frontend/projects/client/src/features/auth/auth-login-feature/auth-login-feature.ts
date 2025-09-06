@@ -10,7 +10,7 @@ import {Router} from '@angular/router';
     imports: [FormBuilderComponent],
     template: `
         <kr-form-builder
-            [formUI]="form"
+            [formUI]="form.ui"
             (formSubmit)="onFormSubmit($event)"/>
     `
 })

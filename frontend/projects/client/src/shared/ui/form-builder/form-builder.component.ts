@@ -1,12 +1,13 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilderSubmitPayload, TFlowUI} from '@client/shared/common';
-import {FormControl, FormGroup, ReactiveFormsModule, Validator, ValidatorFn, Validators} from '@angular/forms';
+import {FormBuilderSubmitPayload} from '@client/shared/common';
+import {FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators} from '@angular/forms';
 import {UiNode, UiNodeInputAttributes} from '@ory/kratos-client';
-import {NgClass} from '@angular/common';
-import {makeLink} from './helpers';
+import {JsonPipe, NgClass} from '@angular/common';
+import {makeLink} from '@client/shared/common';
 import {RouterLink} from '@angular/router';
 import {isInputAttributes} from '@client/shared/ui';
 import {FormMessagesComponent} from './components/form-messages.component';
+import {UiContainer} from '@ory/kratos-client/api';
 
 @Component({
     selector: 'kr-form-builder',
@@ -19,12 +20,12 @@ import {FormMessagesComponent} from './components/form-messages.component';
     template: `
         @if (formUI) {
             <form [formGroup]="form">
-                @if (formUI.ui.messages) {
+                @if (formUI.messages) {
                     <div class="mb-4">
-                        <kr-form-messages [messages]="formUI.ui.messages" />
+                        <kr-form-messages [messages]="formUI.messages"/>
                     </div>
                 }
-                @for (node of formUI.ui.nodes; track $index) {
+                @for (node of formUI.nodes; track $index) {
                     <ng-container>
                         <!-- Input fields -->
                         @if (node.type === 'input' && node.attributes.node_type === "input") {
@@ -45,7 +46,7 @@ import {FormMessagesComponent} from './components/form-messages.component';
                                         [attr.placeholder]="label(node)"
                                     />
                                     @if (node.messages) {
-                                        <kr-form-messages [messages]="node.messages" />
+                                        <kr-form-messages [messages]="node.messages"/>
                                     }
                                 </div>
                             }
@@ -86,6 +87,31 @@ import {FormMessagesComponent} from './components/form-messages.component';
                                 </a>
                             </div>
                         }
+
+
+                        @if (node.type === 'img' && node.attributes.node_type === "img") {
+                            <div class="mb-4">
+                                <label>
+                                    {{ label(node) }}
+                                </label>
+                                <img class="img-fluid"
+                                     [id]="node.attributes.id"
+                                     [width]="node.attributes.width"
+                                     [height]="node.attributes.height"
+                                     [src]="node.attributes.src"/>
+                            </div>
+                        }
+
+                        @if (node.type === 'text' && node.attributes.node_type === "text") {
+                            <div class="mb-4">
+                                <p>
+                                    {{ node.meta.label?.text }}
+                                </p>
+                                <code class="block p-2 rounded bg-slate-200">
+                                    {{ node.attributes.text.text }}
+                                </code>
+                            </div>
+                        }
                     </ng-container>
                 }
             </form>
@@ -93,14 +119,14 @@ import {FormMessagesComponent} from './components/form-messages.component';
     `
 })
 export class FormBuilderComponent implements OnInit {
-    @Input() formUI!: TFlowUI;
+    @Input() formUI!: UiContainer;
     @Output() formSubmit: EventEmitter<FormBuilderSubmitPayload> = new EventEmitter<FormBuilderSubmitPayload>(); // TODO: create type for submit form payload
     form: FormGroup = new FormGroup({});
 
     ngOnInit() {
         if (this.formUI) {
             const controls: Record<string, FormControl> = {};
-            for (const node of this.formUI.ui.nodes) {
+            for (const node of this.formUI.nodes) {
                 if (node.attributes.node_type !== "input") continue
                 if (node.attributes.type === 'submit') continue; // don't add submit buttons to the form
                 if (!controls[node.attributes.name]) {

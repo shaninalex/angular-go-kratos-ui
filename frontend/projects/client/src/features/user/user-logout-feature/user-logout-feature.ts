@@ -2,7 +2,7 @@ import {Component, inject} from '@angular/core';
 import {AuthService} from '@client/entities/auth';
 
 @Component({
-    selector: 'kr-auth-logout-feature',
+    selector: 'kr-user-logout-feature',
     imports: [],
     template: `
         <button class="underline cursor-pointer" (click)="logoutAction()">
@@ -17,7 +17,7 @@ import {AuthService} from '@client/entities/auth';
         }
     `,
 })
-export class AuthLogoutFeature {
+export class UserLogoutFeature {
     private api = inject(AuthService);
     loading: boolean = false
     error: string | undefined = undefined
