@@ -1,3 +1,9 @@
+## 0.4.0 (2025-09-06)
+
+### Feat
+
+- AAL2 form, NGRX, refactoring, Guards, provideAppInitializer #57
+
 ## 0.3.0 (2025-09-06)
 
 ### Feat
