@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {
     LoginFlow, LogoutFlow, RecoveryFlow,
-    RegistrationFlow, SettingsFlow, SuccessfulNativeLogin, SuccessfulNativeRegistration,
+    RegistrationFlow, Session, SettingsFlow, SuccessfulNativeLogin, SuccessfulNativeRegistration,
     UpdateLoginFlowBody,
     VerificationFlow
 } from '@ory/kratos-client';
@@ -18,7 +18,6 @@ import {
 } from './helpers';
 
 import {environment} from '@client/environments/environment.development';
-import {SettingsPage} from '@client/pages/primary/settings-page/settings-page';
 
 // Docs:
 // https://www.ory.sh/docs/kratos/reference/api
@@ -28,6 +27,10 @@ import {SettingsPage} from '@client/pages/primary/settings-page/settings-page';
 })
 export class AuthService {
     http = inject(HttpClient);
+
+    session(): Observable<Session> {
+        return this.http.get<Session>(`${environment.KRATOS_ROOT}/sessions/whoami`, {withCredentials: true})
+    }
 
     loginFlow(): Observable<LoginFlow> {
         return this.http.get<LoginFlow>(`${environment.KRATOS_ROOT}/self-service/login/browser`, {withCredentials: true})
