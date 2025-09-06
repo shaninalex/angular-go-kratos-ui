@@ -1,8 +1,8 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import {FormBuilderSubmitPayload, TFlowUI} from '@client/shared/common';
-import {FormControl, FormGroup, ReactiveFormsModule, Validator, ValidatorFn, Validators} from '@angular/forms';
+import {FormBuilderSubmitPayload} from '@client/shared/common';
+import {FormControl, FormGroup, ReactiveFormsModule, ValidatorFn, Validators} from '@angular/forms';
 import {UiNode, UiNodeInputAttributes} from '@ory/kratos-client';
-import {NgClass} from '@angular/common';
+import {JsonPipe, NgClass} from '@angular/common';
 import {makeLink} from '@client/shared/common';
 import {RouterLink} from '@angular/router';
 import {isInputAttributes} from '@client/shared/ui';

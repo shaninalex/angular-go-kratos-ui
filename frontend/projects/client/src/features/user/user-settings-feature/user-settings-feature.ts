@@ -1,5 +1,5 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
-import {FormBuilderComponent} from '@client/shared/ui';
+import {ChangeDetectorRef, Component, inject, Input, OnInit} from '@angular/core';
+import {FormBuilderComponent, FormMessagesComponent} from '@client/shared/ui';
 import {SettingsFlow, UiNode} from '@ory/kratos-client';
 import {Router} from '@angular/router';
 import {FormBuilderSubmitPayload, makeLink} from '@client/shared/common';
@@ -11,16 +11,34 @@ import {UserService} from '@client/entities/user';
     selector: 'kr-user-settings-feature',
     imports: [
         FormBuilderComponent,
-        NgClass
+        NgClass,
+        FormMessagesComponent
     ],
     template: `
-        @if (ready) {
+        @if (form) {
             <div class="flex gap-2 mb-4">
-                <div class="cursor-pointer" [ngClass]="{'underline': active_tab === 'profile'}" (click)="active_tab = 'profile'">Profile</div>
-                <div class="cursor-pointer" [ngClass]="{'underline': active_tab === 'password'}" (click)="active_tab = 'password'">Password</div>
-                <div class="cursor-pointer" [ngClass]="{'underline': active_tab === 'lookup_secret'}" (click)="active_tab = 'lookup_secret'">Lookup secret</div>
-                <div class="cursor-pointer" [ngClass]="{'underline': active_tab === 'totp'}" (click)="active_tab = 'totp'">TOTP</div>
+                <div class="cursor-pointer" [ngClass]="{'underline': active_tab === 'profile'}"
+                     (click)="setTab('profile')">Profile
+                </div>
+                <div class="cursor-pointer" [ngClass]="{'underline': active_tab === 'password'}"
+                     (click)="setTab('password')">Password
+                </div>
+                <div class="cursor-pointer" [ngClass]="{'underline': active_tab === 'lookup_secret'}"
+                     (click)="setTab('lookup_secret')">Lookup secret
+                </div>
+                <div class="cursor-pointer" [ngClass]="{'underline': active_tab === 'totp'}"
+                     (click)="setTab('totp')">TOTP
+                </div>
+                <div class="cursor-pointer" [ngClass]="{'underline': active_tab === 'oidc'}"
+                     (click)="setTab('oidc')">Social Accounts
+                </div>
             </div>
+
+            @if (form.ui.messages) {
+                <div class="mb-4">
+                    <kr-form-messages [messages]="form.ui.messages"/>
+                </div>
+            }
 
             @switch (active_tab) {
                 @case ('profile') {
@@ -47,6 +65,12 @@ import {UserService} from '@client/entities/user';
                         (formSubmit)="onFormSubmit($event)"
                     />
                 }
+                @case ('oidc') {
+                    <kr-form-builder
+                        [formUI]="oidc_group"
+                        (formSubmit)="onFormSubmit($event)"
+                    />
+                }
             }
         } @else {
             loading...
@@ -54,65 +78,89 @@ import {UserService} from '@client/entities/user';
     `,
 })
 export class UserSettingsFeature implements OnInit {
-    @Input() form!: SettingsFlow;
-    api = inject(UserService);
-    router = inject(Router);
-    ready = true; // force rerender completely form-builder component
-    active_tab: UiNodeGroupEnum = "profile";
+    @Input() form: SettingsFlow;
+    private api = inject(UserService);
+    private router = inject(Router);
 
-    profile_group: UiContainer
-    password_group: UiContainer
-    lookup_secret_group: UiContainer
-    totp_group: UiContainer
+    active_tab: UiNodeGroupEnum = 'profile';
+
+    profile_group!: UiContainer;
+    password_group!: UiContainer;
+    lookup_secret_group!: UiContainer;
+    totp_group!: UiContainer;
+    oidc_group!: UiContainer;
+
+    ngOnInit() {
+        this.buildGroups(this.form);
+    }
+
+    setTab(tab: UiNodeGroupEnum) {
+        this.active_tab = tab;
+        localStorage.setItem('settings_tab', tab);
+    }
 
     onFormSubmit(data: FormBuilderSubmitPayload): void {
-        this.ready = false; // force rerender completely form-builder component
         this.api.submitSettingsForm(this.form.id, data).subscribe({
             next: resp => {
-                this.form = resp
                 if (resp.continue_with) {
-                    for (let action of resp.continue_with) {
-                        if (action.action === "show_verification_ui" && action.flow.url) {
-                            this.router.navigateByUrl(makeLink(action.flow.url))
-                            return
+                    for (const action of resp.continue_with) {
+                        if (action.action === 'show_verification_ui' && action.flow.url) {
+                            this.router.navigateByUrl(makeLink(action.flow.url));
+                            return;
                         }
-                        if (action.action === "redirect_browser_to") {
-                            this.router.navigateByUrl(makeLink(action.redirect_browser_to))
-                            return
+                        if (action.action === 'redirect_browser_to') {
+                            this.router.navigateByUrl(makeLink(action.redirect_browser_to));
+                            return;
                         }
                     }
                 }
+                this.updateForm(resp);
             },
-            error: (err) => {
+            error: err => {
                 if (err.error?.redirect_browser_to) {
                     window.location.href = err.error.redirect_browser_to;
-                } else {
-                    this.form = err.error;
+                } else if (err.error) {
+                    this.updateForm(err.error);
                 }
-            },
-            complete: () => {
-                this.ready = true
             }
-        })
+        });
     }
 
-    ngOnInit() {
+    private updateForm(newForm: SettingsFlow) {
+        this.form = {...newForm};
+        this.buildGroups(this.form);
+    }
+
+    private buildGroups(form: SettingsFlow) {
         this.profile_group = {
-            action: this.form.ui.action, method: "POST",
-            nodes: this.form.ui.nodes.filter((node:UiNode) => node.group === "profile" || node.group === "default")
+            action: form.ui.action,
+            method: 'POST',
+            nodes: this.filterNodes(form.ui.nodes, ['profile', 'default']),
         };
         this.password_group = {
-            action: this.form.ui.action, method: "POST",
-            nodes: this.form.ui.nodes.filter((node:UiNode) => node.group === "password" || node.group === "default")
+            action: form.ui.action,
+            method: 'POST',
+            nodes: this.filterNodes(form.ui.nodes, ['password', 'default']),
         };
         this.lookup_secret_group = {
-            action: this.form.ui.action, method: "POST",
-            nodes: this.form.ui.nodes.filter((node:UiNode) => node.group === "lookup_secret" || node.group === "default")
+            action: form.ui.action,
+            method: 'POST',
+            nodes: this.filterNodes(form.ui.nodes, ['lookup_secret', 'default']),
         };
         this.totp_group = {
-            action: this.form.ui.action, method: "POST",
-            nodes: this.form.ui.nodes.filter((node:UiNode) => node.group === "totp" || node.group === "default")
+            action: form.ui.action,
+            method: 'POST',
+            nodes: this.filterNodes(form.ui.nodes, ['totp', 'default']),
         };
+        this.oidc_group = {
+            action: form.ui.action,
+            method: 'POST',
+            nodes: this.filterNodes(form.ui.nodes, ['oidc', 'default']),
+        };
+    }
+
+    private filterNodes(nodes: UiNode[], groups: string[]): UiNode[] {
+        return nodes.filter(node => groups.includes(node.group as string));
     }
 }
 

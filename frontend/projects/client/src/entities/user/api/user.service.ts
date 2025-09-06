@@ -4,7 +4,12 @@ import {SettingsFlow} from '@ory/kratos-client';
 import {environment} from '@client/environments/environment.development';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {FormBuilderSubmitPayload} from '@client/shared/common';
-import {toPasswordPayload, toProfilePayload, toTOTPPayload} from '@client/entities/user/api/helpers';
+import {
+    toLookupSecretPayload, toOIDCPayload,
+    toPasswordPayload,
+    toProfilePayload,
+    toTOTPPayload
+} from '@client/entities/user/api/helpers';
 
 @Injectable()
 export class UserService {
@@ -32,10 +37,13 @@ export class UserService {
                 payload = toPasswordPayload(data.form)
                 break
             case 'lookup_secret':
-                throw new Error(`not implemented`);
+                payload = toLookupSecretPayload(data)
                 break
             case 'totp':
                 payload = toTOTPPayload(data.form)
+                break
+            case 'oidc':
+                payload = toOIDCPayload(flowID, data)
                 break
             default:
                 throw new Error(`Unsupported method: ${data.group}`);

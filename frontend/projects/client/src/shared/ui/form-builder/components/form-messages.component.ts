@@ -10,11 +10,11 @@ import {UiText} from '@ory/kratos-client/api';
     template: `
         <div class="flex flex-col gap-1">
             @for (message of messages; track message.id) {
-                <div class="text-sm rounded px-2"
+                <div class="text-sm rounded py-2 px-4"
                      [id]="message.id"
                      [ngClass]="{
                                             'text-red-500 bg-red-50': message.type === 'error',
-                                            'text-lime-500 bg-lime-50': message.type === 'success',
+                                            'text-green-500 bg-green-50': message.type === 'success',
                                             'text-sky-500 bg-sky-50': message.type === 'info',
                                         }"
                 >
