@@ -13,7 +13,7 @@ import {FormBuilderSubmitPayload} from '@client/shared/common';
     template: `
         @if (ready) {
             <kr-form-builder
-                [formUI]="form"
+                [formUI]="form.ui"
                 (formSubmit)="onFormSubmit($event)"
             />
         } @else {

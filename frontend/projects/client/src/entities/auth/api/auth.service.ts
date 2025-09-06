@@ -3,7 +3,7 @@ import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {
     LoginFlow, LogoutFlow, RecoveryFlow,
-    RegistrationFlow, SuccessfulNativeLogin, SuccessfulNativeRegistration,
+    RegistrationFlow, SettingsFlow, SuccessfulNativeLogin, SuccessfulNativeRegistration,
     UpdateLoginFlowBody,
     VerificationFlow
 } from '@ory/kratos-client';
@@ -18,6 +18,7 @@ import {
 } from './helpers';
 
 import {environment} from '@client/environments/environment.development';
+import {SettingsPage} from '@client/pages/primary/settings-page/settings-page';
 
 // Docs:
 // https://www.ory.sh/docs/kratos/reference/api

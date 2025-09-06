@@ -1,5 +1,4 @@
 export * from './auth-login-feature'
-export * from './auth-logout-feature'
 export * from './auth-recovery-feature'
 export * from './auth-registration-feature'
 export * from './auth-verification-feature'
