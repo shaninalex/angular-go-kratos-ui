@@ -5,21 +5,17 @@ import {inject} from '@angular/core';
 import {AuthService, SetSessionAction} from '@client/entities/auth';
 import {Store} from '@ngrx/store';
 import {AppState} from '@client/shared/common';
-import {Router} from '@angular/router';
+import {HttpErrorResponse} from '@angular/common/http';
 
 export function appInit(): Observable<Session | null> {
     const api = inject(AuthService);
     const store = inject(Store<AppState>);
-    const router = inject(Router);
-
-    console.log('Init application');
-
-    // skip init if on auth pages
-    const url = router.url;
+    const url = location.href
     if (
-        url.startsWith('/auth/login') ||
-        url.startsWith('/auth/registration') ||
-        url.startsWith('/auth/recovery')
+        url.includes('/auth/login') ||
+        url.includes('/auth/registration') ||
+        url.includes('/auth/verification') ||
+        url.includes('/auth/recovery')
     ) {
         return of(null);
     }
@@ -28,12 +24,11 @@ export function appInit(): Observable<Session | null> {
     return api.session().pipe(
         map((session: Session) => {
             if (session) {
-                store.dispatch(SetSessionAction({ session }));
+                store.dispatch(SetSessionAction({session}));
             }
             return session;
         }),
-        catchError(() => {
-            // no session → stay null, don’t redirect here
+        catchError((err: HttpErrorResponse) => {
             return of(null);
         })
     );

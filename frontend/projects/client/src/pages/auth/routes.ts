@@ -2,7 +2,6 @@ import {Routes} from '@angular/router';
 import {Login} from './login/login';
 import {Registration} from './registration/registration';
 import {Verification} from './verification/verification';
-import {loginFlowResolver} from './login/login.resolver';
 import {registrationFlowResolver} from './registration/registration.resolver';
 import {Recovery} from './recovery/recovery';
 import {recoveryFlowResolver} from '@client/pages/auth/recovery/recovery.resolver';
@@ -10,7 +9,6 @@ import {recoveryFlowResolver} from '@client/pages/auth/recovery/recovery.resolve
 export const authRoutes: Routes = [
     {
         path: "auth/login",
-        resolve: {form: loginFlowResolver},
         component: Login,
     },
     {

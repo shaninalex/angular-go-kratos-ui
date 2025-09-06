@@ -39,7 +39,7 @@ export class AuthRecoveryFeature {
                 this.ready = true;
             },
             error: (err) => {
-                if (err.error?.redirect_browser_to) {
+                if (err.error.error.id === "browser_location_change_required") {
                     window.location.href = err.error.redirect_browser_to;
                 } else {
                     this.form = err.error;

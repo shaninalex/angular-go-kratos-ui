@@ -1,14 +1,10 @@
 import {
-    UpdateLoginFlowBody,
+    UpdateLoginFlowBody, UpdateLoginFlowWithTotpMethod,
     UpdateRecoveryFlowWithCodeMethod,
     UpdateRegistrationFlowBody,
     UpdateVerificationFlowWithCodeMethod
 } from '@ory/kratos-client';
 
-
-export function registrationWithOIDC(provider: string): UpdateRegistrationFlowBody {
-    return {method: 'oidc', provider};
-}
 
 export function registrationWithPassword(form: any): UpdateRegistrationFlowBody {
     return {
@@ -23,10 +19,6 @@ export function registrationWithPassword(form: any): UpdateRegistrationFlowBody 
             },
         },
     };
-}
-
-export function loginWithOIDC(provider: string): UpdateLoginFlowBody {
-    return {method: "oidc", provider}
 }
 
 export function loginWithPassword(form: any): UpdateLoginFlowBody {

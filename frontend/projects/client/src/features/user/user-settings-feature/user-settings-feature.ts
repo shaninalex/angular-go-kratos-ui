@@ -107,22 +107,22 @@ export class UserSettingsFeature implements OnInit {
         this.api.submitSettingsForm(this.form.id, data).subscribe({
             next: resp => {
                 if (resp.continue_with) {
-                    for (const action of resp.continue_with) {
-                        if (action.action === 'show_verification_ui' && action.flow.url) {
-                            this.router.navigateByUrl(makeLink(action.flow.url));
-                            return;
-                        }
-                        if (action.action === 'redirect_browser_to') {
-                            this.router.navigateByUrl(makeLink(action.redirect_browser_to));
-                            return;
-                        }
-                    }
+                    // for (const action of resp.continue_with) {
+                    //     if (action.action === 'show_verification_ui' && action.flow.url) {
+                    //         this.router.navigateByUrl(makeLink(action.flow.url));
+                    //         return;
+                    //     }
+                    //     if (action.action === 'redirect_browser_to') {
+                    //         this.router.navigateByUrl(makeLink(action.redirect_browser_to));
+                    //         return;
+                    //     }
+                    // }
                 }
                 this.updateForm(resp);
             },
             error: err => {
                 if (err.error?.redirect_browser_to) {
-                    window.location.href = err.error.redirect_browser_to;
+                    // window.location.href = err.error.redirect_browser_to;
                 } else if (err.error) {
                     this.updateForm(err.error);
                 }

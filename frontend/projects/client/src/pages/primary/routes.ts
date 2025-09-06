@@ -1,7 +1,7 @@
 import {Routes} from '@angular/router';
 import {PrimaryRoot} from './primary-root';
 import {SettingsPage} from './settings-page/settings-page';
-import {CanMatchPrimarySection} from '@client/entities/user'
+import {CanMatchPrimarySection} from '@client/pages/primary/guard';
 
 export const primaryRoutes: Routes = [
     {
