@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, inject, Input, OnInit} from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
 import {FormBuilderComponent, FormMessagesComponent} from '@client/shared/ui';
 import {SettingsFlow, UiNode} from '@ory/kratos-client';
 import {Router} from '@angular/router';
@@ -12,26 +12,26 @@ import {UserService} from '@client/entities/user';
     imports: [
         FormBuilderComponent,
         NgClass,
-        FormMessagesComponent
+        FormMessagesComponent,
     ],
     template: `
         @if (form) {
-            <div class="flex gap-2 mb-4">
-                <div class="cursor-pointer" [ngClass]="{'underline': active_tab === 'profile'}"
-                     (click)="setTab('profile')">Profile
-                </div>
-                <div class="cursor-pointer" [ngClass]="{'underline': active_tab === 'password'}"
-                     (click)="setTab('password')">Password
-                </div>
-                <div class="cursor-pointer" [ngClass]="{'underline': active_tab === 'lookup_secret'}"
-                     (click)="setTab('lookup_secret')">Lookup secret
-                </div>
-                <div class="cursor-pointer" [ngClass]="{'underline': active_tab === 'totp'}"
-                     (click)="setTab('totp')">TOTP
-                </div>
-                <div class="cursor-pointer" [ngClass]="{'underline': active_tab === 'oidc'}"
-                     (click)="setTab('oidc')">Social Accounts
-                </div>
+            <div class="flex gap-4 mb-4">
+                <button class="cursor-pointer text-sm" [ngClass]="{'underline': active_tab === 'profile'}"
+                        (click)="setTab('profile')">Profile
+                </button>
+                <button class="cursor-pointer text-sm" [ngClass]="{'underline': active_tab === 'password'}"
+                        (click)="setTab('password')">Password
+                </button>
+                <button class="cursor-pointer text-sm" [ngClass]="{'underline': active_tab === 'lookup_secret'}"
+                        (click)="setTab('lookup_secret')">Lookup secret
+                </button>
+                <button class="cursor-pointer text-sm" [ngClass]="{'underline': active_tab === 'totp'}"
+                        (click)="setTab('totp')">TOTP
+                </button>
+                <button class="cursor-pointer text-sm" [ngClass]="{'underline': active_tab === 'oidc'}"
+                        (click)="setTab('oidc')">Social Accounts
+                </button>
             </div>
 
             @if (form.ui.messages) {
@@ -66,10 +66,14 @@ import {UserService} from '@client/entities/user';
                     />
                 }
                 @case ('oidc') {
-                    <kr-form-builder
-                        [formUI]="oidc_group"
-                        (formSubmit)="onFormSubmit($event)"
-                    />
+                    @if (oidc_group.nodes.length > 1) {
+                        <kr-form-builder
+                            [formUI]="oidc_group"
+                            (formSubmit)="onFormSubmit($event)"
+                        />
+                    } @else {
+                        <div class="bg-slate-100 p-2 text-small">Now social accounts linked</div>
+                    }
                 }
             }
         } @else {
@@ -82,7 +86,7 @@ export class UserSettingsFeature implements OnInit {
     private api = inject(UserService);
     private router = inject(Router);
 
-    active_tab: UiNodeGroupEnum = 'profile';
+    active_tab: UiNodeGroupEnum = 'profile'; // TODO: read value from localstorage or on "profile" tab
 
     profile_group!: UiContainer;
     password_group!: UiContainer;
