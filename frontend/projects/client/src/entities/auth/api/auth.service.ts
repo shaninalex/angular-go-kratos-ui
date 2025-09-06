@@ -2,23 +2,25 @@ import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from '@angular/common/http';
 import {Observable} from 'rxjs';
 import {
-    LoginFlow, LogoutFlow, RecoveryFlow,
-    RegistrationFlow, SettingsFlow, SuccessfulNativeLogin, SuccessfulNativeRegistration,
+    LoginFlow,
+    LogoutFlow,
+    RecoveryFlow,
+    RegistrationFlow,
+    Session,
+    SuccessfulNativeLogin,
+    SuccessfulNativeRegistration,
     UpdateLoginFlowBody,
     VerificationFlow
 } from '@ory/kratos-client';
 import {FormBuilderSubmitPayload} from '@client/shared/common';
 import {
-    loginWithOIDC,
     loginWithPassword,
     recoveryWithCode,
-    registrationWithOIDC,
     registrationWithPassword,
     verificationWithCode
 } from './helpers';
 
 import {environment} from '@client/environments/environment.development';
-import {SettingsPage} from '@client/pages/primary/settings-page/settings-page';
 
 // Docs:
 // https://www.ory.sh/docs/kratos/reference/api
@@ -29,8 +31,19 @@ import {SettingsPage} from '@client/pages/primary/settings-page/settings-page';
 export class AuthService {
     http = inject(HttpClient);
 
-    loginFlow(): Observable<LoginFlow> {
-        return this.http.get<LoginFlow>(`${environment.KRATOS_ROOT}/self-service/login/browser`, {withCredentials: true})
+    session(): Observable<Session> {
+        return this.http.get<Session>(`${environment.KRATOS_ROOT}/sessions/whoami`, {withCredentials: true})
+    }
+
+    loginFlow(aal: string | null): Observable<LoginFlow> {
+        let params = new HttpParams()
+        if (aal) {
+            params = params.append("aal", aal)
+        }
+        return this.http.get<LoginFlow>(`${environment.KRATOS_ROOT}/self-service/login/browser`, {
+            params,
+            withCredentials: true
+        })
     }
 
     registrationFlow(): Observable<RegistrationFlow> {
@@ -43,22 +56,28 @@ export class AuthService {
 
     verificationFlow(flowID: string): Observable<VerificationFlow> {
         const p = new HttpParams().set("id", flowID)
-        return this.http.get<VerificationFlow>(`${environment.KRATOS_ROOT}/self-service/verification/flows`, {params: p, withCredentials: true})
+        return this.http.get<VerificationFlow>(`${environment.KRATOS_ROOT}/self-service/verification/flows`, {
+            params: p,
+            withCredentials: true
+        })
     }
 
     logoutFlow(): Observable<LogoutFlow> {
         return this.http.get<LogoutFlow>(`${environment.KRATOS_ROOT}/self-service/logout/browser`, {withCredentials: true})
     }
 
-    submitLoginFlow(flowID: string, data: FormBuilderSubmitPayload): Observable<LoginFlow|SuccessfulNativeLogin> {
+    submitLoginFlow(flowID: string, data: FormBuilderSubmitPayload): Observable<LoginFlow | SuccessfulNativeLogin> {
         let payload: UpdateLoginFlowBody;
         switch (data.group) {
             case 'oidc':
-                payload = loginWithOIDC(data.value); // data.value contains OIDC provider
+                payload = {method: "oidc", provider: data.value}; // data.value contains OIDC provider
                 break;
             case 'password':
                 payload = loginWithPassword(data.form);
                 break;
+            case 'totp':
+                payload = {method: 'totp', csrf_token: data.form['csrf_token'], totp_code: data.form['totp_code']}
+                break
             default:
                 throw new Error(`Unsupported method: ${data.action}`);
         }
@@ -73,11 +92,11 @@ export class AuthService {
         )
     }
 
-    submitRegistrationFlow(flowID: string, data: FormBuilderSubmitPayload): Observable<RegistrationFlow|SuccessfulNativeRegistration> {
+    submitRegistrationFlow(flowID: string, data: FormBuilderSubmitPayload): Observable<RegistrationFlow | SuccessfulNativeRegistration> {
         let payload: any;
         switch (data.group) {
             case 'oidc':
-                payload = registrationWithOIDC(data.value); // data.value contains OIDC provider
+                payload = {method: "oidc", provider: data.value}; // data.value contains OIDC provider
                 break;
             case 'password':
                 payload = registrationWithPassword(data.form);
@@ -86,7 +105,7 @@ export class AuthService {
                 throw new Error(`Unsupported method: ${data.action}`);
         }
         const p = new HttpParams().set("flow", flowID)
-        return this.http.post<RegistrationFlow|SuccessfulNativeRegistration>(
+        return this.http.post<RegistrationFlow | SuccessfulNativeRegistration>(
             `${environment.KRATOS_ROOT}/self-service/registration`,
             payload,
             {

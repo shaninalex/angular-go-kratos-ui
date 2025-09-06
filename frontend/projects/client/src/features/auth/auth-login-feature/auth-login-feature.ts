@@ -1,9 +1,10 @@
 import {Component, inject, Input} from '@angular/core';
 import {FormBuilderComponent} from '@client/shared/ui';
 import {LoginFlow} from '@ory/kratos-client';
-import {AuthService} from '@client/entities/auth';
-import {FormBuilderSubmitPayload} from '@client/shared/common';
+import {AuthService, SetSessionAction} from '@client/entities/auth';
+import {AppState, FormBuilderSubmitPayload} from '@client/shared/common';
 import {Router} from '@angular/router';
+import {Store} from '@ngrx/store';
 
 @Component({
     selector: 'kr-auth-login-feature',
@@ -16,18 +17,16 @@ import {Router} from '@angular/router';
 })
 export class AuthLoginFeature {
     @Input() form!: LoginFlow;
-    router = inject(Router)
+    private router = inject(Router)
+    private store = inject(Store<AppState>)
     private api = inject(AuthService);
 
     onFormSubmit(data: FormBuilderSubmitPayload): void {
         this.api.submitLoginFlow(this.form.id, data).subscribe({
             next: (res) => {
-                if ('continue_with' in res) {
-                    const items = res.continue_with?.filter(item => item.action === "redirect_browser_to")
-                    if (items && items.length > 0) {
-                        const url = new URL(items[0].redirect_browser_to as string)
-                        this.router.navigate([url.pathname], {queryParams: {flow: url.searchParams.get("flow")}})
-                    }
+                if ("session" in res) {
+                    this.store.dispatch(SetSessionAction({ session: res.session }))
+                    this.router.navigate(['/'])
                 }
             },
             error: (err) => {
