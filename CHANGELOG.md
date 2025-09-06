@@ -1,3 +1,14 @@
+## 0.3.0 (2025-09-06)
+
+### Feat
+
+- submitting forms + render oidc #52
+- render settings form #52
+
+### Fix
+
+- proper redirection from auth pages #37
+
 ## 0.2.1 (2025-09-05)
 
 ### Fix
